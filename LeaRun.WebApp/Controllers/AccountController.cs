@@ -66,7 +66,7 @@ namespace LeaRun.WebApp.Controllers
                 insertModel.ModifyTime = DateTime.Now;
                 insertModel.SureTime = DateTime.Now;
                 insertModel.HeadImg = user == null ? "/Content/Images/top.png" : user.headimgurl;
-                insertModel.Address = user == null ? "" :(user.province + user.city + user.country);
+                insertModel.Address = user == null ? "" : (user.province + user.city + user.country);
                 insertModel.Money = 0.00;
                 insertModel.FreezeMoney = 0.00;
                 insertModel.Status = 0;
@@ -219,76 +219,102 @@ namespace LeaRun.WebApp.Controllers
 
         }
         #endregion
-        public ActionResult Login(string openid)
+        public ActionResult Login(string openid, string parentNumber, bool? wxLogin)
         {
-            
-            //获取cookie
-            WebData wbll = new WebData();
-            var user = wbll.GetUserInfo(Request);
-            
-            if (user != null && !string.IsNullOrEmpty(user.Number)) //cookie存在
+            if (wxLogin!=null &&!wxLogin.Value)
             {
-                if (user.OpenId==null ||user.OpenId=="")
-                {
-                    //var gui=  GetUserInfo(openid);
-                    if (string.IsNullOrEmpty(openid))
-                    {
-                        return Redirect("http://shop.zst0771.com/Wechat/WeChat/CreateCode");
-                    }
-                    else
-                    {
-                        List<DbParameter> parameter = new List<DbParameter>();
-                        parameter.Add(DbFactory.CreateDbParameter("@OpenId", openid));
-                        parameter.Add(DbFactory.CreateDbParameter("@Number", user.Number ));
-
-                        StringBuilder sql = new StringBuilder();
-                        sql.Append(" update Ho_PartnerUser set  OpenId=@OpenId where Number =@Number ");
-                        database.ExecuteBySql(sql, parameter.ToArray());
-                    }
-                   
-
-                }
-                
-
-                return Redirect("/Personal/Index");
+                return Content("<script type='text/javascript'>alert('授权失败!');</script>");
+            }
+            if (string.IsNullOrEmpty(openid))
+            {
+                //new GetOpendController().OAuthBegin("/Wap/Release");
+                return Redirect("https://open.weixin.qq.com/connect/oauth2/authorize?appid="+ConfigurationManager.AppSettings["WEPAY_WEB_APPID"].ToString().Trim()+"&redirect_uri=http://nn.gxlbang.com/GetOpend/getOpenid?goBackUrl=/Account/Login&response_type=code&scope=snsapi_base&state=a#wechat_redirect");
             }
             else
             {
-                if (!string.IsNullOrEmpty(openid))
+                List<DbParameter> parameter = new List<DbParameter>();
+                parameter.Add(DbFactory.CreateDbParameter("@OpenId", openid));
+                var account = database.FindEntityByWhere<Ho_PartnerUser>(" and OpenId=@OpenId", parameter.ToArray());
+                if (account != null && account.Number != null)
                 {
-                    List<DbParameter> parameter = new List<DbParameter>();
-                    parameter.Add(DbFactory.CreateDbParameter("@OpenId", openid));
-                    var account = database.FindEntityByWhere<Ho_PartnerUser>(" and OpenId=@OpenId", parameter.ToArray());
-                    if (account != null && account.Number != null)
+                    if (account.Status == 9)
                     {
-                        if (account.Status == 9)
-                        {
-                            return Content("<script type='text/javascript'>alert('用户被限制登录!');location.href='/Account/Login';</script>");
-                        }
-                        else
-                        {
-                            // 抽取用户信息
-                            string Md5 = Md5Helper.MD5(account.Number + account.OpenId + Request.UserHostAddress + Request.Browser.Type + Request.Browser.ClrVersion.ToString() + "2017", 16);
-
-                            string str = account.Number + "&" + account.OpenId + "&" + Request.UserHostAddress + "&" + Request.Browser.Type
-                                + "&" + Request.Browser.ClrVersion.ToString() + "&" + Md5;
-
-                            str = Utilities.DESEncrypt.Encrypt(str);
-                            CookieHelper.WriteCookie("WebUserInfo", str);
-                        }
-                    }
-                    else
-                    {
-                        return Content("<script type='text/javascript'>alert('请先注册用户!');location.href='/Account/Register?openid=" + openid + "';</script>");
+                        return Content("<script type='text/javascript'>alert('用户被限制登录!');</script>");
                     }
                 }
                 else
                 {
-                    return Redirect("http://shop.zst0771.com/Wechat/WeChat/CreateCode");
+                    UserInfoR userGrant = GetUserInfo(openid);
+                    //找代理
+                    List<DbParameter> par = new List<DbParameter>();
+                    par.Add(DbFactory.CreateDbParameter("@OpenId", openid));
+
+                    var accountParent = database.FindEntityByWhere<Ho_PartnerUser>(" and OpenId=@OpenId", par.ToArray());
+                    if (accountParent==null || accountParent.Number ==null )
+                    {
+                        accountParent.Number = "";
+                        accountParent.Name = "";
+                    }
+
+                    var role = database.FindEntityByWhere<Am_UserRole>(" and RoleName='普通会员'");
+
+                    var userInsert = new Ho_PartnerUser
+                    {
+                        Number = CommonHelper.GetGuid,
+                        Account = "",
+                        Address = "",
+                        As_Name = "",
+                        As_Number = "",
+                        Birthday = DateTime.Now,
+                        CardCode = "",
+                        City = "",
+                        CodeImg1 = "",
+                        CodeImg2 = "",
+                        County = "",
+                        CreatTime = DateTime.Now,
+                        Email = "",
+                        FreezeMoney = 0.00,
+                        HeadImg = userGrant.headimgurl,
+                        InnerCode = "",
+                        Mobile = "",
+                        ModifyTime = DateTime.Now,
+                        Money = 0.00,
+                        Name = userGrant.nickname,
+                        OpenId = openid,
+                        ParentName = accountParent.Name,
+                        ParentNumber = accountParent.Number,
+                        Password = "",
+                        PayPassword = "",
+                        PCardImg = "",
+                        Phone = "",
+                        Province = "",
+                        Remark = "",
+                        Sex = "",
+                        Sign = null ,
+                        Status = 0,
+                        StatusStr = "新注册",
+                        SureTime = DateTime.Now,
+                        SureUser = "",
+                        UserRole = role.RoleName,
+                        UserRoleNumber = role.Number,
+                        WeiXin = ""
+                    };
+                    if (database.Insert<Ho_PartnerUser>(userInsert) > 0)
+                    {
+                        account = userInsert;
+                    }
 
                 }
-            }
+                // 抽取用户信息
+                string Md5 = Md5Helper.MD5(account.Number + account.OpenId + Request.UserHostAddress + Request.Browser.Type + Request.Browser.ClrVersion.ToString() + "2017", 16);
 
+                string str = account.Number + "&" + account.OpenId + "&" + Request.UserHostAddress + "&" + Request.Browser.Type
+                    + "&" + Request.Browser.ClrVersion.ToString() + "&" + Md5;
+
+                str = Utilities.DESEncrypt.Encrypt(str);
+                CookieHelper.WriteCookie("WebUserInfo", str);
+
+            }
             return View();
         }
         [HttpPost]
