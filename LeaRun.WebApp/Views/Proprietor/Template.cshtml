@@ -1,0 +1,88 @@
+﻿@model LeaRun.Entity.Am_Ammeter
+@{
+    ViewBag.Title = "账单模板管理";
+    Layout = "~/Views/Shared/_Partial.cshtml";
+}
+@if (Model != null && Model.Number != null)
+{
+    <div class="all">
+        <header class="header clear">
+            <a href="javascript:history.go(-1);" class="return fl"></a>
+            <h1 class="title">账单模板管理</h1>
+        </header>
+        <div class="charge-top bbot">
+            <span class="charge-span">表号：@Model.AM_Code</span>
+            <span class="charge-span">区域：@Model.Province@Model.City@Model.County @Model.Address</span>
+            <span class="charge-span">房号：@Model.Cell 单元 @Model.Floor 层 @Model.Room 号</span>
+        </div>
+        <div class="gary"></div>
+        <div class="charge-bill bbot btop clear">
+            <span class="bill-text fl">账单开始时间：</span>
+            <input type="date" class="l-input fl" maxlength="" value="" placeholder="2018-01-01" />
+        </div>
+        <div class="charge-bill bbot clear">
+            <span class="bill-text fl">账单周期：</span>
+            <select class="charge-se"><option>周期</option></select>
+        </div>
+        <div class="charge-bill bbot clear">
+            <span class="bill-text fl">滞纳金：</span>
+            <input type="text" class="l-input fl" maxlength="11" value="" placeholder="%" />
+        </div>
+        <div class="gary"></div>
+        <div class="acc-top bbot btop clear">
+            <span class="acc-one fl">项目</span>
+            <span class="acc-one acc-two fl">金额</span>
+        </div>
+        <div class="acc-all">
+            <div class="acc-top acc-pa clear">
+                <span class="acc-one fl"><input type="text" class="acc-in" placeholder="租金" /></span>
+                <span class="acc-one acc-two fl"><input type="text" class="acc-in" placeholder="0.00" /></span>
+                <input class="icon-close fr" type="button" onclick="test(this)" value="-" />
+            </div>
+            <div class="acc-top acc-pa clear">
+                <span class="acc-one fl"><input type="text" class="acc-in" placeholder="业务" /></span>
+                <span class="acc-one acc-two fl"><input type="text" class="acc-in" placeholder="0.00" /></span>
+                <input class="icon-close fr" type="button" onclick="test(this)" value="-" />
+            </div>
+            <div class="acc-top acc-pa clear">
+                <span class="acc-one fl"><input type="text" class="acc-in" placeholder="网费" /></span>
+                <span class="acc-one acc-two fl"><input type="text" class="acc-in" placeholder="0.00" /></span>
+                <input class="icon-close fr" type="button" onclick="test(this)" value="-" />
+            </div>
+            <div class="acc-top acc-pa clear">
+                <span class="acc-one fl"><input type="text" class="acc-in" placeholder="垃圾费" /></span>
+                <span class="acc-one acc-two fl"><input type="text" class="acc-in" placeholder="0.00" /></span>
+                <input class="icon-close fr" type="button" onclick="test(this)" value="-" />
+            </div>
+            <div class="acc-top acc-pa clear" id="container">
+                <span class="acc-one fl"><input type="text" class="acc-in" placeholder="公摊费" /></span>
+                <span class="acc-one acc-two fl"><input type="text" class="acc-in" placeholder="0.00" /></span>
+                <input class="icon-close fr" type="button" onclick="test(this)" value="-" />
+            </div>
+            <div id="container"></div>
+            <div class="acc-add"><button id="add" class="acc-aj">+增加收费项</button></div>
+
+        </div>
+        <div class="acc-btnt clear">
+            <a href="" class="acc-btno fl">保存</a>
+            <a href="" class="acc-btno acc-btntt fr">取消</a>
+        </div>
+    </div>
+}
+
+
+<script type="text/javascript">
+    var add = document.getElementById('add');
+    var container = document.getElementById('container');
+    var node = container.nextSibling;
+    add.onclick = function () {
+        oDiv = document.createElement('div');
+        oDiv.innerHTML = "<div class='acc-top acc-pa clear'><span class='acc-one fl'><input type='text' class='acc-in' placeholder='公摊费' /></span><span class='acc-one acc-two fl'><input type='text' class='acc-in' placeholder='0.00' /></span><input class='icon-close fr' type='button' onclick='test(this)' value='-' /></div>";
+        container.parentNode.insertBefore(oDiv, node)
+        node = oDiv.nextSibling;
+
+    }
+    function test(test) {
+        test.parentNode.parentNode.removeChild(test.parentNode);
+    }
+</script>

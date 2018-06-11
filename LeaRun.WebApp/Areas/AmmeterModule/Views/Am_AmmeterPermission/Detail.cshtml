@@ -1,0 +1,77 @@
+@{
+    ViewBag.Title = "Am_AmmeterPermission》明细页面";
+    Layout = "~/Views/Shared/_LayoutForm.cshtml";
+}
+<script type="text/javascript">
+    $(function () {
+        InitControl();
+    })
+    //得到一个对象实体
+    function InitControl() {
+        if (!!GetQuery('KeyValue')) {
+            AjaxJson("/AmmeterModule/Am_AmmeterPermission/SetForm", { KeyValue: GetQuery('KeyValue') }, function (data) {
+                SetWebControls(data);
+            });
+        }
+    }
+</script>
+<form id="form1" style="margin: 1px">
+    <table class="form">
+        <tr>
+            <th class='formTitle'>Number：</th>
+            <td class='formValue'>
+                <label id="Number" />
+            </td>
+            <th class='formTitle'>Ammeter_Number：</th>
+            <td class='formValue'>
+                <label id="Ammeter_Number" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>Ammeter_Code：</th>
+            <td class='formValue'>
+                <label id="Ammeter_Code" />
+            </td>
+            <th class='formTitle'>U_Number：</th>
+            <td class='formValue'>
+                <label id="U_Number" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>UserName：</th>
+            <td class='formValue'>
+                <label id="UserName" />
+            </td>
+            <th class='formTitle'>U_Name：</th>
+            <td class='formValue'>
+                <label id="U_Name" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>CreateTime：</th>
+            <td class='formValue'>
+                <label id="CreateTime" />
+            </td>
+            <th class='formTitle'>Status：</th>
+            <td class='formValue'>
+                <label id="Status" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>StatusStr：</th>
+            <td class='formValue'>
+                <label id="StatusStr" />
+            </td>
+            <th class='formTitle'>LeaveTime：</th>
+            <td class='formValue'>
+                <label id="LeaveTime" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>Remark：</th>
+            <td class='formValue'>
+                <label id="Remark" />
+            </td>
+        </tr>
+    </table>
+</form>

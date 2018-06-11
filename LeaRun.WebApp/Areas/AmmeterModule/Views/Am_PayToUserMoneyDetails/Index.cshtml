@@ -1,0 +1,106 @@
+@{
+    ViewBag.Title = "Am_PayToUserMoneyDetails";
+    Layout = "~/Views/Shared/_LayoutIndex.cshtml";
+}
+<script type="text/javascript">
+    $(function () {
+        GetGrid();
+    })
+    //加载表格
+    function GetGrid() {
+        $("#gridTable").jqGrid({
+        url: "@Url.Content("~/AmmeterModule/Am_PayToUserMoneyDetails/GridPageJson")",
+        datatype: "json",
+        height: $(window).height() - 149,
+        autowidth: true,
+        colModel: [
+                { label: 'Number', name: 'Number', index: 'Number', width: 0, align: 'left',sortable: true  },
+                { label: 'UserNumber', name: 'UserNumber', index: 'UserNumber', width: 0, align: 'left',sortable: true  },
+                { label: 'UserName', name: 'UserName', index: 'UserName', width: 0, align: 'left',sortable: true  },
+                { label: 'UName', name: 'UName', index: 'UName', width: 0, align: 'left',sortable: true  },
+                { label: 'TaskNumber', name: 'TaskNumber', index: 'TaskNumber', width: 0, align: 'left',sortable: true  },
+                { label: 'TotalMoney', name: 'TotalMoney', index: 'TotalMoney', width: 0, align: 'left',sortable: true  },
+                { label: 'Money', name: 'Money', index: 'Money', width: 0, align: 'left',sortable: true  },
+                { label: 'MoneyFree', name: 'MoneyFree', index: 'MoneyFree', width: 0, align: 'left',sortable: true  },
+                { label: 'CreateTime', name: 'CreateTime', index: 'CreateTime', width: 0, align: 'left',sortable: true  },
+                { label: 'F_UserNumber', name: 'F_UserNumber', index: 'F_UserNumber', width: 0, align: 'left',sortable: true  },
+                { label: 'F_UserName', name: 'F_UserName', index: 'F_UserName', width: 0, align: 'left',sortable: true  },
+                { label: 'F_UName', name: 'F_UName', index: 'F_UName', width: 0, align: 'left',sortable: true  },
+                { label: 'OpenId', name: 'OpenId', index: 'OpenId', width: 0, align: 'left',sortable: true  },
+                { label: 'OperateType', name: 'OperateType', index: 'OperateType', width: 0, align: 'left',sortable: true  },
+                { label: 'OperateTypeStr', name: 'OperateTypeStr', index: 'OperateTypeStr', width: 0, align: 'left',sortable: true  },
+                { label: 'ObjectNumber', name: 'ObjectNumber', index: 'ObjectNumber', width: 0, align: 'left',sortable: true  },
+                { label: 'Remark', name: 'Remark', index: 'Remark', width: 0, align: 'left',sortable: true  },
+        ],
+        pager: "#gridPager",
+        sortname: '',
+        sortorder: 'desc',
+        rownumbers: true,
+        shrinkToFit: false,
+        gridview: true,
+    });
+}
+    //新增
+    function btn_add() {
+        var url = "/AmmeterModule/Am_PayToUserMoneyDetails/Form"
+        openDialog(url, "Form", "新增Am_PayToUserMoneyDetails", 770, 395, function (iframe) {
+            top.frames[iframe].AcceptClick()
+        });
+    }
+    //编辑
+    function btn_edit() {
+        var KeyValue = GetJqGridRowValue("#gridTable", "Number");
+        if (IsChecked(KeyValue)) {
+            var url = "/AmmeterModule/Am_PayToUserMoneyDetails/Form?KeyValue=" + KeyValue;
+            openDialog(url, "Form", "编辑Am_PayToUserMoneyDetails", 770, 395, function (iframe) {
+                top.frames[iframe].AcceptClick();
+            });
+        }
+    }
+    //删除
+    function btn_delete() {
+        var KeyValue = GetJqGridRowValue("#gridTable", "Number");
+        if (IsDelData(KeyValue)) {
+            var delparm = 'KeyValue=' + KeyValue;
+            delConfig('/AmmeterModule/Am_PayToUserMoneyDetails/Delete', delparm, KeyValue.split(",").length);
+        }
+    }
+    //明细
+    function btn_detail() {
+        var KeyValue = GetJqGridRowValue("#gridTable", "Number");
+        if (IsChecked(KeyValue)) {
+            var url = "/AmmeterModule/Am_PayToUserMoneyDetails/Detail?KeyValue=" + KeyValue;
+            Dialog(url, "Detail", "Am_PayToUserMoneyDetails明细", 820, 500, function (iframe) {
+                top.frames[iframe].AcceptClick();
+            });
+        }
+    }
+    //刷新
+    function windowload() {
+        $("#gridTable").trigger("reloadGrid"); //重新载入
+        
+    }
+</script>
+<!--工具栏-->
+<div class="tools_bar leftline rightline" style="margin: 1px; margin-bottom: 0px;">
+    <div class="PartialButton">
+        @Html.Partial("_PartialButton")
+    </div>
+</div>
+<div class="leftline rightline QueryArea" style="margin: 1px; margin-top: 0px; margin-bottom: 0px;">
+    <table border="0" class="form-find" style="height: 45px;">
+        <tr>
+            <th>关键字：</th>
+            <td>
+                <input id="keywords" type="text" class="txt" style="width: 200px" />
+            </td>
+            <td>
+                <input id="btnSearch" type="button" class="btnSearch" value="搜 索" onclick="btn_Search()" />
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="topline rightline" style="margin: 1px; margin-top: -1px;">
+    <table id="gridTable"></table>
+    <div id="gridPager"></div>
+</div>

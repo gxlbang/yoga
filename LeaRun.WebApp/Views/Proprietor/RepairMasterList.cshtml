@@ -1,0 +1,52 @@
+﻿@model List<LeaRun.Entity.Ho_PartnerUser>
+@{
+    ViewBag.Title = "维修师傅管理";
+    Layout = "~/Views/Shared/_Partial.cshtml";
+}
+
+<div class="all pro-all">
+    <header class="header clear">
+        <a href="javascript:history.go(-1);" class="return fl"></a>
+        <h1 class="title">维修师傅管理</h1>
+    </header>
+    <div class="ele-top">
+        @if (Model != null && Model.Count() > 0)
+        {
+            foreach (var item in Model)
+            {
+                <div class="pro repair-m clear mt15">
+                    <span class="ele-span fl">师傅姓名：@item.Name</span>
+                    <span class="ele-span fl">联系电话：@item.Mobile</span>
+                    <span class="ele-span ele-pa clear"><a href="javascript:;" onclick="del('@item.Number')" class="ele-a fr">删除</a></span>
+                </div>
+            }
+
+        }
+
+        <a href="/Proprietor/RepairMasterAdd" class="btn-all">+添加维修师傅</a>
+    </div>
+</div>
+<script src="~/Content/Scripts/layer.mobile-v2.0/layer_mobile/layer.js"></script>
+<script>
+    function del(number) {
+        layer.open({
+            content: '您是否确定要删除维修师傅'
+              , btn: ['删除', '取消']
+              , skin: 'footer'
+              , yes: function (index) {
+                  $.post("/Proprietor/RepairMasterDel", { number: number }, function (data) {
+                      if (data.res == "Ok") {
+                          layer.open({ content: data.msg, skin: 'msg', time: 2 });
+                          location.reload();
+                          layer.close(index);
+                      } else {
+                          layer.open({ content: data.msg, skin: 'msg', time: 2 });
+                      }
+
+                  });
+
+
+              }
+        });
+    }
+</script>

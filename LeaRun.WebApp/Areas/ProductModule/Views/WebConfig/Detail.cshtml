@@ -1,0 +1,134 @@
+@{
+    ViewBag.Title = "Fx_WebConfig》明细页面";
+    Layout = "~/Views/Shared/_LayoutForm.cshtml";
+}
+<script type="text/javascript">
+    $(function () {
+        InitControl();
+    })
+    //得到一个对象实体
+    function InitControl() {
+        if (!!GetQuery('KeyValue')) {
+            AjaxJson("/ProductModule/WebConfig/SetForm", { KeyValue: GetQuery('KeyValue') }, function (data) {
+                SetWebControls(data);
+            });
+        }
+    }
+</script>
+<form id="form1" style="margin: 1px">
+    <table class="form">
+        <tr>
+            <th class='formTitle'>网站名称：</th>
+            <td class='formValue'>
+                <input  type="text" class="txt" id="Web_Name" />
+            </td>
+            <th class='formTitle'>网站标题：</th>
+            <td class='formValue'>
+                <input  type="text" class="txt" id="Web_Title" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>关键字：</th>
+            <td class='formValue'>
+                <input  type="text" class="txt" id="Web_Keyword" />
+            </td>
+            <th class='formTitle'>描述：</th>
+            <td class='formValue'>
+                <input  type="text" class="txt" id="Web_Des" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>网址：</th>
+            <td class='formValue'>
+                <input  type="text" class="txt" id="Web_Url" />
+            </td>
+            <th class='formTitle'>是否开启邮件：</th>
+            <td class='formValue'>
+                <input id="IsEmail" name="IsEmail" type="checkbox" checked="checked" style="vertical-align: middle;" />
+                <label for="IsEmail" style="vertical-align: middle;">开启</label>
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>邮箱地址：</th>
+            <td class='formValue'>
+                <input  type="text" class="txt" id="Email" />
+            </td>
+            <th class='formTitle'>邮箱密码：</th>
+            <td class='formValue'>
+                <input  type="text" class="txt" id="Email_Password" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>邮件主机：</th>
+            <td class='formValue'>
+                <input  type="text" class="txt" id="Email_Host" />
+            </td>
+            <th class='formTitle'>邮箱端口：</th>
+            <td class='formValue'>
+                <input  type="text" class="txt" id="Email_Port" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>邮件格式：</th>
+            <td class='formValue' colspan="3">
+                <textarea id="Email_Formart" name="Email_Formart" maxlength="200" class="txtArea" rows="5"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>账单日：</th>
+            <td class='formValue' colspan="3">
+                <input id="BillDate" maxlength=10 type="text" class="txt" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>出账日：</th>
+            <td class='formValue' colspan="3">
+                <input id="SendBillDate" maxlength=10 type="text" class="txt" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>提现费率：</th>
+            <td class='formValue' colspan="3">
+                <input id="ChargeFee" maxlength=19 type="text" class="txt" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>电表首充：</th>
+            <td class='formValue' colspan="3">
+                <input id="AmCharge" maxlength=19 type="text" class="txt" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>电表押金：</th>
+            <td class='formValue' colspan="3">
+                <input id="AmDeposit" maxlength=19 type="text" class="txt" />
+            </td>
+        </tr>
+        @*<tr>
+            <th class='formTitle'>AppID：</th>
+            <td class='formValue' colspan="3">
+                <input id="AppID" maxlength=5 type="text" class="txt" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>AppSecret：</th>
+            <td class='formValue' colspan="3">
+                <textarea id="AppSecret" class="txtArea" rows="4"></textarea>
+            </td>
+        </tr>*@
+        @*<tr>
+            <th class='formTitle'>用户层级：</th>
+            <td class='formValue' colspan="3">
+                <input id="UserLevel" maxlength=5 type="text" class="txt" />
+            </td>
+        </tr>*@
+        <tr>
+            <th class='formTitle'>备注：</th>
+            <td class='formValue' colspan="3">
+                <textarea id="Remark" class="txtArea" rows="4"></textarea>
+            </td>
+        </tr>
+        <tr>
+        </tr>
+    </table>
+</form>

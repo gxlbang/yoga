@@ -1,0 +1,142 @@
+@{
+    ViewBag.Title = "产品管理》表单页面";
+    Layout = "~/Views/Shared/_LayoutForm.cshtml";
+}
+<!--编辑器组件start-->
+<script src="~/Content/Scripts/ckeditor/ckeditor.js"></script>
+<!--编辑器组件endt-->
+<!--选择颜色组件start-->
+<link href="~/Content/Scripts/cxColor/css/jquery.cxcolor.css" rel="stylesheet" />
+<script src="~/Content/Scripts/cxColor/js/jquery.cxcolor.js"></script>
+<!--选择颜色组件end-->
+<!--上传文件组件start-->
+<link href="~/Content/Scripts/uploadify/uploadify.css" rel="stylesheet" />
+<script src="~/Content/Scripts/uploadify/jquery.uploadify.js"></script>
+<script type="text/javascript">
+    var KeyValue = GetQuery('KeyValue');//主键
+    $(function () {
+        uploadify();
+        GetClass();
+        InitControl();
+    })
+    //上传文件
+    function uploadify() {
+        $("#uploadify").uploadify({
+            uploader: '/ProductModule/Fx_Product/ImgUpload',
+            swf: '/Content/Scripts/uploadify/uploadify.swf',
+            buttonText: "上传图片",
+            height: 24,
+            width: 70,
+            onFallback: function () {
+                alert("您未安装FLASH控件，无法上传！请安装FLASH控件后再试。");
+            },
+            onUploadSuccess: function (file, data, response) {
+                var DataJson = JSON.parse(data);
+                $("#pimg").attr("src", DataJson.Path);
+                $("#Pro_Pic").val(DataJson.Path);
+            }
+        });
+    }
+    //得到一个对象实体
+    function InitControl() {
+        if (!!GetQuery('KeyValue')) {
+            AjaxJson("/ProductModule/Fx_Product/SetForm", { KeyValue: KeyValue }, function (data) {
+                SetWebControls(data);
+                //绑定下拉列表和图片
+                $("#ClassNumber").find("option[value='" + data.ClassNumber + "']").attr("selected", true);
+                $("#pimg").attr("src", data.Pro_Pic);
+                CKEDITOR.instances.Pro_Content.setData(data.Pro_Content);
+            });
+        }
+    }
+    //保存事件
+    function AcceptClick() {
+        if (!CheckDataValid('#form1')) {
+            return false;
+        }
+        var postData = GetWebControls("#form1");
+        postData.Pro_Content = CKEDITOR.instances.Pro_Content.getData();
+        postData.ClassName = $("#ClassNumber").find("option:selected").text();
+        AjaxJson("/ProductModule/Fx_Product/SubmitUserForm?KeyValue=" + KeyValue, postData, function (data) {
+            tipDialog(data.Message, 3, data.Code);
+            top.frames[tabiframeId()].windowload();
+            closeDialog();
+        });
+    }
+    //分类加载
+    function GetClass() {
+        AjaxJson("/ProductModule/Fx_Product/SetProductClassForm", { KeyValue: GetQuery('KeyValue') }, function (data) {
+            $.each(data, function (i) {
+                $("#ClassNumber").append($("<option></option>").val(data[i].Number).html(data[i].ClassName));
+            });
+        });
+    }
+</script>
+<form id="form1" style="margin: 1px">
+    <div id="message" style="display: none"></div>
+    <table class="form">
+        <tr>
+            <th class='formTitle'>产品名称：</th>
+            <td class='formValue'>
+                <input id="Pro_Name" maxlength=128 type="text" class="txt" />
+            </td>
+            <th width="10"></th>
+            <td class='formValue' rowspan="5">
+                <img src="~/Content/Images/noimg.gif" id="pimg" width="150" height="150" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>产品栏目：</th>
+            <td class='formValue'>
+                <select id="ClassNumber" class="txtselect" style="width: 200px">
+                    <option value="">==请选择==</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>产品价格：</th>
+            <td class='formValue'>
+                <input id="Pro_Price" maxlength=19 type="text" class="txt" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>图片：</th>
+            <td class='formValue'>
+                <input id="uploadify" name="uploadify" type="file" />
+                <input id="Pro_Pic" type="hidden" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>备注：</th>
+            <td class='formValue'>
+                <textarea id="Remark" name="Remark" maxlength="200" class="txtArea" rows="2"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>内容：</th>
+            <td class='formValue' colspan="3">
+                <textarea id="Pro_Content" class="ckeditor" name="ClassText"></textarea>
+            </td>
+        </tr>
+        <tr></tr>
+    </table>
+</form>
+<script type="text/javascript">
+    //初始化编辑器
+    CKEDITOR.replace("Pro_Content", { toolbar: 'Basic', height: 290 });
+    //选择颜色-设置标题色彩
+    function SelectColorEvent() {
+        var mycolor = $("#select_color").cxColor();
+        mycolor.show();
+        $("#select_color").bind("change", function () {
+            $("#Theme").css("color", this.value)
+        });
+    }
+</script>
+<style type="text/css">
+    .cke_chrome .cke_top {
+        border-right: none;
+        border-left: none;
+        padding-bottom: 0px;
+    }
+</style>

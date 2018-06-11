@@ -1,0 +1,93 @@
+﻿@{
+    ViewBag.Title = "用户管理》表单页面";
+    Layout = "~/Views/Shared/_LayoutForm.cshtml";
+}
+<script type="text/javascript">
+    $(function () {
+        //BindCombobox();
+        InitControl();
+    })
+ 
+    //得到一个对象实体
+    function InitControl() {
+        if (!!GetQuery('KeyValue')) {
+            AjaxJson("/CommonModule/User/SetUserForm", { KeyValue: GetQuery('KeyValue') }, function (data) {
+                SetWebControls(data);
+                //BindDepartment(); $("#DepartmentId").val(data.DepartmentId);
+                $("#Password").val("******");
+            });
+        }
+    }
+    //保存事件
+    function AcceptClick() {
+        if (!CheckDataValid('#form1')) {
+            return false;
+        }
+        Loading(true, "正在提交数据...");
+        window.setTimeout(function () {
+            var postData = GetWebControls("#form1");
+            postData["BuildFormJson"] = JSON.stringify(GetWebControls("#CustomAttribute"));
+            AjaxJson("/CommonModule/User/SubmitUserForm?KeyValue=" + GetQuery('KeyValue'), postData, function (data) {
+                tipDialog(data.Message, 3, data.Code);
+                top.frames[tabiframeId()].windowload();
+                closeDialog();
+            });
+        }, 200);
+    }
+</script>
+<form id="form1">
+    <div id="message" style="display: none; padding: 1px; padding-bottom: 0px;"></div>
+    <div class="bd" style="border-bottom: none; margin: 1px;">
+        <div class="tipstitle_title settingtable bold bd todayInfoPanelTab rightPanelTitle_normal">
+            <div class="tab_list_top" style="position: absolute">
+                <div id="Tabbasic" class="tab_list bd actived" onclick="Tabchange('basic')">基本信息</div>
+            </div>
+        </div>
+    </div>
+    <div class="ScrollBar" style="margin: 1px; overflow: hidden;">
+        <!--基本信息-->
+        <div id="basic" class="tabPanel">
+            <table class="form">
+                <tr>
+                    <th class="formTitle">登录账户：</th>
+                    <td class="formValue">
+                        <input id="Account" type="text" class="txt required" datacol="yes" err="登录账户" checkexpession="NotNull" />
+                    </td>
+                    <th class="formTitle">登录密码：
+                    </th>
+                    <td class="formValue">
+                        <input id="Password" type="Password" class="txt required" datacol="yes" err="登录密码" checkexpession="NotNull" />
+                    </td>
+                </tr>
+                <tr>
+                    <th class="formTitle">姓名：</th>
+                    <td class="formValue">
+                        <input id="RealName" type="text" class="txt required" datacol="yes" err="真实" checkexpession="NotNull" />
+                    </td>
+                    <th class="formTitle">联系手机：</th>
+                    <td class="formValue">
+                        <input id="Mobile" type="text" class="txt" datacol="yes" err="手机" checkexpession="MobileOrNull" />
+                    </td>
+                </tr>
+                <tr>
+                    <th class="formTitle"></th>
+                    <td class="formValue" colspan="3">
+                        <span class="item">
+                            <input id="Enabled" name="Enabled" type="checkbox" checked="checked" style="vertical-align: middle;" />
+                            <label for="Enabled" style="vertical-align: middle;">有效</label>
+                        </span>
+                        <label style="vertical-align: middle; color: red;">注意：禁用该用户后，将不能登录。</label>
+                    </td>
+                </tr>
+                <tr>
+                    <th class="formTitle">说明：
+                    </th>
+                    <td class="formValue" colspan="3">
+                        <textarea id="Remark" class="txtArea" rows="14"></textarea>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+</form>

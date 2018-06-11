@@ -1,0 +1,92 @@
+﻿@model LbangCMS.Areas.Admin.Models.ImageLisModel
+@{
+    ViewBag.Title = "PictureList";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+@section head{
+    <link href="~/Areas/Admin/Content/libs/zui/lib/datatable/zui.datatable.css" rel="stylesheet" />
+    <link href="~/Areas/Admin/Content/libs/laypage/skin/laypage.css" rel="stylesheet" />
+}
+@section nav{
+    <li><a href="#">素材管理</a></li>
+    <li class="active">图片管理</li>
+}
+
+@section script{
+    <script src="~/Areas/Admin/Content/libs/zui/lib/datatable/zui.datatable.js"></script>
+    <script src="~/Areas/Admin/Content/libs/laypage/laypage.js"></script>
+<script src="~/Areas/Admin/Content/libs/clipboard/clipboard.min.js"></script>
+    <script type="text/javascript">
+        function to_datatable() {
+            $('table.datatable').datatable({
+                checkable: false,
+                checkByClickRow: false,
+                fixedHeader: false
+            });
+        }
+        function setPager() {
+            laypage({
+                cont: 'pager',
+                pages: $("#TotalPage").val(), //可以叫服务端把总页数放在某一个隐藏域，再获取。假设我们获取到的是18
+                curr: $("#CurentPageIndex").val(),
+                jump: function (e, first) { //触发分页后的回调
+                    if (!first) { //一定要加此判断，否则初始时会无限刷新
+                        reload_data(e.curr);
+                    }
+                }
+            });
+        }
+        function reload_data(pageIndex) {
+            var url = '@Url.Action("ImageList", "Upload")' + "?PageIndex=" + pageIndex + "&r=" + Math.random();
+            $.get(url, function (data) {
+                $("#view").html(data);
+                to_datatable()
+                setPager();
+            })
+        }
+        function remove_item(id) {
+            layer.confirm('确定要删除吗?', { icon: 3, title: '提示' }, function (index) {
+                var url = '@Url.Action("RemovePicture", "Upload")';
+                $.post(url, { id: id }, function (data) {
+                    layer.msg("删除成功", { time: 800 });
+                    reload_data($("#currentPageIndex").val());
+
+                })
+            });
+        }
+        function uploadImg()
+        {
+            layer.open({
+                type: 2,
+                title: "上传图片",
+                content: '@Url.Action("Upload", "Upload")',
+                area: ['700px', '500px']
+            });
+        }
+        $().ready(function () {
+            to_datatable()
+            setPager();
+            var clipboard = new Clipboard('.btnCopy');
+            clipboard.on('success', function (e) {
+                layer.msg("复制成功", {time:1000})
+            });
+
+            clipboard.on('error', function (e) {
+                layer.msg("复制失败", { time: 1000 })
+            });
+        });
+    </script>
+    }
+
+<div class="panel">
+    <div class="panel-heading">
+        <button class="btn btn-primary" id="btnAdd" type="button" onclick="uploadImg()">上传图片</button>
+    </div>
+    <div class="panel-body">
+        <div id="view">
+            @{Html.RenderPartial("_ImageListPartial", Model);}
+
+        </div>
+        <div class="text-center" id="pager"></div>
+    </div>
+</div>

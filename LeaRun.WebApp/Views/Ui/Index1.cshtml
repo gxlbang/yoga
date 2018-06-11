@@ -1,0 +1,359 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<header class="head-all bbot">
+    <a href="javascript:history.back();" class="head-return"><i class="icon icon-return"></i></a>
+    <h3 class="head-title">@ViewBag.Pcmodel.ClassDes</h3>
+</header>
+<!--head  end-->
+@Html.Raw(ViewBag.Pcmodel.ClassText)
+<!--banner  end-->
+<form id="form1">
+    <div class="main">
+        <div class="main-top">
+            <i class="icon-cart"></i>
+            <span>@ViewBag.Pcmodel.ClassDes</span>
+        </div>
+        <div class="main-list main-a clear" data-sid="1" id="prolist">
+            <div class="main-left clear"><span class="dian">*</span><span class="name">商品选择</span></div>
+            <ul class="main-right clear">
+                @if (ViewBag.Plist != null)
+            {
+                int i = 1;
+                foreach (var item in ViewBag.Plist)
+                {
+                        <li data-aid="@(i%2 > 1 ? 1 : 2)" data-id="@item.Number" data-price="@item.Pro_Price">
+                            <a href="javascript:void(0);" class="main-choice">
+                                <img src="@item.Pro_Pic" alt="" />
+                                <span class="types">@item.Pro_Name</span>
+                            </a>
+                        </li>
+
+                    i++;
+                }
+            }
+            </ul>
+
+        </div>
+
+        <div class="main-list clear" data-sid="3" id="express">
+            <div class="main-left clear"><span class="dian">*</span><span class="name"><span>快</span>递</span></div>
+            <ul class="main-right clear">
+                <li data-aid="6">
+                    <a href="javascript:;" class="main-choice main-choice3">
+                        <span class="types">顺丰快递</span>
+                        <i class="icon icon-choice"></i>
+                    </a>
+                </li>
+                <li data-aid="7">
+                    <a href="javascript:;" class="main-choice main-choice3">
+                        <span class="types">中通快递</span>
+                        <i class="icon icon-choice"></i>
+                    </a>
+                </li>
+                <li data-aid="8">
+                    <a href="javascript:;" class="main-choice main-choice3">
+                        <span class="types">中国邮政</span>
+                        <i class="icon icon-choice"></i>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="main-list clear">
+            <div class="main-left clear"><span class="dian">*</span><span class="name">订购数量</span></div>
+            <div class="main-right tab clear">
+                <input class="min" name="" type="button" value="-" />
+                <input class="text_box" name="Pro_Num" id="Pro_Num" type="text" value="1" readonly="readonly" />
+                <input class="add" name="" type="button" value="+" />
+            </div>
+        </div>
+
+        <div class="main-list clear">
+            <div class="main-left clear"><span class="dian"></span><span class="name">订单总额</span></div>
+            <div class="main-right clear">
+                <span class="typesty"><em id="txtTotalPrice">368</em>元</span>
+            </div>
+        </div>
+
+        <div class="main-list clear">
+            <div class="main-left clear"><span class="dian">*</span><span class="name">真实姓名</span></div>
+            <div class="main-right clear">
+                <input class="input-text" type="text" id="Buyer" placeholder="请输入您的姓名或者称呼" />
+            </div>
+        </div>
+
+        <div class="main-list clear">
+            <div class="main-left clear"><span class="dian">*</span><span class="name">手机号码</span></div>
+            <div class="main-right clear">
+                <input class="input-text" type="text" id="Mobile" placeholder="请输入您的手机号码"
+                       autofocus="autofocus" autocomplete="off" oninput="if(value.length>11)value=value.slice(0,11)"
+                       onkeyup="this.value=this.value.replace(/\D/g,'')" />
+            </div>
+        </div>
+
+        <div class="main-list clear">
+            <div class="main-left clear"><span class="dian">*</span><span class="name">地区</span></div>
+            <div class="main-right clear">
+                <select class="select" id="Province" name="Province"></select>
+                <select class="select" id="City" name="City"></select>
+                <select class="select" id="County" name="County"></select>
+                <div id="show"></div>
+            </div>
+        </div>
+
+        <div class="main-list clear">
+            <div class="main-left clear"><span class="dian">*</span><span class="name">详细地址</span></div>
+            <div class="main-right clear">
+                <input class="input-text" type="text" id="Arddress" placeholder="请填写您的详细地址" />
+            </div>
+        </div>
+
+        <div class="main-list clear">
+            <div class="main-left clear"><span class="dian"></span><span class="name">留言备注</span></div>
+            <div class="main-right clear">
+                <textarea class="textarea-text" type="text" id="Buyer_Mark" placeholder="如备用电话、商品数量、收货时间等，额外需求请留意"></textarea>
+                <input type="hidden" id="UserId" value="@ViewBag.UserId" />
+            </div>
+        </div>
+
+        <div class="main-list clear">
+            <div class="main-left clear"><span class="dian">*</span><span class="name">支付方式</span></div>
+            <div class="main-right main-cell clear">
+                <div class="pay">
+                    <span class="pay-span">货到付款</span>
+                </div>
+                <span class="pay-in">货到付款，安全放心</span>
+            </div>
+        </div>
+    </div>
+    <div class="btn-all">
+        <input type="hidden" id="Pro_Number" name="Pro_Number" />
+        <input type="hidden" id="Money" />
+        <input type="hidden" id="Ex_Name" />
+        <input type="hidden" id="Ex_Number" />
+        <input type="hidden" id="Pro_Price" />
+        <a href="javascript:void(0);" class="btn" onclick="submitOrder();">确认提交</a>
+    </div>
+</form>
+<div class="main-top">
+    <i class="icon-pay"></i>
+    <span>最新订购</span>
+</div>
+<div class="scroll" id="ticker">
+    <div class="s-list">
+        <dt>
+            <span class="s-na clear">赵*[150****1448]<span class="s-top">黑龙江</span></span>
+            <span class="s-na clear">购买本命佛-属【马】大势至菩萨<time class="s-time">2分钟前</time></span>
+        </dt>
+    </div>
+    <div class="s-list s-list1">
+        <dt>
+            <span class="s-na clear">陈*[136****5328]<span class="s-top">山东</span></span>
+            <span class="s-na clear">购买本命佛-属【龙】普贤菩萨<time class="s-time">2分钟前</time></span>
+        </dt>
+    </div>
+    <div class="s-list">
+        <dt>
+            <span class="s-na clear">李*[189****7778]<span class="s-top">江苏</span></span>
+            <span class="s-na clear">购买本命佛-属【狗】阿弥陀佛<time class="s-time">2分钟前</time></span>
+        </dt>
+    </div>
+    <div class="s-list s-list1">
+        <dt>
+            <span class="s-na clear">王*[177****0909]<span class="s-top">浙江</span></span>
+            <span class="s-na clear">购买本命佛-属【马】大势至菩萨<time class="s-time">10分钟前</time></span>
+        </dt>
+    </div>
+    <div class="s-list">
+        <dt>
+            <span class="s-na clear">李*[139****6527]<span class="s-top">陕西</span></span>
+            <span class="s-na clear">购买本命佛-属【牛】虚空藏菩萨<time class="s-time">10分钟前</time></span>
+        </dt>
+    </div>
+    <div class="s-list s-list1">
+        <dt>
+            <span class="s-na clear">张*[188****8877]<span class="s-top">黑龙江</span></span>
+            <span class="s-na clear">购买本命佛-属【羊】大日如来<time class="s-time">10分钟前</time></span>
+        </dt>
+    </div>
+</div>
+<div class="btm">
+    <span class="btm-y">阅读 100000+</span><span class="btm-m">10000</span>
+</div>
+@section scripts{
+
+    <!--脚本-->
+    <script type="text/javascript">
+        var Gid = document.getElementById;
+        var showArea = function () {
+            Gid('show').innerHTML = "<h3>省" + Gid('s_province').value + " - 市" +
+            Gid('s_city').value + " - 县/区" +
+            Gid('s_county').value + "</h3>"
+        };
+        $(function () {
+            _init_area();
+            $("#prolist").each(function () {
+                var i = $(this);
+                var p = i.find("ul > li");
+                p.click(function () {
+                    if (!!$(this).hasClass("selected")) {
+                        $(this).removeClass("selected");
+                        i.removeAttr("data-attrval");
+                    } else {
+                        $(this).addClass("selected").siblings("li").removeClass("selected");
+                        i.attr("data-attrval", $(this).attr("data-aid"));
+                        $("#Pro_Number").val($(this).attr("data-id"));
+                        
+                        $("#Pro_Price").val($(this).attr("data-price"));
+                        //$("#txtTotalPrice").html($(this).attr("data-price"));
+                        $("#txtTotalPrice").html(parseFloat($(this).attr("data-price")) * parseInt($("#Pro_Num").val()));
+                        $("#Money").val(parseFloat($(this).attr("data-price")) * parseInt($("#Pro_Num").val()));
+                    }
+                })
+            });
+            $("#express").each(function () {
+                var i = $(this);
+                var p = i.find("ul > li");
+                p.click(function () {
+                    if (!!$(this).hasClass("selected")) {
+                        $(this).removeClass("selected");
+                        i.removeAttr("data-attrval");
+                    } else {
+                        $(this).addClass("selected").siblings("li").removeClass("selected");
+                        i.attr("data-attrval", $(this).attr("data-aid"));
+                        $("#Ex_Number").val($(this).attr("data-id"));
+                        $("#Ex_Name").val($(this).text().trim());
+                    }
+                })
+            });
+            //手机号码限定只允许输入数字
+            $("#Mobile").keypress(function (event) {
+                var keyCode = event.which;
+                if (keyCode == 46 || (keyCode >= 48 && keyCode <= 57))
+                    return true;
+                else
+                    return false;
+            }).focus(function () {
+                this.style.imeMode = 'disabled';
+            });
+            //cache the ticker
+            var ticker = $("#ticker");
+            //wrap dt:dd pairs in divs
+            ticker.children().filter("dt").each(function () {
+                var dt = $(this),
+                  container = $("<div>");
+                dt.next().appendTo(container);
+                dt.prependTo(container);
+                container.appendTo(ticker);
+            });
+            //hide the scrollbar
+            ticker.css("overflow", "hidden");
+            //animator function
+            function animator(currentItem) {
+                //work out new anim duration
+                var distance = currentItem.height();
+                duration = (distance + parseInt(currentItem.css("marginTop"))) / 0.025;
+                //animate the first child of the ticker
+                currentItem.animate({ marginTop: -distance }, duration, "linear", function () {
+                    //move current item to the bottom
+                    currentItem.appendTo(currentItem.parent()).css("marginTop", 0);
+                    //recurse
+                    animator(currentItem.parent().children(":first"));
+                });
+            };
+            //start the ticker
+            animator(ticker.children(":first"));
+            //set mouseenter
+            ticker.mouseenter(function () {
+                //stop current animation
+                ticker.children().stop();
+            });
+            //set mouseleave
+            ticker.mouseleave(function () {
+                //resume animation
+                animator(ticker.children(":first"));
+            });
+            $(".add").click(function () {
+                var t = $(this).parent().find('input[class*=text_box]');
+                t.val(parseInt(t.val()) + 1)
+                $("#txtTotalPrice").html(parseFloat($("#Pro_Price").val()) * parseInt($("#Pro_Num").val()));
+            });
+            $(".min").click(function () {
+                var t = $(this).parent().find('input[class*=text_box]');
+                t.val(parseInt(t.val()) - 1)
+                if (parseInt(t.val()) < 1) {
+                    t.val(1);
+                }
+                $("#txtTotalPrice").html(parseFloat($("#Pro_Price").val()) * parseInt($("#Pro_Num").val()));
+            });
+        });
+        function submitOrder() {
+
+            var pnumber = GetQuery('p');
+            var unumber = GetQuery('u');
+            if (!CheckDataValid('#form1')) {
+                return false;
+            }
+            //禁用按钮
+            //$("#subutton").attr("");
+            $('.btn').removeAttr('onclick');
+            window.setTimeout(function () {
+                var postData = GetWebControls("#form1");
+                //postData["BuildFormJson"] = JSON.stringify(GetWebControls("#CustomAttribute"));
+                AjaxJson("/SetOrders?P=" + pnumber + "&U=" + unumber, postData, function (data) {
+                    $.toast(data.Message);
+                    //跳转链接
+                    if (data.Success) { 
+                        Urlhref("/Result?Number=" + data.Code);
+                    }
+                });
+            }, 200);
+        }
+        function CheckDataValid(id) {
+            if (!IsNullOrEmpty($("#Pro_Number").val())) {
+                $.toast("请选择要购买的商品");
+                return false;
+            }
+            if (!IsNullOrEmpty($("#Ex_Name").val())) {
+                $.toast("请选择快递信息");
+                return false;
+            }
+            if (!IsNullOrEmpty($.trim($("#Buyer").val()))) {
+                $.toast("请输入收货人的姓名");
+                return false;
+            }
+            var phone = $.trim($("#Mobile").val());
+            var myreg = /^(((13[0-9]{1})|(14[0-9]{1})|(17[0]{1})|(15[0-3]{1})|(15[5-9]{1})|(18[0-9]{1}))+\d{8})$/;
+            if (!IsNullOrEmpty(phone)) {
+                $.toast("收货人联系电话不能为空");
+                return false;
+            }
+            if (phone.length != 11 ) {
+                $.toast("收货人联系电话不能少于11位");
+                return false;
+            }
+            if ( !myreg.test(phone)) {
+                $.toast("收货人联系电话不正确");
+                return false;
+            }
+            if (!IsNullOrEmpty($("#Province").val()) || $("#Province").val().trim() == "省份") {
+                $.toast("请选择地区");
+                return false;
+            }
+            if (!IsNullOrEmpty($("#City").val()) || $("#City").val().trim() == "城市") {
+                $.toast("请选择地区");
+                return false;
+            }
+            if (!IsNullOrEmpty($("#County").val()) || $("#County").val().trim() == "县/区") {
+                $.toast("请选择地区");
+                return false;
+            }
+            if (!IsNullOrEmpty($("#Arddress").val())) {
+                $.toast("请输入详细的收货地址");
+                return false;
+            }
+            return true;
+        }
+    </script>
+}

@@ -1,0 +1,140 @@
+@{
+    ViewBag.Title = "Ho_SetSubscribe";
+    Layout = "~/Views/Shared/_LayoutIndex.cshtml";
+}
+<script type="text/javascript">
+    $(function () {
+        GetGrid();
+    })
+    //加载表格
+    function GetGrid() {
+        var KeyValue = GetQuery('KeyValue');
+        $("#gridTable").jqGrid({
+            url: "@Url.Content("~/HouseModule/Ho_SetSubscribe/GridUserPageJson")?KeyValue=" + KeyValue,
+        datatype: "json",
+        height: $(window).height() - 149,
+        autowidth: true,
+        colModel: [
+                { label: 'Number', name: 'Number', index: 'Number', width: 0, align: 'left', hidden: true },
+                { label: 'MS_Number', name: 'MS_Number', index: 'MS_Number', width: 0, align: 'left', hidden: true },
+                 { label: '接待人数', name: 's_PeopleNum', index: 's_PeopleNum', width: 80, align: 'left' },
+                  { label: '接待时间', name: 's_MYTime', index: 's_MYTime', width: 100, align: 'left' },
+                { label: '行程安排', name: 's_CarOrBus', index: 's_CarOrBus', width: 80, align: 'left' },
+                { label: '接待地点', name: 's_Address', index: 's_Address', width: 80, align: 'left' },
+                { label: '接待人', name: 's_Reception', index: 's_Reception', width: 80, align: 'left' },
+                { label: '接待人电话', name: 's_ReMobile', index: 's_ReMobile', width: 120, align: 'left' },
+                { label: '车型', name: 's_CarType', index: 's_CarType', width: 80, align: 'left' },
+                { label: '车牌号', name: 's_CarNumer', index: 's_CarNumer', width: 100, align: 'left' },
+                { label: '车颜色', name: 's_CarColor', index: 's_CarColor', width: 80, align: 'left' },
+                { label: '状态', name: 's_StatuStr', index: 's_StatuStr', width: 80, align: 'left' },
+                {
+                    label: "创建时间", name: "CreateTime", index: "CreateTime", width: 150,sortable: true,
+                    formatter: function (value, options, rowObject) {
+                        return formatDate(value, 'yyyy-MM-dd hh:mm:ss');
+                    }
+                },
+                { label: '创建人', name: 'ReUser', index: 'ReUser', width: 80, align: 'left' }
+               
+        ],
+        pager: "#gridPager",
+        sortname: 'CreateTime',
+        sortorder: 'desc',
+        rownumbers: true,
+        shrinkToFit: false,
+        gridview: true,
+    });
+    }
+    //返回
+    function btn_Back() {
+        var KeyValue = GetQuery('KeyValue');
+        Urlhref("/HouseModule/Ho_MySubscribe/Index?KeyValue=" + KeyValue);
+    }
+    //新增
+    function btn_add() {
+        var KeyValue = GetQuery('KeyValue');
+        var url = "/HouseModule/Ho_SetSubscribe/Form?Number=" + KeyValue
+        openDialog(url, "Form", "新增接待安排", 770, 395, function (iframe) {
+            top.frames[iframe].AcceptClick()
+        });
+    }
+    //编辑
+    function btn_edit() {
+        var KeyValue = GetJqGridRowValue("#gridTable", "Number");
+        var Number = GetQuery('KeyValue');
+        if (IsChecked(KeyValue)) {
+            var url = "/HouseModule/Ho_SetSubscribe/Form?KeyValue=" + KeyValue + "&Number=" + Number;
+            openDialog(url, "Form", "编辑接待安排", 770, 395, function (iframe) {
+                top.frames[iframe].AcceptClick();
+            });
+        }
+    }
+    //删除
+    function btn_delete() {
+        var KeyValue = GetJqGridRowValue("#gridTable", "Number");
+        if (IsDelData(KeyValue)) {
+            var delparm = 'KeyValue=' + KeyValue;
+            delConfig('/HouseModule/Ho_SetSubscribe/Delete', delparm, KeyValue.split(",").length);
+        }
+    }
+    //明细
+    function btn_detail() {
+        var KeyValue = GetJqGridRowValue("#gridTable", "Number");
+        var Number = GetQuery('KeyValue');
+        if (IsChecked(KeyValue)) {
+            var url = "/HouseModule/Ho_SetSubscribe/Detail?KeyValue=" + KeyValue + "&Number=" + Number;
+            Dialog(url, "Detail", "接待安排明细", 700, 400, function (iframe) {
+                top.frames[iframe].AcceptClick();
+            });
+        }
+    }
+    //刷新
+    function windowload() {
+        $("#gridTable").trigger("reloadGrid"); //重新载入
+        
+    }
+    //搜索
+    function btn_Search() {
+        var keywords = $("#keywords").val();
+        var KeyValue = GetQuery('KeyValue');
+        $("#gridTable").jqGrid('setGridParam', {
+            url: "@Url.Content("~/HouseModule/Ho_SetSubscribe/GridPageListJson")?KeyValue=" + KeyValue+ '&Keyword=' + keywords , page: 1
+    }).trigger('reloadGrid');
+    }
+    //取消安排
+    function OverSub(s) {
+        var KeyValue = GetJqGridRowValue("#gridTable", "Number");
+        if (IsChecked(KeyValue)) {
+            confirmDialog("确认提示", "确定要更改接待状态?更改后无法恢复!", function (data) {
+                if (data) {
+                    AjaxJson("/HouseModule/Ho_SetSubscribe/SetOrders", { Status: s, KeyValue: KeyValue }, function (data) {
+                        tipDialog(data.Message, 3, data.Code);
+                        windowload();
+                    });
+                }
+            });
+        }
+    }
+</script>
+<!--工具栏-->
+<div class="tools_bar leftline rightline" style="margin: 1px; margin-bottom: 0px;">
+    <div class="PartialButton">
+        @Html.Partial("_PartialButton")
+    </div>
+</div>
+<div class="leftline rightline QueryArea" style="margin: 1px; margin-top: 0px; margin-bottom: 0px;">
+    <table border="0" class="form-find" style="height: 45px;">
+        <tr>
+            <th>关键字：</th>
+            <td>
+                <input id="keywords" type="text" class="txt" style="width: 200px" />
+            </td>
+            <td>
+                <input id="btnSearch" type="button" class="btnSearch" value="搜 索" onclick="btn_Search()" />
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="topline rightline" style="margin: 1px; margin-top: -1px;">
+    <table id="gridTable"></table>
+    <div id="gridPager"></div>
+</div>

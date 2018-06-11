@@ -1,0 +1,83 @@
+@{
+    ViewBag.Title = "Am_Template》明细页面";
+    Layout = "~/Views/Shared/_LayoutForm.cshtml";
+}
+<script type="text/javascript">
+    $(function () {
+        InitControl();
+    })
+    //得到一个对象实体
+    function InitControl() {
+        if (!!GetQuery('KeyValue')) {
+            AjaxJson("/AmmeterModule/Am_Template/SetForm", { KeyValue: GetQuery('KeyValue') }, function (data) {
+                SetWebControls(data);
+            });
+        }
+    }
+</script>
+<form id="form1" style="margin: 1px">
+    <table class="form">
+        <tr>
+            <th class='formTitle'>Number：</th>
+            <td class='formValue'>
+                <label id="Number" />
+            </td>
+            <th class='formTitle'>Name：</th>
+            <td class='formValue'>
+                <label id="Name" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>Ammeter_Number：</th>
+            <td class='formValue'>
+                <label id="Ammeter_Number" />
+            </td>
+            <th class='formTitle'>Ammeter_Code：</th>
+            <td class='formValue'>
+                <label id="Ammeter_Code" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>U_Number：</th>
+            <td class='formValue'>
+                <label id="U_Number" />
+            </td>
+            <th class='formTitle'>UserName：</th>
+            <td class='formValue'>
+                <label id="UserName" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>U_Name：</th>
+            <td class='formValue'>
+                <label id="U_Name" />
+            </td>
+            <th class='formTitle'>OtherFees：</th>
+            <td class='formValue'>
+                <label id="OtherFees" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>CreateTime：</th>
+            <td class='formValue'>
+                <label id="CreateTime" />
+            </td>
+            <th class='formTitle'>UserFromTime：</th>
+            <td class='formValue'>
+                <label id="UserFromTime" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>BillCyc：</th>
+            <td class='formValue'>
+                <label id="BillCyc" />
+            </td>
+            <th class='formTitle'>Remark：</th>
+            <td class='formValue'>
+                <label id="Remark" />
+            </td>
+        </tr>
+        <tr>
+        </tr>
+    </table>
+</form>

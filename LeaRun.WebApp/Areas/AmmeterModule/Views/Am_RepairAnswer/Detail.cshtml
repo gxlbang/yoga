@@ -1,0 +1,73 @@
+@{
+    ViewBag.Title = "Am_RepairAnswer》明细页面";
+    Layout = "~/Views/Shared/_LayoutForm.cshtml";
+}
+<script type="text/javascript">
+    $(function () {
+        InitControl();
+    })
+    //得到一个对象实体
+    function InitControl() {
+        if (!!GetQuery('KeyValue')) {
+            AjaxJson("/AmmeterModule/Am_RepairAnswer/SetForm", { KeyValue: GetQuery('KeyValue') }, function (data) {
+                SetWebControls(data);
+            });
+        }
+    }
+</script>
+<form id="form1" style="margin: 1px">
+    <table class="form">
+        <tr>
+            <th class='formTitle'>Number：</th>
+            <td class='formValue'>
+                <label id="Number" />
+            </td>
+            <th class='formTitle'>Repair_Number：</th>
+            <td class='formValue'>
+                <label id="Repair_Number" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>AContent：</th>
+            <td class='formValue'>
+                <label id="AContent" />
+            </td>
+            <th class='formTitle'>CreateTime：</th>
+            <td class='formValue'>
+                <label id="CreateTime" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>STATUS：</th>
+            <td class='formValue'>
+                <label id="STATUS" />
+            </td>
+            <th class='formTitle'>StatusStr：</th>
+            <td class='formValue'>
+                <label id="StatusStr" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>U_Number：</th>
+            <td class='formValue'>
+                <label id="U_Number" />
+            </td>
+            <th class='formTitle'>UserName：</th>
+            <td class='formValue'>
+                <label id="UserName" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>Mobile：</th>
+            <td class='formValue'>
+                <label id="Mobile" />
+            </td>
+            <th class='formTitle'>Remark：</th>
+            <td class='formValue'>
+                <label id="Remark" />
+            </td>
+        </tr>
+        <tr>
+        </tr>
+    </table>
+</form>

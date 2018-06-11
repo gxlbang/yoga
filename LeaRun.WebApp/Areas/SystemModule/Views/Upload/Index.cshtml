@@ -1,0 +1,30 @@
+﻿
+@{
+    ViewBag.Title = "图片上传";
+    Layout = "~/Views/Shared/_LayoutForm.cshtml";
+}
+<link href="~/Content/Scripts/webuploader/webuploader.css" rel="stylesheet" />
+<link href="~/Content/Styles/pictureupload.css" rel="stylesheet" />
+<script src="~/Content/Scripts/webuploader/webuploader.js"></script>
+<script src="~/Content/Scripts/pictureupload.js"></script>
+<div class="page-container">
+
+    <div id="uploader" class="wu-example">
+        <div class="queueList">
+            <div id="dndArea" class="placeholder">
+                <div id="filePicker"></div>
+                <p>或将图片拖到这里，单次最多可选100张,单张不能大于2M,总共不能大于100M</p>
+            </div>
+        </div>
+        <div class="statusBar" style="display:none;">
+            <div class="progress">
+                <span class="text">0%</span>
+                <span class="percentage"></span>
+            </div><div class="info"></div>
+            <div class="btns">
+                <div id="filePicker2"></div><div class="uploadBtn">开始上传</div>
+            </div>
+        </div>
+    </div>
+
+</div>

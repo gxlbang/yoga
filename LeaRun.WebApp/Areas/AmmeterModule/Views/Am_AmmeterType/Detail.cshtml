@@ -1,0 +1,121 @@
+@{
+    ViewBag.Title = "Am_AmmeterType》明细页面";
+    Layout = "~/Views/Shared/_LayoutForm.cshtml";
+}
+<script type="text/javascript">
+    $(function () {
+        InitSelect("Jxfs");
+        InitSelect("Txgy");
+        InitSelect("Djlx");
+        InitSelect("Jtlx");
+        InitSelect("Dblx");
+        InitSelect("Qx");
+        InitControl();
+    })
+    //得到一个对象实体
+    function InitControl() {
+        if (!!GetQuery('KeyValue')) {
+            AjaxJson("/AmmeterModule/Am_AmmeterType/SetForm", { KeyValue: GetQuery('KeyValue') }, function (data) {
+                SetWebControls1(data);
+            });
+        }
+    }
+
+    function SetWebControls1(data) {
+        for (var key in data) {
+            var id = $('#' + key);
+            var value = $.trim(data[key]).replace("&nbsp;", "");
+            var type = id.attr('type');
+            switch (type) {
+                case "checkbox":
+                    if (value == 0) {
+                        id.attr("checked", 'checked');
+                    } else {
+                        id.removeAttr("checked");
+                    }
+                    $('input').customInput();
+                    break;
+                default:
+                    id.val(value);
+                    break;
+            }
+        }
+    }
+    function InitSelect(s) {
+        //获取用户角色
+        AjaxJson("/AmmeterModule/Am_AmmeterType/GetAmmeterType", { Dic_Code: s }, function (data) {
+            $.each(data, function (i) {
+                $("#" + s).append($("<option></option>").val(data[i].Dic_Value).html(data[i].Dic_Name));
+            });
+        });
+    }
+</script>
+<form id="form1" style="margin: 1px">
+    <table class="form">
+        <tr>
+
+            <th class='formTitle'>名称：</th>
+            <td class='formValue'>
+                <input id="Name" maxlength=50 type="text" class="txt required" datacol="yes" err="名称" checkexpession="NotNull" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>接线方式：</th>
+            <td class='formValue'>
+                <select id="Jxfs" class="txtselect"></select>
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>通讯规约：</th>
+            <td class='formValue'>
+                <select id="Txgy" class="txtselect"></select>
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>电价类型：</th>
+            <td class='formValue'>
+                <select id="Djlx" class="txtselect"></select>
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>阶梯类型：</th>
+            <td class='formValue'>
+                <select id="Jtlx" class="txtselect"></select>
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>电表类型：</th>
+            <td class='formValue'>
+                <select id="Dblx" class="txtselect"></select>
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>权限：</th>
+            <td class='formValue'>
+                <select id="Qx" class="txtselect"></select>
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>密码：</th>
+            <td class='formValue'>
+                <input id="Password" maxlength=50 type="text" value="000000" class="txt" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>其他类型：</th>
+            <td class='formValue'>
+                <span class="item">
+                    <input id="OtherType" name="OtherType" type="checkbox" valeu="1" style="vertical-align: middle;" />
+                    <label for="OtherType" style="vertical-align: middle;">旧售电方式</label>
+                </span>
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>备注：</th>
+            <td class='formValue'>
+                <textarea id="Remark" name="Remark" maxlength="600" class="txtArea" rows="3"></textarea>
+            </td>
+        </tr>
+        <tr></tr>
+    </table>
+</form>

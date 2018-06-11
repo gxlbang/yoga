@@ -1,0 +1,138 @@
+﻿@model LeaRun.Entity.Am_Ammeter
+@{
+    ViewBag.Title = "添加电表";
+    Layout = "~/Views/Shared/_Partial.cshtml";
+}
+
+<div class="all">
+    <header class="header clear">
+        <a href="javascript:history.go(-1);" class="return fl"></a>
+        <h1 class="title">添加电表</h1>
+    </header>
+    @using (Ajax.BeginForm("AmmeterEidt", "Proprietor", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "success" }, new { @id = "form" }))
+    {
+        <div class="charge-bill add-ele bbot clear">
+            <span class="bill-text fl">电表类型</span>
+            @if (ViewBag.ammeterTpyeList != null)
+            {
+                @Html.DropDownListFor(m => m.AmmeterType_Number, new SelectList(@ViewBag.ammeterTpyeList, "Number", "Name"), new { Name = "AmmeterType_Number", @class = "charge-se fl" })
+
+            }
+        </div>
+        <div class="charge-bill add-ele bbot clear">
+            <span class="bill-text fl">采集器</span>
+            @if (ViewBag.collectorList != null)
+            {
+                @Html.DropDownListFor(m => m.Collector_Number, new SelectList(@ViewBag.collectorList, "Number", "CollectorCode"), new { Name = "Collector_Number", @class = "charge-se fl" })
+
+            }
+        </div>
+        @*<div class="charge-bill add-ele bbot clear">
+            <span class="bill-text fl">电费</span>
+            @if (ViewBag.ammeterMoneyList != null)
+            {
+                @Html.DropDownListFor(m => m.Number, new SelectList(@ViewBag.ammeterMoneyList, "Number", "Name"), new { Name = "AmmeterMoney_Number", @class = "charge-se fl" })
+
+            }
+        </div>*@
+        <div class="charge-bill add-ele bbot clear">
+            <span class="bill-text fl">表号</span>
+            @Html.TextBoxFor(model => model.AM_Code, new { @class = "l-input fl", placeholder = "表号", maxlength = "12" ,type="number"})
+        </div>
+        @*<div class="charge-bill add-ele bbot clear">
+            <span class="bill-text fl">电表起充金额</span>
+            <input type="text" class="l-input fl" maxlength="" value="" placeholder="0.00">
+            @Html.TextBoxFor(model => model.AM_Code, new { @class = "l-input fl", placeholder = "0.00", })
+        </div>*@
+        <div class="charge-bill add-ele bbot clear">
+            <span class="bill-text fl">预警最低金额</span>
+            @Html.TextBoxFor(model => model.FirstAlarm, new { @class = "l-input fl", placeholder = "0.00", })
+        </div>
+ 
+        <div class="charge-bill add-ele bbot clear">
+            <span class="bill-text fl">单元</span>
+            @Html.TextBoxFor(model => model.Cell, new { @class = "l-input fl", placeholder = "单元" })
+        </div>
+        <div class="charge-bill add-ele bbot clear">
+            <span class="bill-text fl">楼层</span>
+            @Html.TextBoxFor(model => model.Floor, new { @class = "l-input fl", placeholder = "楼层" })
+        </div>
+        <div class="charge-bill add-ele bbot clear">
+            <span class="bill-text fl">房号</span>
+            @Html.TextBoxFor(model => model.Room, new { @class = "l-input fl", placeholder = "房号" })
+        </div>
+        <div class="charge-bill add-ele bbot clear">
+            <span class="bill-text fl">地址</span>
+            @Html.TextBoxFor(model => model.Address, new { @class = "l-input fl", placeholder = "地址" })
+        </div>
+        <div class="charge-bill add-ele bbot clear">
+            <span class="bill-text fl">备注</span>
+            @Html.TextAreaFor(model => model.Remark, new { @class = "add-cote", placeholder = "备注" })
+        </div>
+        <div class="list-index">
+            <a href="javascript:;" onclick="sub()" class="btn-all">添加</a>
+        </div>
+    }
+</div>
+<script src="~/Content/Scripts/layer/layer.js"></script>
+<script >
+    function sub() {
+        if ($("#AM_Code").val().length <= 0)
+        {
+            layer.msg('请输入表号');
+            return;
+        }
+        if ($("#FirstAlarm").val().length <= 0) {
+            layer.msg('请输入预警最低金额');
+            return;
+        }
+        if ($("#Cell").val().length <= 0) {
+            layer.msg('请输入单元');
+            return;
+        }
+        if ($("#Cell").val().length <= 0) {
+            layer.msg('请输入单元');
+            return;
+        }
+        if ($("#Floor").val().length <= 0) {
+            layer.msg('请输入楼层');
+            return;
+        }
+        if ($("#Room").val().length <= 0) {
+            layer.msg('请输入房号');
+            return;
+        }
+        if ($("#Address").val().length <= 0) {
+            layer.msg('请输入地址');
+            return;
+        }
+        //var phone = $('#UserName').val();
+        //var strphone = /^1[3|4|5|7|8|9][0-9]\d{4,8}$/;
+        //if ($("#UserName").val().length > 0) {
+        //    if (!phone.match(strphone) || phone.length != 11) {
+        //        layer.msg('请输入正确的手机号码');
+        //        return;
+        //    }
+        //    if ($("#U_Name").val().length <= 0) {
+        //        layer.msg('请输入姓名');
+        //        return;
+        //    }
+        //}
+        
+
+        $('#form').submit();
+    }
+    function success(data) {
+        if (data.res == "Ok") {
+            // layer.msg(data.Msg, { time: 800 });
+            layer.msg('添加成功', { icon: 16 })
+
+            setTimeout("jump()", 1000);
+        } else {
+            layer.msg(data.msg, { time: 2000 });
+        }
+    }
+    function jump() {
+        window.location.href = '@Url.Action("AmmeterList", "Proprietor")';
+    }
+</script>

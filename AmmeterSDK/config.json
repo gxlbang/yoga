@@ -1,0 +1,446 @@
+{
+    "configMap": {
+        "server": "http://139.224.191.69",
+        "auth_code": "此处填写后台拿到的授权码",
+        "random_code": "此处填写后台拿到的随机字符串（用于签名）",
+        "select_api_index": 4,
+        "notify_url": "例如：http://139.224.191.69/Api/notify",
+        "auto_gen_opr_id": true
+    },
+    "apiList": [
+        {
+            "api_name": "---以下全部为同步操作接口---",
+            "url": "",
+            "async": false,
+            "keys": []
+        },
+        {
+            "api_name": "采集器添加",
+            "url": "/Api_v1/collector/add",
+            "async": false,
+            "keys": [
+                {
+                    "key_name": "cid",
+                    "key_type": "number",
+                    "default_value": "12345678901",
+                    "enum_items": null
+                }
+            ]
+        },
+        {
+            "api_name": "采集器删除",
+            "url": "/Api_v1/collector/delete",
+            "async": false,
+            "keys": [
+                {
+                    "key_name": "cid",
+                    "key_type": "number",
+                    "default_value": "12345678901",
+                    "enum_items": null
+                }
+            ]
+        },
+        {
+            "api_name": "采集器查询",
+            "url": "/Api_v1/collector/query",
+            "async": false,
+            "keys": [
+                {
+                    "key_name": "cid",
+                    "key_type": "number",
+                    "default_value": "",
+                    "enum_items": null
+                }
+            ]
+        },
+        {
+            "api_name": "电能表添加",
+            "url": "/Api_v1/meter/add",
+            "async": false,
+            "keys": [
+                {
+                    "key_name": "cid",
+                    "key_type": "number",
+                    "default_value": "12345678901",
+                    "enum_items": null
+                },
+                {
+                    "key_name": "address",
+                    "key_type": "number",
+                    "default_value": "123456789012",
+                    "enum_items": null
+                },
+                {
+                    "key_name": "model",
+                    "key_type": "string",
+                    "default_value": "",
+                    "enum_items": null
+                }
+            ]
+        },
+        {
+            "api_name": "电能表删除",
+            "url": "/Api_v1/meter/delete",
+            "async": false,
+            "keys": [
+                {
+                    "key_name": "cid",
+                    "key_type": "number",
+                    "default_value": "12345678901",
+                    "enum_items": null
+                },
+                {
+                    "key_name": "address",
+                    "key_type": "number",
+                    "default_value": "123456789012",
+                    "enum_items": null
+                }
+            ]
+        },
+        {
+            "api_name": "电能表查询",
+            "url": "/Api_v1/meter/query",
+            "async": false,
+            "keys": [
+                {
+                    "key_name": "cid",
+                    "key_type": "number",
+                    "default_value": "12345678901",
+                    "enum_items": null
+                }
+            ]
+        },
+        {
+            "api_name": "操作状态查询",
+            "url": "/Api_v1/request/status",
+            "async": false,
+            "keys": [
+                {
+                    "key_name": "opr_id",
+                    "key_type": "string",
+                    "default_value": "",
+                    "enum_items": null
+                }
+            ]
+        },
+        {
+            "api_name": "取消操作",
+            "url": "/Api_v1/request/cancel",
+            "async": false,
+            "keys": [
+                {
+                    "key_name": "opr_id",
+                    "key_type": "string",
+                    "default_value": "",
+                    "enum_items": null
+                }
+            ]
+        },
+        {
+            "api_name": "---以下全部为异步操作接口---",
+            "url": "",
+            "async": true,
+            "keys": []
+        },
+        {
+            "api_name": "抄电表数据",
+            "url": "/Api_v1/read_meter",
+            "async": true,
+            "keys": [
+                {
+                    "key_name": "opr_id",
+                    "key_type": "string",
+                    "default_value": "",
+                    "enum_items": null
+                },
+                {
+                    "key_name": "time_out",
+                    "key_type": "int",
+                    "default_value": "0",
+                    "enum_items": null
+                },
+                {
+                    "key_name": "must_online",
+                    "key_type": "bool",
+                    "default_value": "True",
+                    "enum_items": null
+                },
+                {
+                    "key_name": "retry_times",
+                    "key_type": "int",
+                    "default_value": "1",
+                    "enum_items": null
+                },
+                {
+                    "key_name": "cid",
+                    "key_type": "number",
+                    "default_value": "12345678901",
+                    "enum_items": null
+                },
+                {
+                    "key_name": "address",
+                    "key_type": "number",
+                    "default_value": "123456789012",
+                    "enum_items": null
+                },
+                {
+                    "key_name": "type",
+                    "key_type": "enum",
+                    "default_value": "3",
+                    "enum_items": "3:正向有功总电能|4:反向有功总电能|5:正向无功总电能|6:反向无功总电能|15:ABC三相电压|16:ABC三相电流|17:ABC三相有功功率|18:ABC三相无功功率|19:累计购电量|20:剩余电量|21:累计购电金额|22:剩余金额|27:A相电流|28:B相电流|29:C相电流|30:A相电压|31:B相电压|32:C相电压|33:瞬时有功功率|34:瞬时无功功率|35:读取费率电价|36:读取阶梯电价|37:读取阶梯值|38:读取一级报警金额|39:读取二级报警金额|40:读取电流互感器变比|41:读取电压互感器变比"
+                }
+            ]
+        },
+        {
+            "api_name": "设置电表参数",
+            "url": "/Api_v1/write_meter",
+            "async": true,
+            "keys": [
+                {
+                    "key_name": "opr_id",
+                    "key_type": "string",
+                    "default_value": "",
+                    "enum_items": null
+                },
+                {
+                    "key_name": "time_out",
+                    "key_type": "int",
+                    "default_value": "0",
+                    "enum_items": null
+                },
+                {
+                    "key_name": "must_online",
+                    "key_type": "bool",
+                    "default_value": "True",
+                    "enum_items": null
+                },
+                {
+                    "key_name": "retry_times",
+                    "key_type": "int",
+                    "default_value": "1",
+                    "enum_items": null
+                },
+                {
+                    "key_name": "cid",
+                    "key_type": "number",
+                    "default_value": "12345678901",
+                    "enum_items": null
+                },
+                {
+                    "key_name": "address",
+                    "key_type": "number",
+                    "default_value": "123456789012",
+                    "enum_items": null
+                },
+                {
+                    "key_name": "type",
+                    "key_type": "enum",
+                    "default_value": "24",
+                    "enum_items": "12:设置费率电价|13:设置阶梯电价|14:设置阶梯值|23:设置电流互感器变比|24:设置一级报警金额|25:设置二级报警金额|26:设置电压互感器变比"
+                },
+                {
+                    "key_name": "params",
+                    "key_type": "string",
+                    "default_value": "p1=123,p2=234",
+                    "enum_items": null
+                }
+            ]
+        },
+        {
+            "api_name": "拉合闸",
+            "url": "/Api_v1/cmd_meter",
+            "async": true,
+            "keys": [
+                {
+                    "key_name": "opr_id",
+                    "key_type": "string",
+                    "default_value": "",
+                    "enum_items": null
+                },
+                {
+                    "key_name": "time_out",
+                    "key_type": "int",
+                    "default_value": "0",
+                    "enum_items": null
+                },
+                {
+                    "key_name": "must_online",
+                    "key_type": "bool",
+                    "default_value": "True",
+                    "enum_items": null
+                },
+                {
+                    "key_name": "retry_times",
+                    "key_type": "int",
+                    "default_value": "1",
+                    "enum_items": null
+                },
+                {
+                    "key_name": "cid",
+                    "key_type": "number",
+                    "default_value": "12345678901",
+                    "enum_items": null
+                },
+                {
+                    "key_name": "address",
+                    "key_type": "number",
+                    "default_value": "123456789012",
+                    "enum_items": null
+                },
+                {
+                    "key_name": "type",
+                    "key_type": "enum",
+                    "default_value": "10",
+                    "enum_items": "10:拉闸|11:合闸"
+                }
+            ]
+        },
+        {
+            "api_name": "开户",
+            "url": "/Api_v1/security/open_acount",
+            "async": true,
+            "keys": [
+                {
+                    "key_name": "opr_id",
+                    "key_type": "string",
+                    "default_value": "",
+                    "enum_items": null
+                },
+                {
+                    "key_name": "time_out",
+                    "key_type": "int",
+                    "default_value": "0",
+                    "enum_items": null
+                },
+                {
+                    "key_name": "must_online",
+                    "key_type": "bool",
+                    "default_value": "True",
+                    "enum_items": null
+                },
+                {
+                    "key_name": "retry_times",
+                    "key_type": "int",
+                    "default_value": "1",
+                    "enum_items": null
+                },
+                {
+                    "key_name": "cid",
+                    "key_type": "number",
+                    "default_value": "12345678901",
+                    "enum_items": null
+                },
+                {
+                    "key_name": "address",
+                    "key_type": "number",
+                    "default_value": "123456789012",
+                    "enum_items": null
+                },
+                {
+                    "key_name": "params",
+                    "key_type": "string",
+                    "default_value": "account_id=123456,count=1,money=100",
+                    "enum_items": null
+                }
+            ]
+        },
+        {
+            "api_name": "充值",
+            "url": "/Api_v1/security/recharge",
+            "async": true,
+            "keys": [
+                {
+                    "key_name": "opr_id",
+                    "key_type": "string",
+                    "default_value": "",
+                    "enum_items": null
+                },
+                {
+                    "key_name": "time_out",
+                    "key_type": "int",
+                    "default_value": "0",
+                    "enum_items": null
+                },
+                {
+                    "key_name": "must_online",
+                    "key_type": "bool",
+                    "default_value": "True",
+                    "enum_items": null
+                },
+                {
+                    "key_name": "retry_times",
+                    "key_type": "int",
+                    "default_value": "1",
+                    "enum_items": null
+                },
+                {
+                    "key_name": "cid",
+                    "key_type": "number",
+                    "default_value": "12345678901",
+                    "enum_items": null
+                },
+                {
+                    "key_name": "address",
+                    "key_type": "number",
+                    "default_value": "123456789012",
+                    "enum_items": null
+                },
+                {
+                    "key_name": "params",
+                    "key_type": "string",
+                    "default_value": "account_id=123456,count=2,money=100",
+                    "enum_items": null
+                }
+            ]
+        },
+        {
+            "api_name": "清零",
+            "url": "/Api_v1/security/reset",
+            "async": true,
+            "keys": [
+                {
+                    "key_name": "opr_id",
+                    "key_type": "string",
+                    "default_value": "",
+                    "enum_items": null
+                },
+                {
+                    "key_name": "time_out",
+                    "key_type": "int",
+                    "default_value": "0",
+                    "enum_items": null
+                },
+                {
+                    "key_name": "must_online",
+                    "key_type": "bool",
+                    "default_value": "True",
+                    "enum_items": null
+                },
+                {
+                    "key_name": "retry_times",
+                    "key_type": "int",
+                    "default_value": "1",
+                    "enum_items": null
+                },
+                {
+                    "key_name": "cid",
+                    "key_type": "number",
+                    "default_value": "12345678901",
+                    "enum_items": null
+                },
+                {
+                    "key_name": "address",
+                    "key_type": "number",
+                    "default_value": "123456789012",
+                    "enum_items": null
+                },
+                {
+                    "key_name": "params",
+                    "key_type": "string",
+                    "default_value": "account_id=123456",
+                    "enum_items": null
+                }
+            ]
+        }
+    ]
+}

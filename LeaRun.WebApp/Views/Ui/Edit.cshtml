@@ -1,0 +1,100 @@
+﻿@{
+    ViewBag.Title = "个人信息修改";
+    Layout = "~/Views/Shared/UiIndex.cshtml";
+}
+<script src="~/Content/Scripts/uijs/jqthumb.min.js"></script>
+<script src="~/Content/Scripts/uijs/checkFileTypeAndSize.js"></script>
+<script type="text/javascript">
+    jQuery(document).ready(function ($) {
+        $('#edit').click(function () {
+            $('.popover').fadeIn(100);
+            $('.theme-popover').slideDown(200);
+        })
+        $('.theme-poptit .close').click(function () {
+            $('.popover').fadeOut(100);
+            $('.theme-popover').slideUp(200);
+        })
+
+    })
+    $(function () {
+        $('.in-la img').jqthumb({
+            width: 3,
+            height: 3,
+        });
+        $("#imguploadimg1").checkFileTypeAndSize({
+            allowedExtensions: ['jpg', 'jpeg', 'gif', 'png'],
+            maxSize: 1024, //最大允许1024KB，即1MB
+            success: function () {
+                //上传文件数据准备
+                var fd = new FormData();
+                fd.append('image', $('#imguploadimg1')[0].files[0]);
+                $.ajax({
+                    url: '@Url.Action("UploadFile","Ui")',
+                    type: "POST",
+                    data: fd,
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    dataType: 'json',
+                    success: function (data) {
+                        $.toast(data.message);
+                        $("#HeadImg").val(data.filepath);
+                        $("#hhimg1").attr("src", data.filepath);
+                        $('.in-la img').jqthumb({
+                            width: 3,
+                            height: 3,
+                        });
+                    }
+                });
+
+            },
+            extensionerror: function () {
+                $.toast("允许的格式为：jpg,jpeg,gif,png");
+                return;
+            },
+            sizeerror: function () {
+                $.toast("最大尺寸1024KB,即1MB");
+                return;
+            }
+        });
+    });
+    function SubmitForm() {
+        var HeadImg = $("#HeadImg").val();
+        if (!IsNullOrEmpty(HeadImg)) {
+            $.toast("请正确上传头像");
+            return false;
+        }
+        var postData = jQuery.parseJSON('{"HeadImg":"' + HeadImg + '"}');
+        AjaxJson("/Ui/SubmitHeadImg", postData, function (data) {
+            $.toast(data.Message);
+            if (data.Code == 1 || data.Code == "1") {
+                $("#HeadImgstr").attr("src", $("#hhimg1").attr("src"));
+                $('.popover').fadeOut(100);
+                $('.theme-popover').slideUp(200);
+            }
+        });
+    }
+</script>
+<a href="javascript:;" class="edit bbot clear" id="edit">
+    <span class="in-name fl">头像</span><div class="edit-img fr">
+    <img src="@ViewBag.User.HeadImg" alt="" id="HeadImgstr" /></div></a>
+
+
+
+<a href="/Ui/PhoneModify" class="edit bbot editwo clear">
+    <span class="in-name fl">电话号码</span>
+    <span class="edit-t fr">@ViewBag.User.Mobile</span></a>
+
+<div class="theme-popover">
+    <div class="theme-poptit"><a href="javascript:;" title="关闭" class="close">×</a>
+    </div>
+    <div class="theme-popbod dform">
+        <div class="img-edit"><label class="in-la">
+            <img id="hhimg1" src="@ViewBag.User.HeadImg" alt="" />
+            <input class="in-file" type="file" id="imguploadimg1" />
+            </label></div>
+        <input type="hidden" id="HeadImg" />
+        <a href="javascript:;" onclick="SubmitForm()" class="tab-btn">保存</a>
+    </div>
+</div>
+<div class="popover"></div>

@@ -1,0 +1,105 @@
+﻿@{
+    ViewBag.Title = "绑定银行卡";
+    Layout = "~/Views/Shared/_Partial.cshtml";
+}
+
+<div class="all">
+    <header class="header clear">
+        <a href="javascript:history.go(-1);" class="return fl"></a>
+        <h1 class="title">绑定银行卡</h1>
+    </header>
+    <div class="bill-all">
+        @using (Ajax.BeginForm("AddBandCard", "Personal", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "success" }, new { @id = "form" }))
+        {
+            <div class="bill bbot clear">
+                <span class="bill-text fl">银行卡号：</span>
+                <input  name="BankCode" id="BankCode" type="number" class="l-input fl"   value="" placeholder="输入银行卡号" />
+            </div>
+            <div class="bill bbot clear">
+                <span class="bill-text fl">银行名称：</span>
+                <input  name="BankName" id="BankName" type="text" class="l-input fl" value="" placeholder="输入银行名称" />
+            </div>
+            <div class="bill bbot clear">
+                <span class="bill-text fl">用户姓名：</span>
+                <input name="U_Name" id="U_Name" type="text" class="l-input fl" value="" placeholder="输入户主" />
+            </div>
+            <div class="bill bbot clear">
+                <span class="bill-text fl">验证码：</span>
+                <input name="validCode" id="validCode" type="number" class="l-input bill-in fl" value="" placeholder="输入验证码" />
+                <input type="button" class="l-code fr" value="获取验证码" onclick="sendCode(this)" />
+            </div>
+            <div class="list-index"><a href="javascript:;" onclick="submit()" class="btn-all">保存</a></div>
+        }
+    </div>
+</div>
+
+<script>
+    function success(data) {
+        if (data.res == "Ok") {
+            layer.msg(data.msg, { time: 1000 });
+            setTimeout("jump()", 1000);
+        } else {
+            layer.msg(data.msg, { time: 2000 });
+        }
+    }
+    function jump() {
+        window.location.href = '@Url.Action("BankCard", "Personal")';
+    }
+    function submit() {
+        var BankCode = $('#BankCode').val();
+        if (!BankCode || BankCode.length <= 0) {
+            layer.msg('请输入银行卡号', { time: 2000 });
+            return;
+        }
+        var BankName = $('#BankName').val();
+        if (BankName.length <= 0) {
+            layer.msg('请输入银行名称', { time: 2000 });
+            return;
+        }
+        var U_Name = $('#U_Name').val();
+        if (BankName.length <= 0) {
+            layer.msg('请输入用户姓名', { time: 2000 });
+            return;
+        }
+        var validCode = $('#validCode').val();
+        if (BankName.length <= 0) {
+            layer.msg('请输入正确的验证码', { time: 2000 });
+            return;
+        }
+        $('#form').submit();
+    }
+    function getVreifyCode() {
+        
+        $.post("/Personal/GetCode", function (data) {
+            if (data.res == "Ok") {
+                layer.msg('发送成功', { time: 2000 });
+            } else {
+                layer.msg(data.msg, { time: 2000 });
+            }
+
+        });
+    }
+</script>
+<script>
+    var clock = '';
+    var nums = 60;
+    var btn;
+    function sendCode(thisBtn) {
+        btn = thisBtn;
+        btn.disabled = true;
+        btn.value = nums + '秒重新获取';
+        clock = setInterval(doLoop, 1000);
+        getVreifyCode();
+    }
+    function doLoop() {
+        nums--;
+        if (nums > 0) {
+            btn.value = nums + '秒重新获取';
+        } else {
+            clearInterval(clock);
+            btn.disabled = false;
+            btn.value = '获取验证码';
+            nums = 60;
+        }
+    };
+</script>

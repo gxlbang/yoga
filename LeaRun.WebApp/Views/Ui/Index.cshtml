@@ -1,0 +1,78 @@
+﻿@{
+    ViewBag.Title = "一手房管理";
+    Layout = "~/Views/Shared/UiIndex.cshtml";
+}
+<div class="product_top">
+    <div class="product_all_class">
+        <ul class="pro-ul bbot clear"></ul>
+    </div>
+</div>
+<div class="main-list">
+</div>
+@{  ViewDataDictionary vdd = new ViewDataDictionary();
+    vdd.Add("ind", "1");
+    Html.RenderPartial("UIDown", vdd); }
+<div id="loading_background" class="loading_background" style="display: none;"></div>
+<div id="loading" onclick="Loading(false);">
+    <img src="/Content/Images/loading.gif" style="vertical-align: middle;" />&nbsp;<span>正在拼了命为您加载…</span>&nbsp;
+</div>
+<script type="text/javascript">
+    $(function () {
+        GetCityInfo();
+        GetDataByCity('450600');
+    })
+    function GetCityInfo() {
+        AjaxJson("/Ui/GetCityInfo", { KeyValue: '' }, function (data) {
+            if (!!data) {
+                $(".pro-ul").html("");
+                var htmlstr = '', index = 0;
+                $.each(data, function (i) {
+                    var classstr = index == 0 ? ' products_curt' : '';
+                    htmlstr += '<li class="pro-li fl"><a class="products-a' + classstr + '"';
+                    htmlstr += ' onclick="choose_secondmenu(this)" data-value="' + data[i].CityNumber + '">';
+                    htmlstr += '' + data[i].City + '</a></li>';
+                    $(".pro-ul").html(htmlstr);
+                    index = index + 1;
+                });
+            } else {
+                $(".pro-ul").html("");
+            }
+        })
+    }
+    function choose_secondmenu(obj) {
+        $(".product_all_class a").css("color", "#333333").css("border-bottom", "2px solid transparent");
+        obj.style.borderBottom = "2px solid #0083ff";
+        obj.style.color = "#0083ff";
+        GetDataByCity($(obj).attr("data-value"));
+    }
+    function GetDataByCity(KeyValue) {
+        if (!!KeyValue) {
+            Loading(true, "加载中...");
+            AjaxJson("/Ui/GetHouseInfo", { KeyValue: KeyValue }, function (data) {
+                Loading(false);
+                if (!!data) {
+                    $(".main-list").html("");
+                    var htmlstr = '', index = 0;
+                    $.each(data, function (i) {
+                        htmlstr += '<a href="/Ui/Details?KeyValue=' + data[i].Number + '" class="all-a' + (index == 0 ? '' : ' mt15') + '">';
+                        htmlstr += '<div class="img-main"><img src="' + data[i].img + '" alt="" /></div>';
+                        htmlstr += '<div class="mian-text">';
+                        htmlstr += '<h3 class="main-tit">楼盘名称：' + data[i].Name + '</h3>';
+                        htmlstr += '<div class="li-text clear"><span class="li-one fl">特色：' + data[i].Characteristic + '</span><span class="li-two fr">均价<em class="li-co">' + parseInt(data[i].Money) + '元/㎡</em></span></div>';
+                        htmlstr += '<div class="li-text clear">';
+                        var strs = data[i].Label.split("|");
+                        $.each(strs, function (j) {
+                            htmlstr += '<span class="li-one li-y fl">' + strs[j] + '</span>';
+                        })
+                        htmlstr += '<span class="li-two fr">佣金<em class="li-co">' + parseInt(data[i].CommissionMoney) + '元/㎡</em></span></div>';
+                        htmlstr += '</div></a>';
+                        index = index + 1;
+                    });
+                    $(".main-list").html(htmlstr);
+                } else {
+                    $(".main-list").html("");
+                }
+            });
+        }
+    }
+</script>

@@ -1,0 +1,80 @@
+﻿@model LeaRun.Entity.Am_Rent
+@{
+    ViewBag.Title = "退租详情审核";
+    Layout = "~/Views/Shared/_Partial.cshtml";
+}
+
+<div class="all pro-all">
+    <header class="header clear">
+        <a href="javascript:history.go(-1);" class="return fl"></a>
+        <h1 class="title">退房详情审核</h1>
+    </header>
+    <div class="list-index">
+        <div class="pro">
+            <span class="pro-li">租户：@Model.U_Name</span>
+            <span class="pro-li">手机号：@Model.UserName</span>
+            
+ 
+            <span class="pro-li">区域：@Model.Province@Model.City@Model.County</span>
+            <span class="pro-li">地址：@Model.Address @Model.Cell 单元 @Model.Floor 层 @Model.Room 号</span>
+            
+            <span class="pro-li">电表号：@Model.AM_Code</span>
+            <span class="pro-li">剩余电费：@Model.CurrMoney.Value.ToString("0.00") 元</span>
+            <span class="pro-li">电费同步时间：@Model.CM_Time.Value.ToString("yyyy-MM-dd HH:mm:ss")</span>
+
+            <span class="pro-li">押金：1000.00元</span>
+            @if (ViewBag.template != null)
+            {
+                var template = ViewBag.template as LeaRun.Entity.Am_Template;
+                if (template != null && template.Number != null)
+                {
+                    <span class="pro-li">账号周期：@template.BillCyc 个月</span>
+                    <span class="pro-li">租赁时间：@template.tim</span>
+                    <span class="pro-li">到期时间：2018-08-08</span>
+                }
+            }
+            
+        </div>
+        <div class="pro mt15">
+            <div class="pro-explain pro-tit bbot">扣除费用</div>
+            <div class="acc-all">
+
+                <div class="acc-top acc-pa clear">
+                    <span class="acc-one fl"><input type="text" class="acc-in" placeholder="项目1" /></span>
+                    <span class="acc-one acc-two fl"><input type="text" class="acc-in" placeholder="0.00" /></span>
+                    <input class="icon-close fr" type="button" onclick="test(this)" value="-" />
+                </div>
+                <div class="acc-top acc-pa clear">
+                    <span class="acc-one fl"><input type="text" class="acc-in" placeholder="项目1" /></span>
+                    <span class="acc-one acc-two fl"><input type="text" class="acc-in" placeholder="0.00" /></span>
+                    <input class="icon-close fr" type="button" onclick="test(this)" value="-" />
+                </div>
+                <div id="container"></div>
+                <div class="acc-add"><button id="add" class="acc-aj">+增加扣除费用项</button></div>
+            </div>
+        </div>
+        <div class="pro mt15">
+            <div class="pro-explain pro-tit bbot">备注</div>
+            <div class="pro-explain">
+                <textarea class="all-text" placeholder="备注"></textarea>
+            </div>
+        </div>
+
+        <a href="" class="btn-all">确定</a>
+    </div>
+</div>
+<script type="text/javascript">
+    var add = document.getElementById('add');
+    var container = document.getElementById('container');
+    var node = container.nextSibling;
+    add.onclick = function () {
+        oDiv = document.createElement('div');
+        oDiv.innerHTML = "<div class='acc-top acc-pa clear'><span class='acc-one fl'><input type='text' class='acc-in' placeholder='公摊费' /></span><span class='acc-one acc-two fl'><input type='text' class='acc-in' placeholder='0.00' /></span><input class='icon-close fr' type='button' onclick='test(this)' value='-' /></div>";
+        container.parentNode.insertBefore(oDiv, node)
+        node = oDiv.nextSibling;
+
+    }
+    function test(test) {
+        test.parentNode.parentNode.removeChild(test.parentNode);
+    }
+</script>

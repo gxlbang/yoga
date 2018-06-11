@@ -1,0 +1,173 @@
+﻿@model LeaRun.Entity.Am_Rent
+@{
+    ViewBag.Title = "退租详情审核";
+    Layout = "~/Views/Shared/_Partial.cshtml";
+}
+
+@if (Model != null)
+{
+    var userDeposit = ViewBag.userDeposit as LeaRun.Entity.Am_UserDeposit;
+    var ammeter = ViewBag.ammeter as LeaRun.Entity.Am_Ammeter;
+    var contract = ViewBag.contract as LeaRun.Entity.Am_Contract;
+
+    <input type="hidden" name="name" value="@Model.Number" id="number" />
+    <div class="all pro-all">
+        <header class="header clear">
+            <a href="javascript:history.go(-1);" class="return fl"></a>
+            <h1 class="title">退房详情审核</h1>
+        </header>
+        <div class="list-index">
+            <div class="pro">
+                <span class="pro-li">租户：@Model.U_Name</span>
+                <span class="pro-li">手机号：@Model.UserName</span>
+
+
+                <span class="pro-li">区域：@Model.Province@Model.City@Model.County</span>
+                <span class="pro-li">地址：@Model.Address @Model.Cell 单元 @Model.Floor 层 @Model.Room 号</span>
+                @if (ViewBag.ammeter != null)
+                {
+                    <span class="pro-li">电表号：@ammeter.AM_Code</span>
+                    <span class="pro-li">剩余电费：@ammeter.CurrMoney.Value.ToString("0.00") 元 <a href="javascript:;" onclick="checkAmmeter('@ammeter.Number',22)" class="my-meter my-m">同步</a> </span>
+                    <span class="pro-li">电费同步时间：@ammeter.CM_Time.Value.ToString("yyyy-MM-dd HH:mm:ss")</span>
+
+                }
+
+
+                <span class="pro-li">押金：@(userDeposit.Money == null ? "0.00" : userDeposit.Money.Value.ToString("0.00"))元</span>
+
+
+                @if (ViewBag.ammeterPermission != null)
+                {
+                    var ammeterPermission = ViewBag.ammeterPermission as LeaRun.Entity.Am_AmmeterPermission;
+                    if (ammeterPermission != null && ammeterPermission.Number != null)
+                    {
+                        <span class="pro-li">租赁时间：@ammeterPermission.BeginTime.Value.ToString("yyyy-MM-dd")</span>
+                        <span class="pro-li">到期时间：@ammeterPermission.EndTime.Value.ToString("yyyy-MM-dd")</span>
+                    }
+                }
+                @if (contract != null && contract.Number != null)
+                {
+                    <span class="pro-li">合同：<a href="/Common/Contract?KeyValue=@contract.Number"  style="color:orangered">@contract.ContractCode</a></span>
+                }
+
+            </div>
+            <div class="pro mt15">
+                <div class="pro-explain pro-tit bbot">退还款项</div>
+                <div class="acc-all">
+
+                    <div class="acc-top acc-pa clear">
+                        <span class="acc-one fl"><input type="text" class="acc-in" placeholder="项目1" value="押金" /></span>
+                        <span class="acc-one acc-two fl"><input type="text" class="acc-in" placeholder="0.00" value="@(userDeposit.Money == null?"0.00":userDeposit.Money.Value.ToString("0.00"))" /></span>
+                        @*<input class="icon-close fr" type="button" onclick="test(this)" value="-" />*@
+                    </div>
+                    <div class="acc-top acc-pa clear">
+                        <span class="acc-one fl"><input type="text" class="acc-in" placeholder="项目1" value="电费" /></span>
+                        <span class="acc-one acc-two fl"><input type="text" class="acc-in" placeholder="0.00" value="@ammeter.CurrMoney.Value.ToString("0.00")" /></span>
+                        @*<input class="icon-close fr" type="button" onclick="test(this)" value="-" />*@
+                    </div>
+                    <div id="container"></div>
+                    <div class="acc-add"><button id="add" class="acc-aj">+增加扣除费用项</button></div>
+                </div>
+            </div>
+            <div class="pro mt15">
+                <div class="pro-explain pro-tit bbot">备注</div>
+                <div class="pro-explain">
+                    <textarea class="all-text" placeholder="备注" id="remark"></textarea>
+                </div>
+            </div>
+
+            <a href="javascript:;" id="submit1" class="btn-all">确定</a>
+        </div>
+    </div>
+}
+<script src="~/Content/Scripts/layer.mobile-v2.0/layer_mobile/layer.js"></script>
+<script type="text/javascript">
+    var add = document.getElementById('add');
+    var container = document.getElementById('container');
+    var node = container.nextSibling;
+    add.onclick = function () {
+        oDiv = document.createElement('div');
+        oDiv.innerHTML = "<div class='acc-top acc-pa clear'><span class='acc-one fl'><input type='text' class='acc-in' placeholder='其他' /></span><span class='acc-one acc-two fl'><input type='text' class='acc-in' placeholder='0.00' /></span><input class='icon-close fr' type='button' onclick='test(this)' value='-' /></div>";
+        container.parentNode.insertBefore(oDiv, node)
+        node = oDiv.nextSibling;
+
+    }
+    function test(test) {
+        test.parentNode.parentNode.removeChild(test.parentNode);
+    }
+
+    $(function () {
+        $('#submit1').click(function () {
+            var total = 0;
+            var _list = {};
+            var isTrue = true;
+            $('.acc-pa').each(function (i) {
+                var thisItem = $(this);
+                _list["rentBillList[" + i + "].ChargeItem_Title"] = thisItem.find("input:eq(0)").val();
+                _list["rentBillList[" + i + "].Money"] = thisItem.find("input:eq(1)").val();
+                total += parseFloat(thisItem.find("input:eq(1)").val());
+            });
+            if (!isTrue) {
+                return;
+            }
+            _list["number"] = $("#number").val();
+            _list["remark"] = $("#remark").val();
+            var text = "您的退租账单金额为：" + total + "元，您是否确定要退租?";
+            layer.open({
+                content: text
+              , btn: ['退租', '取消']
+              , skin: 'footer'
+              , yes: function (index) {
+                  $.ajax({
+                      type: "POST",
+                      url: "/Proprietor/RentGenerate",
+                      traditional: true,
+                      data: _list,
+                      success: function (data) {
+                          if (data.res == "Ok") {
+                              layer.open({ content: data.msg, skin: 'msg', time: 2 });
+                              location.reload();
+                              layer.close(index);
+                          } else {
+                              layer.open({ content: data.msg, skin: 'msg', time: 2 });
+                          }
+                      },
+                      error: function (data) {
+                          layer.open({ content: data.msg, skin: 'msg', time: 2 });
+                      }
+                  });
+              }
+            });
+            return false;
+        });
+    });
+
+
+    function checkAmmeter(number, type) {
+        $.post("/Personal/AmmeterCheck", { number: number, type: type }, function (data) {
+            if (data.res == "Ok") {
+                layer.open({ content: data.msg, skin: 'msg', time: 2 });
+                layer.open({ type: 2, content: '同步中...' });
+                setInterval(function () {
+                    result(data.pr_id);
+                }, 3000);
+
+            } else {
+                layer.open({ content: data.msg, skin: 'msg', time: 2 });
+            }
+        });
+    }
+    function result(pr_id) {
+        $.post("/Personal/OperationResult", { pr_id: pr_id }, function (data) {
+            if (data.res == "Ok") {
+                layer.close();
+                layer.open({
+                    content: data.msg, skin: 'msg', time: 2, end: function myfunction() {
+                        location.reload();
+                    }
+                });
+
+            }
+        });
+    }
+</script>

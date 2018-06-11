@@ -1,0 +1,74 @@
+﻿@{
+    Layout = null;
+}
+<link rel="stylesheet" type="text/css" href="~/Content/Styles/ui/pic.css">
+<script type="text/javascript" src="~/Content/Scripts/uijs/Picture display/zepto.min.js"></script>
+<script type="text/javascript" src="~/Content/Scripts/uijs/Picture display/pic.js"></script>
+<script type="text/javascript">
+        !function (J) { function H() { var d = E.getBoundingClientRect().width; var e = (d / 7.5 > 100 * B ? 100 * B : (d / 7.5 < 42 ? 42 : d / 7.5)); E.style.fontSize = e + "px", J.rem = e } var G, F = J.document, E = F.documentElement, D = F.querySelector('meta[name="viewport"]'), B = 0, A = 0; if (D) { var y = D.getAttribute("content").match(/initial\-scale=([\d\.]+)/); y && (A = parseFloat(y[1]), B = parseInt(1 / A)) } if (!B && !A) { var u = (J.navigator.appVersion.match(/android/gi), J.navigator.appVersion.match(/iphone/gi)), t = J.devicePixelRatio; B = u ? t >= 3 && (!B || B >= 3) ? 3 : t >= 2 && (!B || B >= 2) ? 2 : 1 : 1, A = 1 / B } if (E.setAttribute("data-dpr", B), !D) { if (D = F.createElement("meta"), D.setAttribute("name", "viewport"), D.setAttribute("content", "initial-scale=" + A + ", maximum-scale=" + A + ", minimum-scale=" + A + ", user-scalable=no"), E.firstElementChild) { E.firstElementChild.appendChild(D) } else { var s = F.createElement("div"); s.appendChild(D), F.write(s.innerHTML) } } J.addEventListener("resize", function () { clearTimeout(G), G = setTimeout(H, 300) }, !1), J.addEventListener("pageshow", function (b) { b.persisted && (clearTimeout(G), G = setTimeout(H, 300)) }, !1), H() }(window);
+        if (typeof (M) == 'undefined' || !M) {
+            window.M = {};
+        }
+        $(function () {
+            InitControl();
+        })
+        //初始化
+        function InitControl() {
+            var KeyValue = GetQuery('KeyValue');
+            var GroupNumber = GetQuery('GroupNumber');
+            if (!!KeyValue && !!GroupNumber) {
+                AjaxJson("/Ui/GetHouse/Content/UiImages", { KeyValue: KeyValue, GroupNumber: GroupNumber }, function (data) {
+
+                });
+            }
+        }
+        //关闭层
+        function CloseLayerPage() {
+            alert(aa);
+            var index = parent.layer.getFrameIndex(window.name);
+            parent.layer.close(index);
+        }
+</script>
+<a href="#" onclick="CloseLayerPage()">
+    <div class="container">
+        <div class="page-nub">
+            <span class="page-tit">图品展示</span>
+            <div class="page-page"> <em id="slide-nub" class="fz18">2</em> <em class="nub-bg">/</em> <em id="slide-sum" class="fz12">5</em> </div>
+            <div class="return-allimg"><a href="#" onclick="CloseLayerPage()" class="a-morere"><img src="/Content/UiImages/re-all.png" alt=""></a></div>
+        </div>
+        <!-- 焦点图片 -->
+        <div class="scroll-imgs" style="top: 50%; margin-top: -187.5px;">
+            <div id="slide" class="slide" style="height: 375px;">
+                <ul data-slide-ul="firstUl" style="width: 1875px; height: 375px;">
+                    <li data-ul-child="child" onClick="CloseLayerPage()" style="transition: all 300ms ease; height: 375px; width: 375px; transform: translate3d(-375px, 0px, 0px);">
+                        <img alt="" src="/Content/UiImages/lou.png" onerror="imgError();" class="J_ping" report-eventid="MProductdetail_BigPicClick" report-pageparam="3907358">
+                    </li>
+                    <li data-ul-child="child" onClick="closepage()" style="transition: all 300ms ease; height: 375px; width: 375px; transform: translate3d(-375px, 0px, 0px);">
+                        <img alt="" src="/Content/UiImages/img.png" onerror="imgError();" class="J_ping" report-eventid="MProductdetail_BigPicClick" report-pageparam="3907358">
+                    </li>
+                    <li data-ul-child="child" onClick="closepage()" style="transition: all 300ms ease; height: 375px; width: 375px; transform: translate3d(-375px, 0px, 0px);">
+                        <img alt="" src="/Content/UiImages/lou.png" onerror="imgError();" class="J_ping" report-eventid="MProductdetail_BigPicClick" report-pageparam="3907358">
+                    </li>
+                    <li data-ul-child="child" onClick="closepage()" style="transition: all 300ms ease; height: 375px; width: 375px; transform: translate3d(-375px, 0px, 0px);">
+                        <img alt="" src="/Content/UiImages/img.png" onerror="imgError();" class="J_ping" report-eventid="MProductdetail_BigPicClick" report-pageparam="3907358">
+                    </li>
+                    <li data-ul-child="child" onClick="closepage()" style="transition: all 300ms ease; height: 375px; width: 375px; transform: translate3d(-375px, 0px, 0px);">
+                        <img alt="" src="/Content/UiImages/lou.png" onerror="imgError();" class="J_ping" report-eventid="MProductdetail_BigPicClick" report-pageparam="3907358">
+                    </li>
+                    <li data-ul-child="child" onClick="closepage()" style="transition: all 300ms ease; height: 375px; width: 375px; transform: translate3d(-375px, 0px, 0px);">
+                        <img alt="" src="/Content/UiImages/img.png" onerror="imgError();" class="J_ping" report-eventid="MProductdetail_BigPicClick" report-pageparam="3907358">
+                    </li>
+                    <li data-ul-child="child" onClick="CloseLayerPage()" style="transition: all 300ms ease; height: 375px; width: 375px; transform: translate3d(-375px, 0px, 0px);">
+                        <img alt="" src="/Content/UiImages/lou.png" onerror="imgError();" class="J_ping" report-eventid="MProductdetail_BigPicClick" report-pageparam="3907358">
+                    </li>
+                </ul>
+                <div class="tittup" id="tittup" style="transform: translate3d(4.3333px, 0px, 0px);">
+                    <div class="arrow-box"> <em class="arrow"></em> <em class="arrow2"></em> </div>
+                    <span class="inner">没有啦</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</a>
+@*<input type="hidden" id="wareId" value="3907358">*@
+<input type="hidden" id="picInitNum" value="1">

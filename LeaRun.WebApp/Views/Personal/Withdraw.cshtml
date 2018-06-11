@@ -1,0 +1,118 @@
+﻿@{
+    ViewBag.Title = "提现";
+    Layout = "~/Views/Shared/_Partial.cshtml";
+}
+
+<div class="all pro-all">
+    <header class="header clear">
+        <a href="javascript:history.go(-1);" class="return fl"></a>
+        <h1 class="title">提现</h1>
+    </header>
+
+    <div class="re-all re-oth clear" style="padding:0 0.3rem;">
+        <span class="re-span clear">提现金额：<a href="" class="w-explain fr">提现说明</a></span>
+        <div class="re-pt clear"><span class="re-y fl">￥</span>
+            @using (Ajax.BeginForm("Withdraw", "Personal", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "success" }, new { @id = "form" }))
+            {
+                <input type="number" name="money" id="money" class="l-input" value="" placeholder="0.00" />
+                <input type="hidden" name="pwd" id="pwd" value="" />
+            }
+        </div>
+    </div>
+    <div class="re-all clear">
+        <div class="re-fu w-recharge clear">
+            @*<span class="l-ch fl">
+                    <input type="checkbox" id="checkbox-3-2" class="btn-xuan" checked name="choose" />
+                    <label for="checkbox-3-2"></label>
+                </span>*@
+            @if (ViewBag.Bank != null)
+            {
+                var bank = ViewBag.Bank as LeaRun.Entity.Am_BankInfo;
+                if (bank.BankCode != null)
+                {
+                    <div class="pro">
+                        <span class="pro-li">银行卡号：@bank.BankCode</span>
+                        <span class="pro-li">银行名称：@bank.BankName</span>
+                        <span class="pro-li">用户姓名：@bank.U_Name</span>
+                    </div>
+                }
+                else
+                {
+                    <div class="pro">
+                        <div class="btn-all my-infor">请先绑定银行卡信息</div>
+
+                    </div>
+                }
+
+            }
+
+        </div>
+        @if (1 == 1)
+        {
+            var bank = ViewBag.Bank as LeaRun.Entity.Am_BankInfo;
+            if (bank.BankCode == null)
+            {
+                <a href="/Personal/AddBandCard" class="w-explain">添加银行卡</a>
+            }
+        }
+
+        
+        <a href="javascript:;" class="btn-all" onclick="myfunction()">提现</a>
+        <a href="/Personal/WithdrawList" class="btn-all btn-li">提现记录</a>
+    </div>
+</div>
+<script src="~/Content/Scripts/passwordBox/passwordBox.min.js"></script>
+<script>
+    $(function () {
+        PwdBox.init('', '/Content/Scripts/passwordBox/img/pwd_keyboard.png', '请输入支付密码', '安全支付环境，请放心使用！');
+    });
+    function DoCheck() {
+        var ch = document.getElementsByName("choose");
+        if (document.getElementsByName("allChecked")[0].checked == true) {
+            for (var i = 0; i < ch.length; i++) {
+                ch[i].checked = true;
+            }
+        } else {
+            for (var i = 0; i < ch.length; i++) {
+                ch[i].checked = false;
+            }
+        }
+    }
+    function myfunction() {
+        var money = $("#money").val();
+        if (!parseFloat(money) > 0) {
+            layer.msg("请输入正确的金额", { time: 2000 });
+            return;
+        }
+
+        PwdBox.show(function (res) {
+            if (res.status) {
+                //关闭并重置密码输入
+                $("#pwd").val(res.password);
+                setTimeout("PwdBox.reset();", 500);
+                
+                $("form").submit();
+            } else {
+                //alert(JSON.stringify(arguments));
+            }
+        });
+        //layer.prompt({
+        //    title: '',
+        //    formType: 1
+        //}, function (pass) {
+        //    $("#pwd").val(pass);
+           
+        //});
+    }
+    function success(data) {
+        if (data.res == "Ok") {
+            layer.msg(data.msg, { time: 1000 });
+            setTimeout("jump()", 1000);
+        } else {
+            layer.msg(data.msg, { time: 2000 });
+        }
+    }
+    function jump() {
+        window.location.href = '@Url.Action("WithdrawList", "Personal")';
+    }
+</script>

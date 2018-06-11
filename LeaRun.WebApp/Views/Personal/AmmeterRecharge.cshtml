@@ -1,0 +1,368 @@
+﻿@model LeaRun.Entity.Am_Ammeter
+@{
+    ViewBag.Title = "电表充值";
+    Layout = "~/Views/Shared/_Partial.cshtml";
+}
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    html,
+    body {
+        height: 100%;
+        overflow: hidden;
+    }
+
+    .clearfix:after {
+        content: "\200B";
+        display: block;
+        height: 0;
+        clear: both;
+    }
+
+    .clearfix {
+        *zoom: 1;
+    }
+
+
+    /*IE/7/6*/
+
+    .shuru div::-webkit-scrollbar {
+        width: 0;
+        height: 0;
+        -webkit-transition: 1s;
+    }
+
+    .shuru div::-webkit-scrollbar-thumb {
+        background-color: #a7afb4;
+        background-clip: padding-box;
+        min-height: 28px;
+    }
+
+        .shuru div::-webkit-scrollbar-thumb:hover {
+            background-color: #525252;
+            background-clip: padding-box;
+            min-height: 28px;
+        }
+
+    .shuru div::-webkit-scrollbar-track-piece {
+        background-color: #ccd0d2;
+    }
+
+    .wrap {
+        position: relative;
+        margin: auto;
+        max-width: 640px;
+        min-width: 320px;
+        width: 100%;
+        height: 100%;
+        background: #F0EFF5;
+        overflow: hidden;
+    }
+
+    .layer-content {
+        position: absolute;
+        left: 50%;
+        bottom: -200px;
+        width: 100%;
+        max-width: 640px;
+        height: auto;
+        z-index: 12;
+        -webkit-transform: translateX(-50%);
+        transform: translateX(-50%);
+    }
+
+    /* 输入表单 */
+
+    .edit_cash {
+        display: block;
+        margin-top: 15px;
+        padding: 15px;
+        margin: 0 auto;
+        width: 90%;
+        border: 1px solid #CFCFCF;
+        border-radius: 10px;
+        background-color: #fff;
+    }
+
+        .edit_cash p {
+            font-size: 14px;
+            color: #8D8D8F;
+        }
+
+    .shuru {
+        position: relative;
+        margin-bottom: 10px;
+    }
+
+        .shuru div {
+            border: none;
+            width: 100%;
+            height: 50px;
+            font-size: 25px;
+            line-height: 50px;
+            /*border-bottom: 1px solid #CFCFCF;*/
+            text-indent: 30px;
+            outline: none;
+            white-space: pre;
+            overflow-x: scroll;
+        }
+
+        .shuru span {
+            position: absolute;
+            top: 5px;
+            font-size: 25px;
+        }
+
+    .submit {
+        display: block;
+        margin: 20px auto 0;
+        width: 90%;
+        height: 40px;
+        font-size: 16px;
+        color: #fff;
+        background: #80D983;
+        border: 1px solid #47D14C;
+        border-radius: 3px;
+    }
+
+
+    /* 键盘 */
+
+    .form_edit {
+        width: 100%;
+        background: #D1D4DD;
+    }
+
+        .form_edit > div {
+            margin-bottom: 2px;
+            margin-right: 0.5%;
+            float: left;
+            width: 33%;
+            height: 45px;
+            text-align: center;
+            color: #333;
+            line-height: 45px;
+            font-size: 18px;
+            font-weight: 600;
+            background-color: #fff;
+            border-radius: 5px;
+        }
+
+            .form_edit > div:nth-child(3n) {
+                margin-right: 0;
+            }
+
+            .form_edit > div:last-child {
+                background-color: #DEE1E9;
+            }
+</style>
+<div class="all">
+    <header class="header clear">
+        <a href="javascript:history.go(-1);" class="return fl"></a>
+        <h1 class="title">充值页面</h1>
+    </header>
+    @if (Model != null)
+    {
+        <div class="re-all bbot">
+            <span class="re-span"><span class="re-name">表号：</span>@Model.AM_Code</span>
+            <span class="re-span"><span class="re-name">当前余额：</span>@Model.CurrMoney.Value.ToString("0.00") 元</span>
+            <span class="re-span"><span class="re-name">累计充值金额：</span>@Model.AllMoney.Value.ToString("0.00")元</span>
+            <span class="re-span"><span class="re-name">余额同步时间：</span>@Model.CM_Time.Value.ToString("yyyy-MM-dd HH:mm:ss")</span>
+        </div>
+
+        <div class="re-all clear">
+            <div class="re-fu fl clear">
+                <span class="l-ch fl">
+                    <input type="radio" id="checkbox-3-1" checked="checked" class="btn-xuan" name="radio" value="0" />
+                    <label for="checkbox-3-1" class="checked" ></label>
+                    <span class="re-t">微信</span>
+                </span>
+
+            </div>
+            @*<div class="re-fu fl clear">
+                <span class="l-ch fl">
+                    <input type="radio" id="checkbox-3-2" checked="checked" class="btn-xuan" name="radio" value="1" />
+                    <label for="checkbox-3-2" class="checked"></label>
+                    <span class="re-t">余额</span>
+                </span>
+
+            </div>*@
+        </div>
+
+        <div class="re-all re-oth clear">
+            <span class="re-span">充值金额：</span>
+            <div class="re-pt clear">
+                <div class="shuru l-input">
+                    <span>&yen;</span>
+                    <div id="div"></div>
+                </div>
+                @*<input type="text" name="money" id="money" class="l-input" value="" placeholder="0.00" />*@
+            </div>
+            <a href="javascript:;" onclick="jsApiCall()" class="btn-all">充值</a>
+        </div>
+        <input type="hidden" id="number" name="number" value="@Model.Number" />
+    }
+
+</div>
+<div class="layer-content">
+    <div class="form_edit clearfix">
+        <div class="num">1</div>
+        <div class="num">2</div>
+        <div class="num">3</div>
+        <div class="num">4</div>
+        <div class="num">5</div>
+        <div class="num">6</div>
+        <div class="num">7</div>
+        <div class="num">8</div>
+        <div class="num">9</div>
+        <div class="num">.</div>
+        <div class="num">0</div>
+        <div id="remove">删除</div>
+    </div>
+</div>
+<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script>
+    function jsApiCall() {
+        var jsonParm = '';
+        var money = parseFloat($("#div").text());
+        if (!money > 0) {
+            layer.msg("请输入正确的金额", { time: 2000 });
+            return;
+        }
+        var number = $("#number").val();
+        var type = $("input[name='radio']:checked").val();
+        var pwd = "";
+
+        if (type == 1) {
+            layer.prompt({
+                title: '',
+                formType: 1
+            }, function (pass, index) {
+                pwd = pass;
+                myfunction(number, money, type, pwd);
+            });
+
+        } else {
+            myfunction(number, money, type, pwd);
+        }
+
+
+
+    }
+    function myfunction(number, money, type, pwd) {
+        $.ajax({
+            type: "Post",
+            url: "/Personal/AmmeterRecharge",
+            dataType: "json",
+            data: { number: number, money: money, type: type, pwd: pwd },
+            success: function (data) {
+                if (data.res == "Ok") {
+                    if (type == 1) {
+                        layer.msg("支付成功", {
+                            time: 2000, end: function myfunction() {
+                                location.href = "/Personal/AmmeterPayCost?number=" + number;
+                            }
+                        });
+                    }
+                    else {
+                        jsonParm = jQuery.parseJSON(data.json);
+                        WeixinJSBridge.invoke(
+                        'getBrandWCPayRequest',
+                         jsonParm,
+                            function (res) {
+                                WeixinJSBridge.log(res.err_msg);
+                                if (res.err_msg == "get_brand_wcpay_request:ok") {
+                                    layer.msg("支付成功", {
+                                        time: 2000, end: function myfunction() {
+                                            location.href = "/Personal/AmmeterPayCost?number=" + number;
+                                        }
+                                    });
+
+                                } else {
+                                    if (res.err_msg == "get_brand_wcpay_request:cancel") {
+                                        layer.msg("支付取消", { time: 2000 });
+                                        return false;
+                                    } else {
+                                        layer.msg("支付失败", { time: 2000 });
+                                        return false;
+                                    }
+                                }
+                            }
+                        );
+                    }
+
+                }
+                else {
+                    layer.msg(data.msg, { time: 2000 });
+                }
+            }
+        });
+    }
+    $(function () {
+
+        $('.layer-content').hide();
+        //填写信息
+        $('.infor-sub').click(function (e) {
+            $('.layer').hide();
+            $('.form').hide();
+            e.preventDefault();		//阻止表单提交
+        })
+        // 监听#div内容变化，改变支付按钮的颜色
+        $('#div').bind('DOMNodeInserted', function () {
+            if ($("#div").text() != "" || $("#div").text() > '0') {
+                $('.submit').removeClass('active');
+                $('.submit').attr('disabled', false);
+            } else {
+                $('.submit').addClass('active');
+                $('.submit').attr('disabled', true);
+            }
+        })
+        $('#div').trigger('DOMNodeInserted');
+
+        $('.shuru').click(function (e) {
+            $('.layer-content').animate({
+                bottom: 0
+            }, 200)
+            e.stopPropagation();
+            $('.layer-content').show();
+        })
+        $('.all').click(function () {
+            $('.layer-content').animate({
+                bottom: '-200px'
+            }, 200);
+            $('.layer-content').hide();
+        })
+
+        $('.form_edit .num').click(function () {
+            var oDiv = document.getElementById("div");
+            oDiv.innerHTML += this.innerHTML;
+        })
+        $('#remove').click(function () {
+            var oDiv = document.getElementById("div");
+            var oDivHtml = oDiv.innerHTML;
+            oDiv.innerHTML = oDivHtml.substring(0, oDivHtml.length - 1);
+        })
+    })
+</script>
+
+<script>
+    //Check
+
+    function DoCheck() {
+        //var ch = document.getElementsByName("choose");
+        //if (document.getElementsByName("allChecked")[0].checked == true) {
+        //    for (var i = 0; i < ch.length; i++) {
+        //        ch[i].checked = true;
+        //    }
+        //} else {
+        //    for (var i = 0; i < ch.length; i++) {
+        //        ch[i].checked = false;
+        //    }
+        //}
+    }
+
+</script>

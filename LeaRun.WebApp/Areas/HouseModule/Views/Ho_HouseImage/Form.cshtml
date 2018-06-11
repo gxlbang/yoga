@@ -1,0 +1,107 @@
+@{
+    ViewBag.Title = "Ho_HouseImage》表单页面";
+    Layout = "~/Views/Shared/_LayoutForm.cshtml";
+}
+<!--选择颜色组件start-->
+<link href="~/Content/Scripts/cxColor/css/jquery.cxcolor.css" rel="stylesheet" />
+<script src="~/Content/Scripts/cxColor/js/jquery.cxcolor.js"></script>
+<!--选择颜色组件end-->
+<!--上传文件组件start-->
+<link href="~/Content/Scripts/uploadify/uploadify.css" rel="stylesheet" />
+<script src="~/Content/Scripts/uploadify/jquery.uploadify.js"></script>
+<script type="text/javascript">
+    //上传文件
+    function uploadify() {
+        $("#uploadify").uploadify({
+            uploader: '/HouseModule/Ho_HouseInfo/ImgUpload',
+            swf: '/Content/Scripts/uploadify/uploadify.swf',
+            buttonText: "上传图片",
+            height: 24,
+            width: 70,
+            removeCompleted: true,               // 上传成功后移除进度条
+            removeTimeout: 0,
+            onFallback: function () {
+                alert("您未安装FLASH控件，无法上传！请安装FLASH控件后再试。");
+            },
+            onUploadSuccess: function (file, data, response) {
+                var DataJson = JSON.parse(data);
+                $("#pimg").attr("src", DataJson.Path);
+                $("#ImageUrl").val(DataJson.Path);
+            }
+        });
+    }
+</script>
+<script type="text/javascript">
+    var KeyValue = GetQuery('KeyValue');//主键
+    $(function () {
+        InitControl();
+        uploadify();
+    })
+    //得到一个对象实体
+    function InitControl() {
+        if (!!GetQuery('KeyValue')) {
+            AjaxJson("/HouseModule/Ho_HouseImage/SetForm", { KeyValue: KeyValue }, function (data) {
+                SetWebControls(data);
+                $("#pimg").attr("src", data.ImageUrl);
+            });
+        }
+    }
+    //保存事件
+    function AcceptClick() {
+        if (!CheckDataValid('#form1')) {
+            return false;
+        }
+        var postData = GetWebControls("#form1");
+        AjaxJson("/HouseModule/Ho_HouseImage/SubmitUserForm?KeyValue=" + KeyValue, postData, function (data) {
+            tipDialog(data.Message, 3, data.Code);
+            top.frames[tabiframeId()].windowload();
+            closeDialog();
+        });
+    }
+</script>
+<form id="form1" style="margin: 1px">
+    <div id="message" style="display: none"></div>
+    <table class="form">
+        <tr>
+            <th class='formTitle'>楼盘名称：</th>
+            <td class='formValue'>
+                <input id="HouseName" maxlength=50 type="text" class="txt"   />
+            </td>
+            <th width="10"></th>
+            <td class='formValue' rowspan="5">
+                <img src="~/Content/Images/noimg.gif" id="pimg" width="150" height="150" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>图册名称：</th>
+            <td class='formValue'>
+                <input id="GroupName" maxlength=50 type="text" class="txt" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>图片上传：</th>
+            <td class='formValue'>
+                <input id="uploadify" name="uploadify" type="file" />
+                <input id="ImageUrl" type="hidden" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>图片标题：</th>
+            <td class='formValue'>
+                <input id="ImageTitle" maxlength=50 type="text" class="txt" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>图片排序：</th>
+            <td class='formValue'>
+                <input id="Orders" maxlength=10 type="text" class="txt" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>图片说明：</th>
+            <td class='formValue' colspan="3">
+                <textarea id="ImageDes" maxlength="512" class="txtArea" rows="14"></textarea>
+            </td>
+        </tr>
+    </table>
+</form>

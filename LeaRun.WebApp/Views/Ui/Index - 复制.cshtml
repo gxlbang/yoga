@@ -1,0 +1,536 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@functions{
+    static string TokenHeaderValue()
+    {
+        string cookieToken, formToken;
+        AntiForgery.GetTokens(null, out cookieToken, out formToken);
+        return cookieToken + ":" + formToken;
+    }
+}
+
+<header class="head-all bbot">
+    <a href="javascript:history.back();" class="head-return"><i class="icon icon-return"></i></a>
+    <h3 class="head-title">当你穷的时候这样做，不成百万富翁至少也是土豪！</h3>
+</header>
+    <!--head  end-->
+    <div class="te-img">
+        <div class="text-main">
+            <div class="wen">
+                <p>人们的富贵贫贱、吉凶祸福，死生寿夭、穷通得失，科场中举、货殖营利，无一不取决于冥冥之中非人类自身所能把握的一种力量，即命运是也。</p>
+                <div class="we-c"><p>你知道吗？生肖对个人命运有着至关重要的影响。</p></div>
+                <p>12生肖不仅受黄道十二宫磁场的影响，还与二十四节气密切相连，形成十二种不同特质的基因，从而从基因上影响了性格，而性格决定了命运。</p>
+            </div>
+            <div class="t-img mt10">
+                <img src="/Content/UiImages/r/6.jpg" alt="" />
+                <div class="we-c we-b mt10"><p>而你是否有那种好命呢？</p></div>
+            </div>
+            <div class="we-h"><p>你是否遇到这样的情况：</p></div>
+            <div class="wen1">
+                <img src="/Content/UiImages/r/5.jpg" alt="" />
+                <div class="wen2">
+                    <p>在生活中，磕磕碰碰，总是有很多不大不小灾祸让你疲惫不堪！亲人病痛、老人不和、儿女不孝、烦事不断等等，好像就没有几天安静快乐的日子让你过！</p>
+                    <p>在工作中，坎坎坷坷，总是有很多琐碎的事情让你分身乏术！上司刁难、下属不服，同事不和，升迁不顺等等，甚至同样的事情你要花费几倍的努力才能稍有成就，而别的同事就能顺手拈来！</p>
+                    <p>在婚姻上，也意外频出，矛盾不断，三言两语不和便有了婚姻危机。</p>
+                </div>
+            </div>
+            <div class="we-c mt10"><p>很多人都把这些不顺归结为：这就是命！自己不幸遇到了一个跌宕起伏、浮沉不定的年份，诸事欠顺，恐有不测之灾？</p></div>
+            <div class="we-bai">
+                <p>同样的出生，别人是富贵，而你就是贫穷！</p>
+                <p>同样的遭遇，别人是福气，而你就是霉运！</p>
+                <p>同样的身体，别人是长寿，而你就是病殃！</p>
+                <p>同样的机会，别人是得到，而你就是失去！</p>
+                <p>同样的门槛，别人是中举，而你就是落榜！</p>
+                <p>同样的客户，别人是赚钱，而你就是赔钱！</p>
+            </div>
+            <div class="t-img mt10"><img src="/Content/UiImages/r/4.jpg" alt="" /></div>
+            <div class="we-c mt10"><p>运途殊异</p></div>
+            <div class="we-bai"><p>而你是否有那种好命呢？人们在面对这许多不可知的命数时，往往显得茫然无助。</p></div>
+            <div class="we-c we-b"><p>感觉冥冥之中早有注定，无论后天怎样挣扎，也只不过是命运玩弄的对象罢了！</p></div>
+            <div class="we-bai"><p>其实，你不知道的是，每个人生出生的那一天，便与有缘之佛结缘，佛便会一只护佑着自己，这就是人们常说的“守护神”或“本命佛”！</p></div>
+            <div class="t-img mt10"><img src="/Content/UiImages/r/7.jpg" alt="" /></div>
+            <div class="we-c mt10"><p>本命佛从佛理上说是对应属相的命缘，特别是适逢本命年的时候，佛缘解凶，甚是招吉！从现代心里学上说，本命佛是一种运势的暗示，能起到积极作用。</p></div>
+            <div class="we-bai"><p>拥有本命佛的人确实在运势上要高人一等，看看这些人你就知道了！</p></div>
+            <div class="we-other">
+                <p>2003年初，巨星李连杰经人介绍，与中国佛教五大宗之首密印寺神秘居士进行了长达4个小时的秘密会谈，李连杰出门之时，神色凝重，目光呆滞！据知情人士回忆，之后李连杰息影2月再进迷印寺，接受方丈指点，清斋沐浴1个月后，带着奉请的本命佛和8字箴言下山，此8字为：遇林而起,遇水而止。</p>
+                <p>2004年12月25号，李连杰和妻女到马尔代夫度假，第二天吃完早餐就到海滩上完，原本海滩风平浪静，但李连杰慢慢感觉似乎涨潮了，但是海滩上的人还是很多，也没有感觉比较奇怪的地方，隐隐之间，他感觉胸口戴本命佛的位置异常发闷，他立刻感觉有大事发生。</p>
+                <p>容不得多想，他马上把孩子领会酒店，刚到酒店回头一看，海水已经淹没了海滩，再慢1分钟，估计就......</p>
+                <p>很多人都感慨李连杰福大命大，可李连杰说根本没人注意到自己佩戴的本命佛，他感觉冥冥之中都是天注定的。</p>
+                <p>没过多久，他就创办了壹基金，广施仁慈，以此感谢天佑。</p>
+                <i class="left-t"></i>
+                <i class="right-t"></i>
+                <i class="left-b"></i>
+                <i class="right-b"></i>
+            </div>
+            <div class="t-img mt10"><img src="/Content/UiImages/r/8.jpg" alt="" /></div>
+            <div class="we-other">
+                <p>2015年4月6日，是毕福剑人生中最大的一次转折，就因为一个小小的饭局，短短一天便从当红名人变成了众矢之的。如此下场让众多人唏嘘不已，人们在感慨命途难测，人生无常时，唯有星云大师一语道破禅机。</p>
+                <p>星云大师说，毕福剑属相邢太岁，羊年必须奉请本命佛才能消灾。星云大师说，12生肖受黄道12宫磁场与24节气影响，形成12种不同的特殊基因，从而影响个性和人生，猪年出生的人值羊年多容易祸从口出，如果不注意防范，很容易就会出大事。</p>
+                <i class="left-t"></i>
+                <i class="right-t"></i>
+                <i class="left-b"></i>
+                <i class="right-b"></i>
+            </div>
+            <div class="t-img mt10"><img src="/Content/UiImages/r/9.jpg" alt="" /></div>
+            <div class="we-other">
+                <p>2016年3月5日大乐透第16025期，其中1注681万元一等奖被江西彩民李阿姨拿下。李阿姨玩彩票已经十多年，可是这么多年来，自己除了中了点小奖，连上千的都没有，而跟着自己买的邻居王阿姨，有好几次都是修改了几位数就中了奖，金额高的有上万元的。李阿姨非常纳闷。那为何又中如此巨奖呢？据新华网报道称，李阿姨中奖之前有“先兆”，而这个“先兆”便是她无意中发现王阿姨多年来一直佩戴本命佛，运势一直如日冲天，于是她也请了一尊不动明王菩萨，连日来一直梦见一组模糊数字，接连买了几天后就中奖了！</p>
+                <i class="left-t"></i>
+                <i class="right-t"></i>
+                <i class="left-b"></i>
+                <i class="right-b"></i>
+            </div>
+            <div class="t-img mt10"><img src="/Content/UiImages/r/0.jpg" alt="" /></div>
+            <div class="we-other">
+                <p>家住柳州的徐先生，经常出差跑高速，家里老人非常担忧，又无能为力，经人介绍之后，为儿子请了本命佛，祈求佛祖护佑，徐先生本来不信佛，但又不能拒绝老人的好意，只能把本命佛挂在了车里。</p>
+                <p>就在2015年12月3日，徐先生又因为公干外出，恰巧同村一位乡亲同路，就和徐先生搭车一同前去，车子刚过第一个加油站的时候，徐先生就觉得无比瞌睡，恍惚中感觉看见佛光万丈，无法专心驾驶，只能请同村乡亲换开。没成想，还没到中途就出了大事故，轿车无故追尾大货车，撞的体无完肤，司机当场毙命。</p>
+                <p>令人奇怪的是，在如此重大车祸下，徐先生除了轻微擦伤，竟无大碍，当地人全都啧啧称奇！</p>
+                <i class="left-t"></i>
+                <i class="right-t"></i>
+                <i class="left-b"></i>
+                <i class="right-b"></i>
+            </div>
+            <div class="t-img mt10"><img src="/Content/UiImages/r/11.jpg" alt="" /></div>
+            <div class="we-other">
+                <p>李先生，在杭州餐饮界，那叫一个传奇。</p>
+                <p>他的传奇并不是因为生意如日中天的传奇，而是大起大落的传奇。2004年，李先生已经在杭州开酒楼7年了。一直梦想扩大生意的李先生转让了3处小酒楼，花了毕生积蓄盘得了一处豪华地段的店面，按行里的说法，那是睡着也赚钱。然而事情没有那样简单，酒楼开好后，一直不温不火，加上高昂的开支，一度关门息业。</p>
+                <p>李先生和朋友借钱周转的时候才听朋友说，他可能是因为本命年，诸事不顺，让他找人看看。李先生将信将疑，经朋友介绍请到了星云大师开过光的本命佛回家。</p>
+                <p>说来也奇怪，才过2星期，店里就开始人潮如织，甚至到了叫号需要排队的地步。李先生笑得合不拢嘴，请教朋友才知道，做生意的人，最好有尊本命佛护佑，不然容易犯太岁。即使不是本命年，也要有本命佛，这样心里才踏实。</p>
+                <i class="left-t"></i>
+                <i class="right-t"></i>
+                <i class="left-b"></i>
+                <i class="right-b"></i>
+            </div>
+            <div class="we-c mt10"><p>无论商业巨贾、明星大咖还是平民百姓，只要拥有本命佛的人，都能传来喜讯！难怪本命佛会那么火！</p></div>
+            <div class="t-img mt10"><img src="/Content/UiImages/r/12.jpg" alt="" /></div>
+            <div class="we-c mt10"><p>亚洲首富李嘉诚父子常年佩戴本命佛，生意顺风顺水！</p></div>
+            <div class="t-img mt10"><img src="/Content/UiImages/r/15.jpg" alt="" /></div>
+            <div class="we-c mt10"><p>娱乐明星个个佩戴本命佛，让星途坦坦荡荡！</p></div>
+            <div class="we-c we-b we-fr mt10"><p>哪里能请到本命佛？？？</p></div>
+            <div class="we-p">
+                <div class="we-span">星云大师开光本命佛</div>
+                <div class="we-c"><p>星云大师特别提醒，以下文字请认真查看：<p></div>
+                <div class="we-ht"><p>佩戴经过加持开光的本命佛这是富人的日常生活习惯，众多成功人士有今天的成就，本命佛的守护是不能排除的。</p></div>
+                <div class="we-ht"><p>然而不同属相的人必须佩戴不同的本命佛，而且是经过开光的特殊材质本命佛，否则没有佛佑。</p></div>
+            </div>
+            <div class="we-c mt10 we-te"><p>【本 命 佛】+【黑曜石】+【正统开光】=3倍正能量</p></div>
+            <div class="we-pt mt10">
+                <div class="we-c"><p><span class="all-s">星云法师：</span>筹集善款，助印经书宣扬佛法！行善积德！开光证书亲笔签名!宣扬佛法，行善积德！开光本命佛！南无阿弥陀佛！感恩！合十！</p></div>
+            </div>
+            <div class="t-img mt10"><img src="/Content/UiImages/r/14.jpg" alt="" /></div>
+            <div class="we-c mt10"><p>星云大师为本命佛开光诵经 ，每一位看见的人，都有机会得到佛法加持 让佩戴者福佑在身。</p></div>
+            <div class="t-img mt10"><img src="/Content/UiImages/r/13.jpg" alt="" /></div>
+            <div class="we-c mt10">
+                <p>恭请本命佛请在左下角‘阅读原文’处填写施主信息！</p>
+                <p>星云大师为“本命佛”开光诵经、佛法加持，让佩戴者结纳福缘！！</p>
+            </div>
+            <div class="t-img mt10"><img src="/Content/UiImages/r/16.jpg" alt="" /></div>
+            <div class="t-img"><img src="/Content/UiImages/r/17.jpg" alt="" /></div>
+            <div class="t-img"><img src="/Content/UiImages/r/18.jpg" alt="" /></div>
+            <div class="t-img"><img src="/Content/UiImages/r/19.jpg" alt="" /></div>
+            <div class="t-img"><img src="/Content/UiImages/r/20.jpg" alt="" /></div>
+            <div class="we-c we-b mt10"><p>属相不同一生的守护佛也不同：</p></div>
+            <div class="we-c"><p>鼠：<span class="we-hei">千手观音菩萨</span></p></div>
+            <div class="we-c"><p>牛：<span class="we-hei">虚空藏菩萨</span></p></div>
+            <div class="we-c"><p>虎：<span class="we-hei">虚空藏菩萨</span></p></div>
+            <div class="we-c"><p>兔：<span class="we-hei">文殊菩萨</span></p></div>
+            <div class="we-c"><p>龙：<span class="we-hei">普贤菩萨</span></p></div>
+            <div class="we-c"><p>蛇：<span class="we-hei">普贤菩萨</span></p></div>
+            <div class="we-c"><p>马：<span class="we-hei">大势至菩萨</span></p></div>
+            <div class="we-c"><p>羊：<span class="we-hei">大日如来</span></p></div>
+            <div class="we-c"><p>猴：<span class="we-hei">大日如来</span></p></div>
+            <div class="we-c"><p>鸡：<span class="we-hei">不动尊菩萨</span></p></div>
+            <div class="we-c"><p>狗：<span class="we-hei">阿弥陀佛</span></p></div>
+            <div class="we-c"><p>猪：<span class="we-hei">阿弥陀佛</span></p></div>
+            <div class="we-c we-b mt10"><p>佩戴效果：</p></div>
+            <div class="t-img mt10"><img src="/Content/UiImages/r/21.jpg" alt="" /></div>
+            <div class="we-other">
+                <div class="we-c"><p>特别提醒</p></div>
+                <div class="we-white"><p>本命佛不分男女、不限本命年，均可终身佩戴敬奉！</p></div>
+                <i class="left-t"></i>
+                <i class="right-t"></i>
+                <i class="left-b"></i>
+                <i class="right-b"></i>
+            </div>
+            <div class="t-img mt10"><img src="/Content/UiImages/r/22.jpg" alt="" /></div>
+            <div class="we-c we-b mt10"><p>佩戴本命佛转运？</p></div>
+            <div class="t-img mt10"><img src="/Content/UiImages/r/23.jpg" alt="" /></div>
+            <div class="we-yun">
+                <span class="yun">财运</span>
+                <div class="we-white"><p>增强财星的活力，招财旺财，财路通畅，横财易入门。</p></div>
+            </div>
+            <div class="we-yun">
+                <span class="yun">事业运</span>
+                <div class="we-white"><p>增强运势，仕途通畅，事业有成！</p></div>
+            </div>
+            <div class="we-yun">
+                <span class="yun">健康运</span>
+                <div class="we-white"><p>祛除邪气和晦气，保持健康身心！</p></div>
+            </div>
+            <div class="we-yun">
+                <span class="yun">感情运</span>
+                <div class="we-white"><p>改变气场，增强催旺桃花，巩固爱情，异性缘增加，异性缘增加。</p></div>
+            </div>
+            <div class="we-c we-b mt10"><p>开光本命佛都适合那些人群奉养佩戴？</p></div>
+            <div class="we-list mt10">
+                <div class="we-all clear"><span class="we-shu">1</span><p>做生意的人，佩戴开光生肖本命佛能增强财星的活力，工作上让你遇到贵人，招财旺财，同时帮你清除事业上面的障碍，使您避开破财、败财的灾难，使您财路畅通无阻，且能生财聚财，得八方贵人相助，远离小人，人财俱旺。</p></div>
+                <div class="we-all clear"><span class="we-shu">2</span><p>恋爱困难、夫妻矛盾、感情不顺的人佩戴生肖本命佛，能改变自身的气场，增强催旺桃花，巩固自身的爱情，异性缘也大大增加。</p></div>
+                <div class="we-all clear"><span class="we-shu">3</span><p>佩戴开光生肖本命佛能开发智慧，提高悟性，尤其能帮助小孩学业有成、增加创造力、开发力。</p></div>
+                <div class="we-all clear"><span class="we-shu">4</span><p>想让家人运势转好，好运加强，赶走邪气，镇宅辟邪的人。奉请已开光的生肖本命佛，可令家运转好，好运加强，赶走邪气，有辟邪之功效，成为你的很好的本命佛，保合家平安。</p></div>
+                <div class="we-all clear"><span class="we-shu">5</span><p>偏行，收入浮动者，例如销售、经商、外汇、股票、金融、彩马、期货、赌场等。尤对偏行、收入浮动者有奇效。</p></div>
+                <div class="we-all clear"><span class="we-shu">6</span><p>经常乘坐交通工具的人。当遇到煞气，会使家人居住不安，损人破财家庭不合，车祸，血光，开刀，离婚等。而生肖本命佛转祸为祥之神。最擅化解五黄煞，天斩煞，穿心煞，镰刀煞，屋角煞，刀煞，白虎煞，阴气煞。</p></div>
+                <div class="we-all clear"><span class="we-shu">7</span><p>出去旅游的人。开光生肖本命佛除煞辟邪能力都很强，出门在外带着保平安非常好。气，有辟邪之功效，成为你的很好的本命佛，保合家平安。</p></div>
+                <div class="we-all clear"><span class="we-shu">8</span><p>单身之人！等等！</p></div>
+            </div>
+            <div class="we-c we-b mt10"><p>2017年酉年鸡年以下生肖一定要请本命佛：</p></div>
+            <div class="t-img mt10"><img src="/Content/UiImages/r/24.jpg" alt="" /></div>
+            <div class="we-c we-b mt10"><p>为本命佛开光诵经 ，每一位看见的人，都有机会得到佛法加持 让佩戴者福佑在身。</p></div>
+            <video class="video" controls src="/Content/UiImages/r/Screen.mp4">
+                Your browser does not support the video tag.
+            </video>
+            <div class="we-all">
+                <p>凡是请过本命佛的有缘人，<span class="we-c">都对我们的产品赞不绝口，甚至还有缘主戴后发来感谢信，</span>大量购买赠送亲朋好友，很多人推荐给身边的同事和朋友。</p>
+                <p>我们确保给有缘人提供最具灵性的本命佛和最优质的服务，本命佛是你送同事、朋友、家人的最好礼品，<span class="we-c">没有什么事是比关心他们身体健康还重要，也没有任何事比祝他们事事如意还称心。</span></p>
+            </div>
+            <div class="t-img mt10"><img src="/Content/UiImages/r/25.jpg" alt="" /></div>
+            <div class="we-c mt10">
+                <p>温馨提醒：为了感谢信众的善缘，特为<span class="we-blue">前一百名</span>结缘的施主恭<span class="we-blue">送价值688元开光招财貔貅手串，</span>“一摸貔貅运程旺盛，再摸貔貅财运滚滚，三摸貔貅平步青云”</p>
+            </div>
+            <div class="t-img mt10"><img src="/Content/UiImages/r/26.jpg" alt="" /></div>
+            <div class="we-c mt10">
+                <p>想催偏财运的多摸貔貅的爪子，想要事业仕途顺利可以摸摸貔貅背脊，想要正财可以多摸貔貅屁股！</p>
+            </div>
+            <div class="t-img mt10"><img src="/Content/UiImages/r/27.jpg" alt="" /></div>
+
+            <div class="we-c we-b mt10 we-te"><p>【精美包装，送礼佳品】</p></div>
+            <div class="mt10 we-te"><p>无论是送亲戚、送朋友、男女朋友相互赠送</p></div>
+            <div class="we-c mt10 we-te"><p>还是送长辈、送给孩子</p></div>
+            <div class="mt10 we-te"><p><span class="we-c">天然冰种黑曜石本命佛</span>都是独一无二的选择</p></div>
+            <div class="mt10 we-te"><p>每块本命佛都搭配配唯一而且精美的包装</p></div>
+            <div class="mt10 we-te"><p>不仅流露原汁原味<span class="we-c">的佛教气息</span>而且还有<span class="we-c">时尚和奢华的享受</span></p></div>
+            <div class="we-c mt10 we-te"><p>每尊冰种本命佛的结缘善款为368元，福慧双修，功德无量！</p></div>
+            <div class="w-end">
+                <span class="w-top">【重要提醒】</span>
+                <div class="w-endt">
+                    <p class="we-white">1、为广结有缘人，推广佛理，特做以下活动：<span class="we-c">原价1988一尊的冰种本命佛，回馈粉丝结缘价368元</span>，开光本命佛数量有限！看见不结缘就没有了！！</p>
+                    <p class="we-white">2、<span class="we-c we-b">每一尊本命佛都是通过星云大师开光加持过</span>，独一无二，世面不能见到！！！</p>
+                    <p class="we-white">3、全国货到付款，免邮费！<br><span class="we-c">佛到拒收</span>即是<span class="we-c we-b">“请佛回家，又赶佛出门”</span>，此种恶因是万万不能种的！</p>
+                    <p class="we-c">如果有疑问？</p>
+                    <p class="we-white">添加<span class="we-blue">十二生肖本命佛</span>结缘</p>
+                    <p class="we-white">微信号:<span class="we-c we-b">xiaoy870</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--banner  end-->
+    <div class="main">
+        <div class="main-top">
+            <i class="icon-cart"></i>
+            <span>本命佛</span>
+        </div>
+        <div class="main-list main-a clear" data-sid="1">
+            <div class="main-left clear"><span class="dian">*</span><span class="name">商品选择</span></div>
+            <ul class="main-right clear">
+                @if (Model != null)
+                {
+                    int i = 1;
+                    foreach (var item in Model)
+                    {
+                        <li data-aid="@(i%2 > 1 ? 1 : 2)" data-id="@item.Number" data-price="@item.Pro_Price">
+                            <a href="javascript:void(0);" class="main-choice">
+                                <img src="@item.Pro_Pic" alt="" />
+                                <span class="types">@item.Pro_Name</span>
+                            </a>
+                        </li>
+
+                        i++;
+                    }
+                }
+            </ul>
+
+        </div>
+
+        <div class="main-list clear" data-sid="3">
+            <div class="main-left clear"><span class="dian">*</span><span class="name"><span>快</span>递</span></div>
+            <ul class="main-right main-cot clear">
+                <li data-aid="6">
+                    <a href="javascript:void(0);" class="main-choice">
+                        <span class="types">顺丰快递（服务好 速度一流）</span>
+                        <i class="icon icon-choice"></i>
+                    </a>
+                </li>
+                <li data-aid="7">
+                    <a href="javascript:void(0);" class="main-choice">
+                        <span class="types">中通快递</span>
+                        <i class="icon icon-choice"></i>
+                    </a>
+                </li>
+                <li data-aid="8">
+                    <a href="javascript:void(0);" class="main-choice">
+                        <span class="types">中国邮政（可送达乡镇）</span>
+                        <i class="icon icon-choice"></i>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="main-list clear">
+            <div class="main-left clear"><span class="dian">*</span><span class="name">订购数量</span></div>
+            <div class="main-right tab clear">
+                <input class="min" name="" type="button" value="-" />
+                <input class="text_box" name="Quantity" id="txtQuantity" type="text" value="1" readonly="readonly" />
+                <input class="add" name="" type="button" value="+" />
+            </div>
+        </div>
+
+        <div class="main-list clear">
+            <div class="main-left clear"><span class="dian"></span><span class="name">订单总额</span></div>
+            <div class="main-right clear">
+                <span class="typesty"><em id="txtTotalPrice">0</em>元</span>
+            </div>
+        </div>
+
+        <div class="main-list clear">
+            <div class="main-left clear"><span class="dian">*</span><span class="name">真实姓名</span></div>
+            <div class="main-right clear">
+                <input class="input-text" type="text" id="txtConsignee" placeholder="请输入您的姓名或者称呼" />
+            </div>
+        </div>
+
+        <div class="main-list clear">
+            <div class="main-left clear"><span class="dian">*</span><span class="name">手机号码</span></div>
+            <div class="main-right clear">
+                <input class="input-text" type="number" id="txtTelphone" placeholder="请输入您的手机号码" maxlength="11" />
+            </div>
+        </div>
+
+        <div class="main-list clear">
+            <div class="main-left clear"><span class="dian">*</span><span class="name">地区</span></div>
+            <div class="main-right clear">
+                <select class="select" id="s_province" name="s_province"></select>
+                <select class="select" id="s_city" name="s_city"></select>
+                <select class="select" id="s_county" name="s_county"></select>
+                <div id="show"></div>
+            </div>
+        </div>
+
+        <div class="main-list clear">
+            <div class="main-left clear"><span class="dian">*</span><span class="name">详细地址</span></div>
+            <div class="main-right clear">
+                <input class="input-text" type="text" id="txtShipAddress" placeholder="请填写您的详细地址" />
+            </div>
+        </div>
+
+        <div class="main-list clear">
+            <div class="main-left clear"><span class="dian"></span><span class="name">留言备注</span></div>
+            <div class="main-right clear">
+                <textarea class="textarea-text" type="text" id="txtRemark" placeholder="如备用电话、商品数量、收货时间等，额外需求请留意"></textarea>
+            </div>
+        </div>
+
+        <div class="main-list clear">
+            <div class="main-left clear"><span class="dian">*</span><span class="name">支付方式</span></div>
+            <div class="main-right main-cell clear">
+                <a href="" class="pay">
+                    <span class="pay-span">货到付款</span>
+                </a>
+                <span class="pay-in">货到付款，安全放心</span>
+            </div>
+        </div>
+    </div>
+    <div class="btn-all"><a href="javascript:void(0);" class="btn" onclick="submitOrder(this);">确认提交</a></div>
+
+    <div class="main-top">
+        <i class="icon-pay"></i>
+        <span>最新订购</span>
+    </div>
+    <div class="scroll" id="ticker">
+        <div class="s-list">
+            <dt>
+                <span class="s-na clear">赵*[150****1448]<span class="s-top">黑龙江</span></span>
+                <span class="s-na clear">购买本命佛-属【马】大日如来<time class="s-time">半小时前</time></span>
+            </dt>
+        </div>
+        <div class="s-list s-list1">
+            <dt>
+                <span class="s-na clear">赵*[136****5328]<span class="s-top">山东</span></span>
+                <span class="s-na clear">购买本命佛-属【羊】大日如来<time class="s-time">半小时前</time></span>
+            </dt>
+        </div>
+        <div class="s-list">
+            <dt>
+                <span class="s-na clear">赵*[189****7778]<span class="s-top">江苏</span></span>
+                <span class="s-na clear">购买本命佛-属【猪】大日如来<time class="s-time">半小时前</time></span>
+            </dt>
+        </div>
+        <div class="s-list s-list1">
+            <dt>
+                <span class="s-na clear">赵*[177****0909]<span class="s-top">浙江</span></span>
+                <span class="s-na clear">购买本命佛-属【狗】大日如来<time class="s-time">半小时前</time></span>
+            </dt>
+        </div>
+        <div class="s-list">
+            <dt>
+                <span class="s-na clear">李*[139****6527]<span class="s-top">陕西</span></span>
+                <span class="s-na clear">购买本命佛-属【牛】大日如来<time class="s-time">半小时前</time></span>
+            </dt>
+        </div>
+        <div class="s-list s-list1">
+            <dt>
+                <span class="s-na clear">赵*[188****8877]<span class="s-top">黑龙江</span></span>
+                <span class="s-na clear">购买本命佛-属【羊】大日如来<time class="s-time">半小时前</time></span>
+            </dt>
+        </div>
+    </div>
+    <div class="btm">
+        <span class="btm-y">阅读 10000+</span><span class="btm-m">10000</span>
+    </div>
+@section scripts{
+    <script type="text/javascript">
+        //商品规格选择
+        $(function () {
+            $(".main-list").each(function () {
+                var i = $(this);
+                var p = i.find("ul > li");
+                p.click(function () {
+                    if (!!$(this).hasClass("selected")) {
+                        $(this).removeClass("selected");
+                        i.removeAttr("data-attrval");
+                    } else {
+                        $(this).addClass("selected").siblings("li").removeClass("selected");
+                        i.attr("data-attrval", $(this).attr("data-aid"))
+                    }
+                    getTotalPrice()
+                })
+            })
+        })
+        //计算总价
+        function getTotalPrice() {
+            $(".commodity-list").find("li").each(function () {
+                if ($(this).hasClass("selected")) {
+                    $("#txtTotalPrice").html(parseFloat($(this).attr("data-price")) * parseInt($("#txtQuantity").val()));
+                }
+            });
+        }
+        //加减
+
+        //加减
+        $(function () {
+            $(".add").click(function () {
+                var t = $(this).parent().find('input[class*=text_box]');
+                t.val(parseInt(t.val()) + 1)
+                getTotalPrice();
+            });
+            $(".min").click(function () {
+                var t = $(this).parent().find('input[class*=text_box]');
+                t.val(parseInt(t.val()) - 1)
+                if (parseInt(t.val()) < 1) {
+                    t.val(1);
+                }
+                getTotalPrice();
+            });
+            function setTotal() {
+                var s = 0;
+                $(".tab p").each(function () {
+                    s += parseInt($(this).find('input[class*=text_box]').val()) * parseFloat($(this).find('span[class*=price]').text());
+                });
+            }
+        })
+    </script>
+
+    <!--地区选择-->
+    <script type="text/javascript">
+        var Gid = document.getElementById;
+        var showArea = function () {
+            Gid('show').innerHTML = "<h3>省" + Gid('s_province').value + " - 市" +
+            Gid('s_city').value + " - 县/区" +
+            Gid('s_county').value + "</h3>"
+        }
+        /*Gid('s_county').setAttribute('onchange','showArea()');*/
+    </script>
+
+    <!--滚动-->
+    <script type="text/javascript">
+        $(function () {
+            _init_area();
+            //cache the ticker
+            var ticker = $("#ticker");
+            //wrap dt:dd pairs in divs
+            ticker.children().filter("dt").each(function () {
+                var dt = $(this),
+                  container = $("<div>");
+                dt.next().appendTo(container);
+                dt.prependTo(container);
+                container.appendTo(ticker);
+            });
+            //hide the scrollbar
+            ticker.css("overflow", "hidden");
+            //animator function
+            function animator(currentItem) {
+                //work out new anim duration
+                var distance = currentItem.height();
+                duration = (distance + parseInt(currentItem.css("marginTop"))) / 0.025;
+                //animate the first child of the ticker
+                currentItem.animate({ marginTop: -distance }, duration, "linear", function () {
+                    //move current item to the bottom
+                    currentItem.appendTo(currentItem.parent()).css("marginTop", 0);
+                    //recurse
+                    animator(currentItem.parent().children(":first"));
+                });
+            };
+            //start the ticker
+            animator(ticker.children(":first"));
+            //set mouseenter
+            ticker.mouseenter(function () {
+                //stop current animation
+                ticker.children().stop();
+            });
+            //set mouseleave
+            ticker.mouseleave(function () {
+                //resume animation
+                animator(ticker.children(":first"));
+            });
+        });
+        function submitOrder(obj) {
+
+            if ($(obj).html() != "确认提交") {
+                return false;
+            }
+            if (parseFloat($("#txtTotalPrice").html()) < 1) {
+                layer.alert("请选择商品", { title: '信息', btn: '确定' });
+                return;
+            }
+            if ($(".main-cot").find("li.selected").length < 1) {
+                layer.alert("请选择快递", { title: '信息', btn: '确定' });
+                return;
+            }
+            if ($.trim($("#txtConsignee").val()) == "") {
+                layer.alert("请输入真实姓名", { title: '信息', btn: '确定' });
+                return;
+            }
+            if ($.trim($("#txtTelphone").val()) == "") {
+                layer.alert("请输入手机号码", { title: '信息', btn: '确定' });
+                return;
+            }
+            if ($("#s_province").val() == "省份") {
+                layer.alert("请选择省份", { title: '信息', btn: '确定' });
+                return;
+            }
+            if ($("#s_city").val() == "城市") {
+                layer.alert("请选择城市", { title: '信息', btn: '确定' });
+                return;
+            }
+            if ($("#s_county").val() == "县/区") {
+                layer.alert("请选择县区", { title: '信息', btn: '确定' });
+                return;
+            }
+            if ($.trim($("#txtShipAddress").val()) == "") {
+                layer.alert("请输入详细地址", { title: '信息', btn: '确定' });
+                return;
+            }
+
+            
+        }
+    </script>
+}

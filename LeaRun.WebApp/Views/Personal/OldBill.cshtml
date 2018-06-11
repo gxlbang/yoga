@@ -1,0 +1,98 @@
+﻿@{
+    ViewBag.Title = "我的历史账单";
+    Layout = "~/Views/Shared/_Partial.cshtml";
+}
+
+<div class="all pro-all">
+    <header class="header clear">
+        <a href="javascript:history.go(-1);" class="return fl"></a>
+        <h1 class="title">历史账单</h1>
+    </header>
+    <form action="/Personal/OldBill" method="get">
+        <div class="acc-se hiss-bill clear">
+            @*<input type="date" class="acc-in fl" placeholder="开始时间">*@
+            <input type="datetime" class="acc-in fl" name="star" id="test1" placeholder="开始时间">
+            <span class="his-line fl">-</span>
+            <input type="datetime" class="acc-in fr" name="end" id="test2" placeholder="结束时间">
+        </div>
+        <div class="acc-se his-bill clear">
+            <input type="text" class="acc-in list-mi fl" name="billCode" id="billCode" placeholder="表号">
+            <button class="acc-btn fr" type="submit">查询</button>
+        </div>
+    </form>
+
+    <div class="list-index" id="containerList">
+
+    </div>
+</div>
+<link href="~/Content/Scripts/layui/css/layui.css" rel="stylesheet" />
+<script src="~/Content/Scripts/layui/layui.js"></script>
+<script>
+    $("#test1").focus(function () {
+        document.activeElement.blur();
+    });
+    $("#test2").focus(function () {
+        document.activeElement.blur();
+    });
+
+    $("#billCode").val(GetQuery("billCode"));
+    layui.use('laydate', function(){
+        var laydate = layui.laydate;
+        laydate.render({
+            elem: '#test1' ,value: GetQuery("star")
+        });
+        laydate.render({
+            elem: '#test2' ,value: GetQuery("end")
+        });
+    });
+
+    layui.use('flow', function(){
+        var flow = layui.flow;
+        var count=0;
+        if (@ViewBag.recordCount!=null) {
+            count=@ViewBag.recordCount;
+        }
+
+        flow.load({
+            elem: '#containerList', //流加载容器
+            scrollElem: '',
+            done: function(page, next){ //执行下一页的回调
+                //模拟数据插入
+                setTimeout(function () {
+
+                    var par=window.location.search.replace("?","").split('&');
+                    var parList=[];
+                    for (var i in par) {
+                        var arr=par[i].split('=');
+                        if (arr.length>0) {
+                            parList[arr[0]]=arr[1];
+                        }
+                    }
+                    parList["pageIndex"]=page;
+                    var data='';
+                    for (var i in parList) {
+                        data+=i+"="+parList[i]+"&";
+                    }
+                    $.post("/Personal/OldBill",data, function (data) {
+                        var lis = [];
+                        for (var i in data) {
+                            lis.push("<a class=\"pro repair-m his-li mt15\" href=\"/Personal/OldBillDetails?number="+data[i].Number+"\">");
+                            lis.push("<div class=\"my-bill clear\">");
+                            lis.push("<span class=\"bill-span fl\">账单号："+data[i].BillCode+"</span>");
+                            lis.push("<span class=\"bill-span fr\">"+parseFloat(data[i].Money).toFixed(2)+"元</span></div>");
+
+                            
+                            lis.push("<span class=\"bill-span\">区域："+data[i].Province+data[i].City+data[i].County+"</span>");
+                            lis.push("<span class=\"bill-span\">地址："+data[i].Address+"  "+data[i].Cell+"单元"+data[i].Floor+"楼层"+data[i].Room+"号");
+                            lis.push("<span class=\"bill-span  \">时间："+formatDate(data[i].SendTime,"yyyy-MM-dd")+"</span></span>");
+
+                            lis.push("<i class=\"icon-next\"></i></a>");
+                        }
+                        next(lis.join(''), page < count);
+                    });
+
+                }, 500);
+            }
+        });
+    });
+</script>

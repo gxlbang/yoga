@@ -1,0 +1,107 @@
+﻿@{
+    ViewBag.Title = "报修记录";
+    Layout = "~/Views/Shared/_Partial.cshtml";
+}
+
+<div class="all pro-all">
+    <header class="header clear">
+        <a href="javascript:history.go(-1);" class="return fl"></a>
+        <h1 class="title">报修管理</h1>
+    </header>
+    <div id="Tab" class="tab-news pro-all">
+        
+        <div class="tab-news-hd tab-hd-index bbot">
+            <ul class="fix clear">
+                <li id="one1" onclick="setTab('one',1,2)" class="on">待处理</li>
+                <li id="one2" onclick="setTab('one',2,2)">已处理</li>
+            </ul>
+        </div>
+        <div class="mt20"></div>
+        <div class="tab-news-con pro-all">
+            <div id="con_1" class="list-index all-pa on">
+                 
+            </div>
+            <div id="con_2" class="list-index all-pa" style="display:none">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<link href="~/Content/Scripts/layui/css/layui.css" rel="stylesheet" />
+<script src="~/Content/Scripts/layui/layui.js"></script>
+
+<script>
+    function setTab(name,cursel,n){
+        for(i=1;i<=n;i++){
+            var menu=document.getElementById(name+i);
+            var con=document.getElementById("con_"+i);
+            menu.className=i==cursel?"on":"";
+            con.style.display=i==cursel?"block":"none";
+        }
+    }
+    layui.use('flow', function(){
+        var flow = layui.flow;
+        var count=0;
+        if (@ViewBag.recordCount!=null) {
+            count=@ViewBag.recordCount;
+        }
+        flow.load({
+            elem: '#con_1', //流加载容器
+            scrollElem: '',
+            done: function(page, next){ //执行下一页的回调
+                //模拟数据插入
+                setTimeout(function () {
+                    $.post("/Proprietor/RepairRecordList", { pageIndex: page ,type:0 }, function (data) {
+                        var lis = [];
+                        for (var i in data) {
+                            lis.push("<a class=\"pro repair-m pen-a mt15 clear\" href=\"/Proprietor/RepairInfo?number="+ data[i].Number+"\">");
+                            lis.push("<span class=\"pen-span fl\">报修单："+data[i].RepairCode+"</span>");
+                            lis.push("<span class=\"pen-spanex fr\">"+formatDate(data[i].CreateTime,"yyyy-MM-dd hh:mm:ss")+"</span>");
+                            lis.push("<span class=\"pen-span fr\"></span>");
+                            lis.push("<span class=\"repair-span fl\">"+data[i].Province+data[i].City+data[i].County+    data[i].Address+"</span>");
+                            lis.push("<span class=\"repair-span fl\">"+data[i].Cell+"单元  "+data[i].Floor+"楼层  "+data[i].Room+"号</span>");
+                            lis.push("<i class=\"icon-next\"></i>");
+                            lis.push("</a>");
+                        }
+                        next(lis.join(''), page < count);
+                    });
+                }, 500);
+            }
+        });
+
+        var count1=0;
+        if (@ViewBag.recordCount1!=null) {
+            count1=@ViewBag.recordCount1;
+        }
+        flow.load({
+            elem: '#con_2', //流加载容器
+            scrollElem: '#con_2',
+            done: function(page, next){ //执行下一页的回调
+                //模拟数据插入
+                setTimeout(function () {
+                    $.post("/Proprietor/RepairRecordList", { pageIndex: page,type:1 }, function (data) {
+                        var lis = [];
+                        for (var i in data) {
+                            lis.push("<a class=\"pro repair-m pen-a mt15 clear\" href=\"/Proprietor/RepairInfo?number="+ data[i].Number+"\">");
+                            lis.push("<span class=\"pen-span fl\">报修单："+data[i].RepairCode+"</span>");
+                            lis.push("<span class=\"pen-span fr\">"+formatDate(data[i].CreateTime,"yyyy-MM-dd hh:mm:ss")+"</span>");
+                            lis.push("<span class=\"pen-span fr\"></span>");
+                            lis.push("<span class=\"repair-span fl\">"+data[i].Province+data[i].City+data[i].County+    data[i].Address+"</span>");
+                            lis.push("<span class=\"repair-span fl\">"+data[i].Cell+"单元  "+data[i].Floor+"楼层  "+data[i].Room+"号</span>");
+                            lis.push("<i class=\"icon-next\"></i>");
+                            lis.push("</a>");
+                        }
+                        next(lis.join(''), page < count1);
+                    });
+                }, 500);
+            }
+        });
+
+    });
+
+ 
+</script>
+

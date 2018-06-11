@@ -1,0 +1,90 @@
+﻿@model LeaRun.Entity.Am_Collector
+@{
+    ViewBag.Title = "采集管理";
+    Layout = "~/Views/Shared/_Partial.cshtml";
+}
+
+<div class="all">
+    <header class="header clear">
+        <a href="javascript:history.go(-1);" class="return fl"></a>
+        <h1 class="title">采集器编辑</h1>
+    </header>
+    @using (Ajax.BeginForm("CollectorEdit", "Proprietor", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "success" }, new { @id = "form" }))
+    {
+        if (Model != null && Model.Number != null)
+        {
+            <input type="hidden" name="Number" id="Number"  value="@Model.Number" />
+        }
+        <div class="add-co bbot btop clear">
+            <span class="bill-text fl">采集器编号：</span>
+            @Html.TextBoxFor(model => model.CollectorCode, new { @class = "l-input fl", placeholder = "输入编号" })
+        </div>
+        <div class="add-co bbot clear">
+            <span class="bill-text fl">区域：</span>
+            <select id="ProvinceId" name="Province" class="charge-se fl"></select>
+            <select id="CityId" name="City" class="charge-se fl"></select>
+            <select id="CountyId" name="County" class="charge-se fl"></select>
+        </div>
+        <div class="add-co bbot clear">
+            <span class="bill-text fl">地址：</span>
+            @Html.TextBoxFor(model => model.Address, new { @class = "l-input fl", placeholder = "输入地址" })
+        </div>
+        <div class="add-co bbot clear">
+            <span class="bill-text fl">备注：</span>
+            @Html.TextAreaFor(model => model.Remark, new { @class = "add-cote", placeholder = "备注" })
+        </div>
+
+        <div class="list-index">
+            <a href="javascript:;" onclick="sub()" class="btn-all">保存</a>
+        </div>
+    }
+</div>
+<script src="~/Content/Scripts/inkage.js"></script>
+<script>
+    $(function () {
+        BindCombobox();
+        if ($("#Number").length > 0) {
+                $("#ProvinceId option:contains('@(Model!=null?Model.Province:"")')").attr('selected', true);
+                $("#ProvinceId").trigger("change");
+                $("#CityId option:contains('@(Model!=null?Model.City:"")')").attr('selected', true);
+                $("#CityId").trigger("change");
+                $("#CountyId option:contains('@(Model!=null?Model.County : "")')").attr('selected', true);
+        }
+    })
+
+    function sub() {
+
+        if ($("#CollectorCode").val().length <= 0) {
+            layer.msg('请输入采集器编号');
+            return;
+        }
+        if ($("#ProvinceId").text() == "请选择") {
+            layer.msg('请选择省份');
+            return;
+        }
+        if ($("#CityId").text() == "请选择") {
+            layer.msg('请选择城市');
+            return;
+        }
+        if ($("#CountyId").text() == "请选择") {
+            layer.msg('请选择区域');
+            return;
+        }
+        if ($("#Address").val().length <= 0) {
+            layer.msg('请输入地址');
+            return;
+        }
+        $('#form').submit();
+    }
+    function success(data) {
+        if (data.res == "Ok") {
+            layer.msg(data.msg, { icon: 16 })
+            setTimeout("jump()", 1000);
+        } else {
+            layer.msg(data.msg, { time: 2000 });
+        }
+    }
+    function jump() {
+        window.location.href = '@Url.Action("CollectorList", "Proprietor")';
+    }
+</script>

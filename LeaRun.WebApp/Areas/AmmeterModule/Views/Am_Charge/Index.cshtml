@@ -1,0 +1,157 @@
+@{
+    ViewBag.Title = "Am_Charge";
+    Layout = "~/Views/Shared/_LayoutIndex.cshtml";
+}
+<script type="text/javascript">
+    $(function () {
+        GetGrid();
+    })
+    //加载表格
+    function GetGrid() {
+        $("#gridTable").jqGrid({
+        url: "@Url.Content("~/AmmeterModule/Am_Charge/GridPageJson")",
+        datatype: "json",
+        height: $(window).height() - 149,
+        autowidth: true,
+        colModel: [
+                { label: 'Number', name: 'Number', index: 'Number', width: 0, align: 'left', hidden: true },
+                { label: '编号', name: 'OrderNumber', index: 'OrderNumber', width: 150, align: 'left',sortable: true  },
+                { label: '外部编号', name: 'OutNumber', index: 'OutNumber', width: 150, align: 'left', sortable: true },
+                { label: '电表号', name: 'AmmeterCode', index: 'AmmeterCode', width: 150, align: 'left', sortable: true },
+                { label: '用户', name: 'UserName', index: 'UserName', width: 120, align: 'left', sortable: true },
+                { label: '姓名', name: 'U_Name', index: 'U_Name', width: 120, align: 'left', sortable: true },
+                { label: '充值类型', name: 'ChargeTypeStr', index: 'ChargeTypeStr', width: 80, align: 'left', sortable: true },
+                { label: '支付方式', name: 'PayType', index: 'PayType', width: 80, align: 'left',sortable: true  },
+                { label: '充值金额', name: 'Moeny', index: 'Moeny', width: 80, align: 'left', sortable: true, cellattr: addCellAttr_red },
+                { label: '状态', name: 'StatusStr', index: 'StatusStr', width: 80, align: 'left', sortable: true ,cellattr: addCellAttr_blue },
+                {
+                    label: "充值时间", name: "CreateTime", index: "CreateTime", width: 150,
+                    formatter: function (value, options, rowObject) {
+                        return formatDate(value, 'yyyy-MM-dd hh:mm:ss');
+                    }
+                },
+                {
+                    label: "成功时间", name: "SucTime", index: "SucTime", width: 150,
+                    formatter: function (value, options, rowObject) {
+                        return formatDate(value, 'yyyy-MM-dd hh:mm:ss');
+                    }
+                },
+        ],
+        viewrecords: true,
+        pager: "#gridPager",
+        sortname: 'CreateTime',
+        sortorder: 'desc',
+        rownumbers: true,
+        shrinkToFit: false,
+        gridview: true,
+    });
+    }
+    function addCellAttr_red(rowId, val, rawObject, cm, rdata) {
+        if (rawObject.planId == null) {
+            return "style='color:red'";
+        }
+    }
+    function addCellAttr_blue(rowId, val, rawObject, cm, rdata) {
+        if (rawObject.planId == null) {
+            return "style='color:blue'";
+        }
+    }
+    //刷新
+    function windowload() {
+        $("#gridTable").trigger("reloadGrid"); //重新载入
+
+    }
+    //搜索
+    function btn_Search() {
+        var keywords = $("#keywords").val();
+        var Status = $("#Status").val();
+        var BeginTime = $("#BeginTime").val();
+        var EndTime = $("#EndTime").val();
+        var ChargeType = $("#ChargeType").val();
+        $("#gridTable").jqGrid('setGridParam', {
+            url: "@Url.Content("~/AmmeterModule/Am_Charge/GridPageListJson")?Status=" + Status + '&keywords=' + keywords +
+                '&ChargeType=' + ChargeType + '&BeginTime=' + BeginTime + '&EndTime=' + EndTime, page: 1
+    }).trigger('reloadGrid');
+    }
+    //要打印数据源，子页面调用的函数
+    function PrintDataSource() {
+        var columnModel = $("#gridTable").jqGrid('getGridParam', 'colModel');
+        var dataModel = $("#gridTable").jqGrid("getRowData");
+        //var footerData = $("#gridTable").jqGrid("footerData");
+        var JsonData = {
+            columnModel: columnModel,
+            dataModel: dataModel,
+            //footerData: footerData,
+        }
+        return JsonData;
+    }
+    //点击打印
+    function btn_Print() {
+        PrintDialog("/Utility/PrintPage", "PrintPage", "打印当前页", 1200, 500, function (iframe) {
+            top.frames[iframe].SubmitPrint()
+        });
+    }
+    //导出Excel
+    function btn_derive() {
+        Loading(true, "正在处理要导出数据...");
+        var keywords = $("#keywords").val();
+        var Status = $("#Status").val();
+        var ChargeType = $("#ChargeType").val();
+        var BeginTime = $("#BeginTime").val();
+        var EndTime = $("#EndTime").val();
+        window.setTimeout(function () {
+            location.href = "/AmmeterModule/Am_Charge/ExportExcel??keywords=" + keywords + '&Status=' + Status +
+                '&ChargeType=' + ChargeType +  '&BeginTime=' + BeginTime + '&EndTime=' + EndTime;
+            Loading(false);
+        }, 200);
+    }
+</script>
+<!--工具栏-->
+<div class="tools_bar leftline rightline" style="margin: 1px; margin-bottom: 0px;">
+    <div class="PartialButton">
+        @Html.Partial("_PartialButton")
+    </div>
+</div>
+<div class="leftline rightline QueryArea" style="margin: 1px; margin-top: 0px; margin-bottom: 0px;">
+    <table border="0" class="form-find" style="height: 45px;">
+        <tr>
+            <th>关键字：</th>
+            <td>
+                <input id="keywords" type="text" class="txt" style="width: 200px" />
+            </td>
+            <th>充值类型：</th>
+            <td>
+                <select id="ChargeType" class="select" style="width: 80px">
+                    <option value="-1">请选择</option>
+                    <option value="1">余额充值</option>
+                    <option value="2">电费缴费</option>
+                    <option value="3">账单支付</option>
+                    <option value="4">退房账单</option>
+                </select>
+            </td>
+            <th>状态：</th>
+            <td>
+                <select id="Status" class="select" style="width: 80px">
+                    <option value="-1">请选择</option>
+                    <option value="0">未支付</option>
+                    <option value="1">已成功</option>
+                </select>
+            </td>
+            <th>充值时间：</th>
+            <td>
+                <input id="BeginTime" type="text" class="txt Wdate" value="@LeaRun.Utilities.DateTimeHelper.GetToday()" style="width: 120px" onfocus="var endDate=$dp.$('EndTime');WdatePicker({onpicked:function(){EndTime.focus();},maxDate:'#F{$dp.$D(\'EndTime\')}'})" />
+            </td>
+            <td>-</td>
+            <td>
+                <input id="EndTime" type="text" class="txt Wdate" value="@LeaRun.Utilities.DateTimeHelper.GetToday()" style="width: 120px" onfocus="WdatePicker({ minDate: '#F{$dp.$D(\'BeginTime\')}' })" />
+            </td>
+            <td>
+                <input id="btnSearch" type="button" class="btnSearch" value="搜 索" onclick="btn_Search()" />
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="topline rightline" style="margin: 1px; margin-top: -1px;">
+    <table id="gridTable"></table>
+    <div id="gridPager"></div>
+</div>

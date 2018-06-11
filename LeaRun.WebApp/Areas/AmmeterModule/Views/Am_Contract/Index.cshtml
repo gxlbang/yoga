@@ -1,0 +1,229 @@
+@{
+    ViewBag.Title = "Am_Contract";
+    Layout = "~/Views/Shared/_LayoutIndex.cshtml";
+}
+<script type="text/javascript">
+    $(function () {
+        GetGrid();
+        BindCombobox();
+    })
+    //初始化绑定下拉框
+    function BindCombobox() {
+        //所在省
+        $("#ProvinceId").append("<option value=''>==请选择==</option>");
+        $("#CityId").append("<option value=''>==请选择==</option>");
+        $("#CountyId").append("<option value=''>==请选择==</option>");
+        AjaxJson("/Utility/GetProvinceCityListJson", { ParentId: 0 }, function (DataJson) {
+            $.each(DataJson, function (i) {
+                $("#ProvinceId").append($("<option></option>").val(DataJson[i].Code).html(DataJson[i].FullName));
+            });
+        })
+        //所在市
+        $("#ProvinceId").change(function () {
+            BindCityId();
+            BindCountyId();
+        });
+        //所在县区
+        $("#CityId").change(function () {
+            BindCountyId();
+        });
+    }
+    //所在市下拉框
+    function BindCityId() {
+        $("#CityId").html("");
+        $("#CityId").append("<option value=''>==请选择==</option>");
+        AjaxJson("/Utility/GetProvinceCityListJson", { ParentId: $("#ProvinceId").val() }, function (DataJson) {
+            $.each(DataJson, function (i) {
+                $("#CityId").append($("<option></option>").val(DataJson[i].Code).html(DataJson[i].FullName));
+            });
+        })
+    }
+    //所在县区
+    function BindCountyId() {
+        $("#CountyId").html("");
+        $("#CountyId").append("<option value=''>==请选择==</option>");
+        AjaxJson("/Utility/GetProvinceCityListJson", { ParentId: $("#CityId").val() }, function (DataJson) {
+            $.each(DataJson, function (i) {
+                $("#CountyId").append($("<option></option>").val(DataJson[i].Code).html(DataJson[i].FullName));
+            });
+        })
+    }
+    //加载表格
+    function GetGrid() {
+        $("#gridTable").jqGrid({
+        url: "@Url.Content("~/AmmeterModule/Am_Contract/GridPageListJson")",
+        datatype: "json",
+        height: $(window).height() - 149,
+        autowidth: true,
+        colModel: [
+                { label: 'Number', name: 'Number', index: 'Number', width: 0, align: 'left', hidden: true },
+                { label: 'AmmeterNumber', name: 'AmmeterNumber', index: 'AmmeterNumber', width: 0, align: 'left', hidden: true },
+                { label: 'F_U_Number', name: 'F_U_Number', index: 'F_U_Number', width: 0, align: 'left', hidden: true },
+                { label: 'U_Number', name: 'U_Number', index: 'U_Number', width: 0, align: 'left', hidden: true },
+                { label: '电表表号', name: 'AmmeterCode', index: 'AmmeterCode', width: 120, align: 'left', sortable: true },
+                { label: '租户', name: 'UserName', index: 'UserName', width: 120, align: 'left', sortable: true },
+                { label: '租户姓名', name: 'U_Name', index: 'U_Name', width: 80, align: 'left', sortable: true },
+                {
+                    label: "签订日期", name: "CreateTime", index: "CreateTime", width: 150,
+                    formatter: function (value, options, rowObject) {
+                        return formatDate(value, 'yyyy-MM-dd hh:mm:ss');
+                    }
+                },
+                { label: '签订地址', name: 'CreateAddress', index: 'CreateAddress', width: 120, align: 'left', sortable: true },
+                { label: '状态', name: 'StatusStr', index: 'StatusStr', width: 60, align: 'left', sortable: true },
+                { label: '运营商帐号', name: 'F_UserName', index: 'F_UserName', width: 120, align: 'left', sortable: true },
+                { label: '运营商', name: 'F_U_Name', index: 'F_U_Name', width: 80, align: 'left',sortable: true  },
+                { label: '省', name: 'Province', index: 'Province', width: 60, align: 'left',sortable: true  },
+                { label: '市', name: 'City', index: 'City', width: 60, align: 'left',sortable: true  },
+                { label: '区', name: 'County', index: 'County', width: 60, align: 'left',sortable: true  },
+                { label: '地址', name: 'Address', index: 'Address', width: 150, align: 'left',sortable: true  },
+                { label: '单元', name: 'Cell', index: 'Cell', width: 60, align: 'left',sortable: true  },
+                { label: '楼层', name: 'Floor', index: 'Floor', width: 60, align: 'left',sortable: true  },
+                { label: '房号', name: 'Room', index: 'Room', width: 60, align: 'left',sortable: true  },
+        ],
+        viewrecords: true,
+        pager: "#gridPager",
+        sortname: 'CreateTime',
+        sortorder: 'desc',
+        rownumbers: true,
+        shrinkToFit: false,
+        gridview: true,
+    });
+}
+    //明细
+    function btn_detail() {
+        var KeyValue = GetJqGridRowValue("#gridTable", "Number");
+        if (IsChecked(KeyValue)) {
+            var url = "/Common/Contract?KeyValue=" + KeyValue + "&Device=PC";
+            Dialog(url, "Detail", "合同明细", 820, 500, function (iframe) {
+                top.frames[iframe].AcceptClick();
+            });
+        }
+    }
+    //刷新
+    function windowload() {
+        $("#gridTable").trigger("reloadGrid"); //重新载入
+
+    }
+    //搜索
+    function btn_Search() {
+        var keywords = $("#keywords").val();
+        var Status = $("#Status").val();
+        var BeginTime = $("#BeginTime").val();
+        var EndTime = $("#EndTime").val();
+        var ProvinceId = "", CityId = "", CountyId = "";
+        if (IsNullOrEmpty($("#ProvinceId").val())) {
+            ProvinceId = $("#ProvinceId").find("option:selected").text();
+        }
+        if (IsNullOrEmpty($("#CityId").val())) {
+            CityId = $("#CityId").find("option:selected").text();
+        }
+        if (IsNullOrEmpty($("#CountyId").val())) {
+            CountyId = $("#CountyId").find("option:selected").text();
+        }
+        $("#gridTable").jqGrid('setGridParam', {
+            url: "@Url.Content("~/AmmeterModule/Am_Contract/GridPageListJson")?Status=" + Status + '&Keyword=' + keywords +
+                '&ProvinceId=' + ProvinceId + '&CityId=' + CityId + '&CountyId=' + CountyId +
+                '&BeginTime=' + BeginTime + '&EndTime=' + EndTime, page: 1
+    }).trigger('reloadGrid');
+    }
+    //要打印数据源，子页面调用的函数
+    function PrintDataSource() {
+        var columnModel = $("#gridTable").jqGrid('getGridParam', 'colModel');
+        var dataModel = $("#gridTable").jqGrid("getRowData");
+        //var footerData = $("#gridTable").jqGrid("footerData");
+        var JsonData = {
+            columnModel: columnModel,
+            dataModel: dataModel,
+            //footerData: footerData,
+        }
+        return JsonData;
+    }
+    //点击打印
+    function btn_Print() {
+        PrintDialog("/Utility/PrintPage", "PrintPage", "打印当前页", 1200, 500, function (iframe) {
+            top.frames[iframe].SubmitPrint()
+        });
+    }
+    //导出Excel
+    function btn_derive() {
+        //SetDeriveExcel("#gridTable", "订单信息");
+        //openDialog("/CommonModule/ExcelImport/DeriveDialog", "DeriveDialog", "订单信息", 600, 300, function (iframe) {
+        //    top.frames[iframe].AcceptClick();
+        //});
+        //var SelectedField = ""; $('#AccessView .selected a').each(function () { SelectedField += $(this).attr('id') + ","; });
+        Loading(true, "正在处理要导出数据...");
+        var keywords = $("#keywords").val();
+        var Status = $("#Status").val();
+        var BeginTime = $("#BeginTime").val();
+        var EndTime = $("#EndTime").val();
+        var ProvinceId="", CityId="", CountyId="";
+        if (IsNullOrEmpty($("#ProvinceId").val())) {
+            ProvinceId = $("#ProvinceId").find("option:selected").text();
+        }
+        if (IsNullOrEmpty($("#CityId").val())) {
+            CityId = $("#CityId").find("option:selected").text();
+        }
+        if (IsNullOrEmpty($("#CountyId").val())) {
+            CountyId = $("#CountyId").find("option:selected").text();
+        }
+        window.setTimeout(function () {
+            location.href = "/AmmeterModule/Am_Contract/ExportExcel??Keyword=" + keywords + '&Status=' + Status +
+                '&ProvinceId=' + ProvinceId + '&CityId=' + CityId + '&CountyId=' + CountyId +
+                '&BeginTime=' + BeginTime + '&EndTime=' + EndTime;
+            Loading(false);
+        }, 200);
+    }
+</script>
+<!--工具栏-->
+<div class="tools_bar leftline rightline" style="margin: 1px; margin-bottom: 0px;">
+    <div class="PartialButton">
+        @Html.Partial("_PartialButton")
+    </div>
+</div>
+<div class="leftline rightline QueryArea" style="margin: 1px; margin-top: 0px; margin-bottom: 0px;">
+    <table border="0" class="form-find" style="height: 45px;">
+        <tr>
+            <th>关键字：</th>
+            <td>
+                <input id="keywords" type="text" class="txt" style="width: 200px" />
+            </td>
+            <th class="formTitle">所在省：</th>
+            <td class="formValue">
+                <select id="ProvinceId" class="select" style="width: 100px"></select>
+            </td>
+            <th class="formTitle">所在市：</th>
+            <td class="formValue">
+                <select id="CityId" class="select" style="width: 100px"></select>
+            </td>
+            <th class="formTitle">所在县区：</th>
+            <td class="formValue">
+                <select id="CountyId" class="select" style="width: 100px"></select>
+            </td>
+            <th>状态：</th>
+            <td>
+                <select id="Status" class="select" style="width: 80px">
+                    <option value="-1">请选择</option>
+                    <option value="0">已生成</option>
+                    <option value="1">已签订</option>
+                    <option value="1">已失效</option>
+                </select>
+            </td>
+            <th>合同日期：</th>
+            <td>
+                <input id="BeginTime" type="text" class="txt Wdate" value="@LeaRun.Utilities.DateTimeHelper.GetDate(-7)" style="width: 120px" onfocus="var endDate=$dp.$('EndTime');WdatePicker({onpicked:function(){EndTime.focus();},maxDate:'#F{$dp.$D(\'EndTime\')}'})" />
+            </td>
+            <td>-</td>
+            <td>
+                <input id="EndTime" type="text" class="txt Wdate" value="@LeaRun.Utilities.DateTimeHelper.GetToday()" style="width: 120px" onfocus="WdatePicker({ minDate: '#F{$dp.$D(\'BeginTime\')}' })" />
+            </td>
+            <td>
+                <input id="btnSearch" type="button" class="btnSearch" value="搜 索" onclick="btn_Search()" />
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="topline rightline" style="margin: 1px; margin-top: -1px;">
+    <table id="gridTable"></table>
+    <div id="gridPager"></div>
+</div>

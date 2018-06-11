@@ -1,0 +1,24 @@
+﻿<footer class="foot mt20">
+    <div class="footer btop">
+        <ul class="foot-ul clear">
+            @if (ViewData["ind"].ToString() == "1")
+            {
+            <li class="foot-li"><a href="/Ui/Index" class="foot-a foot-on"><i class="icon-home"></i><span class="foot-span">首页</span></a></li>
+            <li class="foot-li"><a href="/Ui/Dynamic" class="foot-a"><i class="icon-dynamic"></i><span class="foot-span">动态</span></a></li>
+            <li class="foot-li"><a href="/Ui/Center" class="foot-a"><i class="icon-center"></i><span class="foot-span">个人中心</span></a></li>
+            }
+            else if (ViewData["ind"].ToString() == "2")
+            {
+                <li class="foot-li"><a href="/Ui/Index" class="foot-a"><i class="icon-home"></i><span class="foot-span">首页</span></a></li>
+                <li class="foot-li"><a href="/Ui/Dynamic" class="foot-a foot-on"><i class="icon-dynamic"></i><span class="foot-span">动态</span></a></li>
+                <li class="foot-li"><a href="/Ui/Center" class="foot-a"><i class="icon-center"></i><span class="foot-span">个人中心</span></a></li>
+            }
+            else
+            {
+                <li class="foot-li"><a href="/Ui/Index" class="foot-a"><i class="icon-home"></i><span class="foot-span">首页</span></a></li>
+                <li class="foot-li"><a href="/Ui/Dynamic" class="foot-a"><i class="icon-dynamic"></i><span class="foot-span">动态</span></a></li>
+                <li class="foot-li"><a href="/Ui/Center" class="foot-a foot-on"><i class="icon-center"></i><span class="foot-span">个人中心</span></a></li>
+            }
+         </ul>
+    </div>
+</footer>

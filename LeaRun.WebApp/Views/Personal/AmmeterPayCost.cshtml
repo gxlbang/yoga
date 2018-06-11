@@ -1,0 +1,71 @@
+﻿@{
+    ViewBag.Title = "电表缴费记录";
+    Layout = "~/Views/Shared/_Partial.cshtml";
+}
+
+<div class="all">
+    <header class="header clear">
+        <a href="javascript:history.go(-1);" class="return fl"></a>
+        <h1 class="title">缴费查询</h1>
+    </header>
+    <div id="containerList">
+        <div class="pen-li pay-in bbot clear">
+            <span class="pen-span fl">金额</span>
+            <span class="pen-span fl">状态</span>
+            <span class="pen-span fl">时间</span>
+        </div>
+
+
+    </div>
+
+</div>
+
+<link href="~/Content/Scripts/layui/css/layui.css" rel="stylesheet" />
+<script src="~/Content/Scripts/layui/layui.js"></script>
+
+<script>
+    layui.use('flow', function(){
+        var flow = layui.flow;
+        var count=0;
+        if (@ViewBag.recordCount!=null) {
+            count=@ViewBag.recordCount;
+        }
+        
+        flow.load({
+            elem: '#containerList', //流加载容器
+            scrollElem: '',
+            done: function(page, next){ //执行下一页的回调
+                //模拟数据插入
+                setTimeout(function () {
+
+                    var par=window.location.search.replace("?","").split('&');
+                    var parList=[];
+                    for (var i in par) {
+                        var arr=par[i].split('=');
+                        if (arr.length>0) {
+                            parList[arr[0]]=arr[1];
+                        }
+                    } 
+                    parList["pageIndex"]=page;
+                    var data='';
+                    for (var i in parList) {
+                        data+=i+"="+parList[i]+"&";
+                    }
+                    $.post("/Personal/AmmeterPayCost",data, function (data) {
+                        var lis = [];
+                        for (var i in data) {
+                            lis.push("<div class=\"pro pay-in pay-a bbot clear\">");
+                            lis.push("<span class=\"pen-span fl\">"+parseFloat(data[i].Money).toFixed(2)+"</span>");
+                            lis.push("<span class=\"pen-span fl\">"+data[i].StatusStr+"</span>");
+                            lis.push("<span class=\"pen-span  fl\" style=\" width:45%;\">"+formatDate(data[i].CreateTime,"yyyy-MM-dd hh:mm:ss") +"</span>");
+                            lis.push("</div>");
+                        }
+                        next(lis.join(''), page < count);
+                    });
+
+                }, 500);
+            }
+        });
+    });
+</script>
+

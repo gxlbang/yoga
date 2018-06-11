@@ -1,0 +1,93 @@
+@{
+    ViewBag.Title = "Am_Charge》明细页面";
+    Layout = "~/Views/Shared/_LayoutForm.cshtml";
+}
+<script type="text/javascript">
+    $(function () {
+        InitControl();
+    })
+    //得到一个对象实体
+    function InitControl() {
+        if (!!GetQuery('KeyValue')) {
+            AjaxJson("/AmmeterModule/Am_Charge/SetForm", { KeyValue: GetQuery('KeyValue') }, function (data) {
+                SetWebControls(data);
+            });
+        }
+    }
+</script>
+<form id="form1" style="margin: 1px">
+    <table class="form">
+        <tr>
+            <th class='formTitle'>Number：</th>
+            <td class='formValue'>
+                <label id="Number" />
+            </td>
+            <th class='formTitle'>OrderNumber：</th>
+            <td class='formValue'>
+                <label id="OrderNumber" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>OutNumber：</th>
+            <td class='formValue'>
+                <label id="OutNumber" />
+            </td>
+            <th class='formTitle'>U_Number：</th>
+            <td class='formValue'>
+                <label id="U_Number" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>UserName：</th>
+            <td class='formValue'>
+                <label id="UserName" />
+            </td>
+            <th class='formTitle'>ChargeType：</th>
+            <td class='formValue'>
+                <label id="ChargeType" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>ChargeTypeStr：</th>
+            <td class='formValue'>
+                <label id="ChargeTypeStr" />
+            </td>
+            <th class='formTitle'>PayType：</th>
+            <td class='formValue'>
+                <label id="PayType" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>Moeny：</th>
+            <td class='formValue'>
+                <label id="Moeny" />
+            </td>
+            <th class='formTitle'>CreateTime：</th>
+            <td class='formValue'>
+                <label id="CreateTime" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>STATUS：</th>
+            <td class='formValue'>
+                <label id="STATUS" />
+            </td>
+            <th class='formTitle'>StatusStr：</th>
+            <td class='formValue'>
+                <label id="StatusStr" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>SucTime：</th>
+            <td class='formValue'>
+                <label id="SucTime" />
+            </td>
+            <th class='formTitle'>Remark：</th>
+            <td class='formValue'>
+                <label id="Remark" />
+            </td>
+        </tr>
+        <tr>
+        </tr>
+    </table>
+</form>

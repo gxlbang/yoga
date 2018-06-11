@@ -1,0 +1,124 @@
+﻿@{
+    ViewBag.Title = "收费项模板添加";
+    Layout = "~/Views/Shared/_Partial.cshtml";
+}
+
+
+<script type="text/javascript">
+    $(function () {
+        var show_count = 20;   //要显示的条数
+        var count = 1;    //递增的开始值，这里是你的ID
+        $("#btn_addtr").click(function () {
+
+            var length = $("#dynamicTable tbody tr").length;
+            //alert(length);
+            if (length < show_count)    //点击时候，如果当前的数字小于递增结束的条件
+            {
+                $("#tab11 tbody tr").clone().appendTo("#dynamicTable tbody");   //在表格后面添加一行
+                changeIndex();//更新行号
+            }
+        });
+
+        $('#submit1').click(function () {
+
+            var form = $(this).parents('form');
+            var _list = {};
+            form.find('tbody tr').each(function (i) {
+                var thisItem = $(this);
+                _list["result[" + i + "].Title"] = thisItem.find("input:eq(1)").val();
+                _list["result[" + i + "].Money"] = thisItem.find("input:eq(2)").val();
+                //result.push({
+                //    Title: thisItem.find("input:eq(1)").val(),
+                //    Money: thisItem.find('input:eq(2)').val()
+                //})
+            });
+            _list["ammeter.Number"] = "sdsadsadsadasa";
+            console.log(_list);
+            $.ajax({
+                type: "POST",
+                url: "/Proprietor/ChargeItemEidt",
+                traditional: true,
+                data: _list,// $.param(result.serializeObject("result")),
+                success: function (data) {
+                    console.log("successfully processed.");
+                },
+                error: function (data) {
+                    console.log("error occurred.");
+                }
+            });
+            return false;
+        });
+
+        Array.prototype.serializeObject = function (lName) {
+            var o = {};
+            $t = this;
+
+            for (var i = 0; i < $t.length; i++) {
+                for (var item in $t[i]) {
+                    o[lName + '[' + i + '].' + item.toString()] = $t[i][item].toString();
+                }
+            }
+            return o;
+        };
+    });
+    function changeIndex() {
+        var i = 1;
+        $("#dynamicTable tbody tr").each(function () { //循环tab tbody下的tr
+            $(this).find("input[name='Number']").val(i++);//更新行号
+        });
+    }
+
+    function deltr(opp) {
+        var length = $("#dynamicTable tbody tr").length;
+        //alert(length);
+        if (length <= 1) {
+            alert("至少保留一行");
+        } else {
+            $(opp).parent().parent().remove();//移除当前行
+            changeIndex();
+        }
+    }
+
+</script>
+
+
+<div style="width:720px;margin:20px auto;">
+
+    <table id="tab11" style="display: none">
+        <tbody>
+            <tr>
+                <td height="30" align="center">
+                    <input type="text" name="Number" value="1" />
+                </td>
+                <td align="center">
+                    <input type="text" name="Title" />
+                </td>
+                <td align="center">
+                    <input type="text" name="Money" />
+                </td>
+
+                <td>
+                    <input type="button" id="Button2" onClick="deltr(this)" value="删行">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <input type="button" id="btn_addtr" value="增行">
+    <form action="/Proprietor/ChargeItemEidt" method="post">
+        <table id="dynamicTable" width="700" border="0" cellspacing="0" cellpadding="0">
+            <thead>
+                <tr>
+                    <td height="30" align="center" bgcolor="#CCCCCC">ID</td>
+                    <td align="center" bgcolor="#CCCCCC">起止时间</td>
+                    <td align="center" bgcolor="#CCCCCC">单位/部门</td>
+                    <td></td>
+                </tr>
+            </thead>
+            <tbody>
+                
+                
+            </tbody>
+        </table>
+        <input type="button" id="submit1" value="提交">
+    </form>
+</div>

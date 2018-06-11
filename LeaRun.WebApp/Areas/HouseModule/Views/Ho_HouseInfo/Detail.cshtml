@@ -1,0 +1,250 @@
+@{
+    ViewBag.Title = "Ho_HouseInfo》明细页面";
+    Layout = "~/Views/Shared/_LayoutForm.cshtml";
+}
+<script type="text/javascript">
+    var KeyValue = GetQuery('KeyValue');//主键
+    $(function () {
+        BindCombobox();
+        InitControl();
+    })
+    //得到一个对象实体
+    function InitControl() {
+        if (!!GetQuery('KeyValue')) {
+            AjaxJson("/HouseModule/Ho_HouseInfo/SetForm", { KeyValue: KeyValue }, function (data) {
+                SetWebControls(data);
+                $("#pimg").attr("src", data.img);
+                $("#pimg1").attr("src", data.Certificate);
+                $("#pimg2").attr("src", data.DesignImage);
+                $("#pimg3").attr("src", data.RealImage);
+                $("#pimg4").attr("src", data.HouseImage);
+                $("#pimg5").attr("src", data.HouseTypeImage);
+                $("#StartTime").val(formatDate(data.StartTime, "yyyy-MM-dd"));
+                $("#GiveTime").val(formatDate(data.GiveTime, "yyyy-MM-dd"));
+                //绑定地市
+                BindCityId();
+                $("#City").val(data.City);
+                $('input,select,textarea').each(function (r) {
+                    $(this).attr("readonly", "readonly");
+                })
+                
+            });
+        }
+    }
+    //初始化绑定下拉框
+    function BindCombobox() {
+        //所在省
+        $("#Province").append("<option value=''>==请选择==</option>");
+        //$("#City").append("<option value=''>==请选择==</option>");
+        AjaxJson("/Utility/GetProvinceCityListJson", { ParentId: 0 }, function (DataJson) {
+            $.each(DataJson, function (i) {
+                $("#Province").append($("<option></option>").val(DataJson[i].Code).html(DataJson[i].FullName));
+            });
+        })
+        //所在市
+        $("#Province").change(function () {
+            BindCityId();
+        });
+    }
+    //所在市下拉框
+    function BindCityId() {
+        $("#City").html("");
+        $("#City").append("<option value=''>==请选择==</option>");
+        AjaxJson("/Utility/GetProvinceCityListJson", { ParentId: $("#Province").val() }, function (DataJson) {
+            $.each(DataJson, function (i) {
+                $("#City").append($("<option></option>").val(DataJson[i].Code).html(DataJson[i].FullName));
+            });
+        })
+    }
+</script>
+<form id="form1" style="margin: 1px">
+    <div id="message" style="display: none"></div>
+    <table class="form">
+        <tr>
+            <th class="formTitle">所在省：</th>
+            <td class="formValue">
+                <select id="Province" class="txtselect"></select>
+            </td>
+            <th class="formTitle">所在市：</th>
+            <td class="formValue">
+                <select id="City" class="txtselect"></select>
+            </td>
+        </tr>
+    </table>
+    <table class="form">
+        <tr>
+            <th class='formTitle'>楼盘名称：</th>
+            <td class='formValue'>
+                <input id="Name" maxlength=50 type="text" class="txt required" />
+            </td>
+            <th width="10"></th>
+            <td class='formValue' rowspan="7">
+                <img src="~/Content/Images/noimg.gif" id="pimg" width="150" height="150" title="楼盘主图" />
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <img src="~/Content/Images/noimg.gif" id="pimg1" width="150" height="150" title="授权书" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>楼盘特色：</th>
+            <td class='formValue'>
+                <input id="Characteristic" maxlength=50 type="text" class="txt" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>项目地址：</th>
+            <td class='formValue'>
+                <input id="Address" maxlength=128 type="text" class="txt" />
+            </td>
+        </tr>
+
+        <tr>
+            <th class='formTitle'>楼盘均价：</th>
+            <td class='formValue'>
+                <input id="Money" maxlength=19 type="text" class="txt" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>佣金：</th>
+            <td class='formValue'>
+                <input id="CommissionMoney" maxlength=19 type="text" class="txt" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>楼盘主图：</th>
+            <td class='formValue'>
+                <input id="img" type="hidden" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>授权书：</th>
+            <td class='formValue'>
+                <input id="Certificate" type="hidden" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>视频资料：</th>
+            <td class='formValue' colspan="3">
+                <input id="Video" maxlength=256 type="text" class="txt" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>楼盘要点：</th>
+            <td class='formValue' colspan="3">
+                <input id="Label" maxlength=50 type="text" class="txt" style="width:400px;" />
+                <label for="Label" style="vertical-align: middle; color:red;">* 多个要点之间用|分割,例如:五证齐全|不限购|最后几套</label>
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>状态：</th>
+            <td class='formValue'>
+                <input id="StatusStr" maxlength=256 type="text" class="txt" />
+            </td>
+            <th width="10"></th>
+            <td class='formValue' rowspan="6">
+                <img src="~/Content/Images/noimg.gif" id="pimg2" width="150" height="150" title="效果图册" />&nbsp;&nbsp;&nbsp;&nbsp;
+                <img src="~/Content/Images/noimg.gif" id="pimg3" width="150" height="150" title="实景图册" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>排序：</th>
+            <td class='formValue'>
+                <input id="HOrder" type="number" class="txt required" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>开发商：</th>
+            <td class='formValue'>
+                <input id="Developers" maxlength=50 type="text" class="txt" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>开盘时间：</th>
+            <td class='formValue'>
+                <input id="StartTime" type="text" class="txt Wdate" value="@LeaRun.Utilities.DateTimeHelper.GetToday()" style="width: 120px" onfocus="var endDate = $dp.$('GiveTime'); WdatePicker()" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>交房时间：</th>
+            <td class='formValue'>
+                <input id="GiveTime" type="text" class="txt Wdate" value="@LeaRun.Utilities.DateTimeHelper.GetToday()" style="width: 120px" onfocus="WdatePicker()" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>效果图册：</th>
+            <td class='formValue'>
+                <input id="DesignImage" type="hidden" />
+                @*<input id="DesignImageNumber" type="hidden" value="5f69b268-504e-44f8-950b-dfda8e00ee19" />*@
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>实景图册：</th>
+            <td class='formValue'>
+                <input id="RealImage" type="hidden" />
+                @*<input id="RealImageNumber" type="hidden" value="bc4a267a-3404-4e2e-9053-a0788bd53789" />*@
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>容积率：</th>
+            <td class='formValue' colspan="3">
+                <input id="VolumeRate" maxlength=50 type="text" class="txt" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>绿化率：</th>
+            <td class='formValue' colspan="3">
+                <input id="Green" maxlength=50 type="text" class="txt" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>工程进度：</th>
+            <td class='formValue'>
+                <input id="HouseNow" maxlength=50 type="text" class="txt" />
+            </td>
+            <th width="10"></th>
+            <td class='formValue' rowspan="6">
+                <img src="~/Content/Images/noimg.gif" id="pimg4" width="150" height="150" title="样板图册" />
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <img src="~/Content/Images/noimg.gif" id="pimg5" width="150" height="150" title="户型图册" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>物业公司：</th>
+            <td class='formValue'>
+                <input id="Manager" maxlength=128 type="text" class="txt" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>产权年限：</th>
+            <td class='formValue'>
+                <input id="PropertyRight" maxlength=50 type="text" class="txt" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>建筑类型：</th>
+            <td class='formValue'>
+                <input id="HouseType" maxlength=50 type="text" class="txt" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>样板图册：</th>
+            <td class='formValue'>
+
+                <input id="HouseImage" type="hidden" />
+                @*<input id="HouseImageNumber" type="hidden" value="b8af3e9b-aea0-4618-9f66-67987b081731" />*@
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>户型图册：</th>
+            <td class='formValue'>
+                <input id="HouseTypeImage" type="hidden" />
+                @*<input id="HouseTypeImageNumber" type="hidden" value="e6b2a2ee-9744-4902-9ad1-d29b06c883ab" />*@
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>备注：</th>
+            <td class='formValue' colspan="3">
+                <textarea id="Remark" name="Remark" maxlength="600" class="txtArea" rows="4"></textarea>
+            </td>
+        </tr>
+    </table>
+</form>

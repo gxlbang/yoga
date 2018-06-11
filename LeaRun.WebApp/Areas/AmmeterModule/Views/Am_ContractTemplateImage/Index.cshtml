@@ -1,0 +1,97 @@
+@{
+    ViewBag.Title = "Am_ContractTemplateImage";
+    Layout = "~/Views/Shared/_LayoutIndex.cshtml";
+}
+<script type="text/javascript">
+    $(function () {
+        GetGrid();
+    })
+    //加载表格
+    function GetGrid() {
+        $("#gridTable").jqGrid({
+        url: "@Url.Content("~/AmmeterModule/Am_ContractTemplateImage/GridPageJson")",
+        datatype: "json",
+        height: $(window).height() - 149,
+        autowidth: true,
+        colModel: [
+                { label: 'Number', name: 'Number', index: 'Number', width: 0, align: 'left',sortable: true  },
+                { label: 'ACT_Number', name: 'ACT_Number', index: 'ACT_Number', width: 0, align: 'left',sortable: true  },
+                { label: 'Name', name: 'Name', index: 'Name', width: 0, align: 'left',sortable: true  },
+                { label: 'Num', name: 'Num', index: 'Num', width: 0, align: 'left',sortable: true  },
+                { label: 'Price', name: 'Price', index: 'Price', width: 0, align: 'left',sortable: true  },
+                { label: 'ImagePath', name: 'ImagePath', index: 'ImagePath', width: 0, align: 'left',sortable: true  },
+                { label: 'ImageMark', name: 'ImageMark', index: 'ImageMark', width: 0, align: 'left',sortable: true  },
+                { label: 'Remark', name: 'Remark', index: 'Remark', width: 0, align: 'left',sortable: true  },
+        ],
+        pager: "#gridPager",
+        sortname: '',
+        sortorder: 'desc',
+        rownumbers: true,
+        shrinkToFit: false,
+        gridview: true,
+    });
+}
+    //新增
+    function btn_add() {
+        var url = "/AmmeterModule/Am_ContractTemplateImage/Form"
+        openDialog(url, "Form", "新增Am_ContractTemplateImage", 770, 395, function (iframe) {
+            top.frames[iframe].AcceptClick()
+        });
+    }
+    //编辑
+    function btn_edit() {
+        var KeyValue = GetJqGridRowValue("#gridTable", "ACT_Number");
+        if (IsChecked(KeyValue)) {
+            var url = "/AmmeterModule/Am_ContractTemplateImage/Form?KeyValue=" + KeyValue;
+            openDialog(url, "Form", "编辑Am_ContractTemplateImage", 770, 395, function (iframe) {
+                top.frames[iframe].AcceptClick();
+            });
+        }
+    }
+    //删除
+    function btn_delete() {
+        var KeyValue = GetJqGridRowValue("#gridTable", "ACT_Number");
+        if (IsDelData(KeyValue)) {
+            var delparm = 'KeyValue=' + KeyValue;
+            delConfig('/AmmeterModule/Am_ContractTemplateImage/Delete', delparm, KeyValue.split(",").length);
+        }
+    }
+    //明细
+    function btn_detail() {
+        var KeyValue = GetJqGridRowValue("#gridTable", "ACT_Number");
+        if (IsChecked(KeyValue)) {
+            var url = "/AmmeterModule/Am_ContractTemplateImage/Detail?KeyValue=" + KeyValue;
+            Dialog(url, "Detail", "Am_ContractTemplateImage明细", 820, 500, function (iframe) {
+                top.frames[iframe].AcceptClick();
+            });
+        }
+    }
+    //刷新
+    function windowload() {
+        $("#gridTable").trigger("reloadGrid"); //重新载入
+        
+    }
+</script>
+<!--工具栏-->
+<div class="tools_bar leftline rightline" style="margin: 1px; margin-bottom: 0px;">
+    <div class="PartialButton">
+        @Html.Partial("_PartialButton")
+    </div>
+</div>
+<div class="leftline rightline QueryArea" style="margin: 1px; margin-top: 0px; margin-bottom: 0px;">
+    <table border="0" class="form-find" style="height: 45px;">
+        <tr>
+            <th>关键字：</th>
+            <td>
+                <input id="keywords" type="text" class="txt" style="width: 200px" />
+            </td>
+            <td>
+                <input id="btnSearch" type="button" class="btnSearch" value="搜 索" onclick="btn_Search()" />
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="topline rightline" style="margin: 1px; margin-top: -1px;">
+    <table id="gridTable"></table>
+    <div id="gridPager"></div>
+</div>

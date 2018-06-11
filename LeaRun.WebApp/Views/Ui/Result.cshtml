@@ -1,0 +1,21 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<header class="head">
+    <i class="aicon"></i><span>订单提交成功</span>
+</header>
+<div class="a-main">
+    <div class="alist clear"><span class="a-span">订单编号：</span>@ViewBag.Orders.OrderNumber</div>
+    <div class="alist clear"><span class="a-span">商品名称：</span>@ViewBag.Orders.Pro_Name</div>
+    <div class="alist clear "><span class="a-span">支付方式：</span>@ViewBag.Orders.Pay_Name</div>
+    <div class="alist clear "><span class="a-span">配送快递：</span>@ViewBag.Orders.Ex_Name</div>
+    <div class="alist clear"><span class="a-span">价格：</span>@ViewBag.Orders.Pro_Price 元</div>
+    <div class="alist clear"><span class="a-span">数量：</span>@ViewBag.Orders.Pro_Num</div>
+    <div class="alist clear"><span class="a-span">名字：</span>@ViewBag.Orders.Buyer</div>
+    <div class="alist clear"><span class="a-span">手机：</span>@ViewBag.Orders.Mobile</div>
+    <div class="alist clear"><span class="a-span">地区：</span>@ViewBag.Orders.Province @ViewBag.Orders.City @ViewBag.Orders.County</div>
+    <div class="alist clear "><span class="a-span">地址：</span>@ViewBag.Orders.Arddress</div>
+    <div class="alist clear"><span class="a-span">备注：</span>@ViewBag.Orders.Buyer_Mark</div>
+    <a href="javascript:history.go(-1);" class="aa-btn">返回上一页</a>
+</div>

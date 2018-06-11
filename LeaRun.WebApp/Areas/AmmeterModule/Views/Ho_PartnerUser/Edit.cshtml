@@ -1,0 +1,186 @@
+﻿@{
+    ViewBag.Title = "用户》表单页面";
+    Layout = "~/Views/Shared/_LayoutForm.cshtml";
+}
+<!--选择颜色组件start-->
+<link href="~/Content/Scripts/cxColor/css/jquery.cxcolor.css" rel="stylesheet" />
+<script src="~/Content/Scripts/cxColor/js/jquery.cxcolor.js"></script>
+<!--选择颜色组件end-->
+<!--上传文件组件start-->
+<link href="~/Content/Scripts/uploadify/uploadify.css" rel="stylesheet" />
+<script src="~/Content/Scripts/uploadify/jquery.uploadify.js"></script>
+<script type="text/javascript">
+    //上传文件
+    function uploadify() {
+        $("#uploadify").uploadify({
+            uploader: '/ProductModule/Fx_Product/ImgUpload',
+            swf: '/Content/Scripts/uploadify/uploadify.swf',
+            buttonText: "上传图片",
+            height: 24,
+            width: 70,
+            onFallback: function () {
+                alert("您未安装FLASH控件，无法上传！请安装FLASH控件后再试。");
+            },
+            onUploadSuccess: function (file, data, response) {
+                var DataJson = JSON.parse(data);
+                $("#pimg").attr("src", DataJson.Path);
+                $("#CodeImg1").val(DataJson.Path);
+            }
+        });
+    }
+    //上传文件
+    function uploadify1() {
+        $("#uploadify1").uploadify({
+            uploader: '/ProductModule/Fx_Product/ImgUpload',
+            swf: '/Content/Scripts/uploadify/uploadify.swf',
+            buttonText: "上传图片",
+            height: 24,
+            width: 70,
+            onFallback: function () {
+                alert("您未安装FLASH控件，无法上传！请安装FLASH控件后再试。");
+            },
+            onUploadSuccess: function (file, data, response) {
+                var DataJson = JSON.parse(data);
+                $("#pimg1").attr("src", DataJson.Path);
+                $("#CodeImg2").val(DataJson.Path);
+            }
+        });
+    }
+</script>
+<script type="text/javascript">
+    var KeyValue = GetQuery('KeyValue');//主键
+    $(function () {
+        //获取用户角色
+        AjaxJson("/AmmeterModule/Ho_PartnerUser/GetUserRole", "", function (data) {
+            $.each(data, function (i) {
+                $("#UserRoleNumber").append($("<option></option>").val(data[i].Number).html(data[i].RoleName));
+            });
+        });
+        InitControl();
+        uploadify();
+        uploadify1();
+    })
+    //得到一个对象实体
+    function InitControl() {
+        if (!!GetQuery('KeyValue')) {
+            AjaxJson("/AmmeterModule/Ho_PartnerUser/SetForm", { KeyValue: KeyValue }, function (data) {
+                SetWebControls(data);
+                $("#CreatTime").val(formatDate(data.CreatTime, "yyyy-MM-dd hh:mm:ss"));
+                //设置select
+                $("#UserRoleNumber").val(data.UserRoleNumber);
+            });
+        }
+    }
+    //保存事件
+    function AcceptClick() {
+        if (!CheckDataValid('#form1')) {
+            return false;
+        }
+        //var postData = GetWebControls("#form1");
+        var postData = jQuery.parseJSON('{"Name":"' + $("#Name").val() + '","Password":"' + $("#Password").val() +
+            '","Account":"' + $("#Account").val() + '","Address":"' + $("#Address").val() +
+            '","CodeImg1":"' + $("#CodeImg1").val() + '","CodeImg2":"' + $("#CodeImg2").val() +
+            '","Status":"' + $("#Status").val() + '","StatusStr":"' + $("#Status").find("option:selected").text() +
+            '","UserRoleNumber":"' + $("#UserRoleNumber").val() + '","UserRole":"' + $("#UserRoleNumber").find("option:selected").text() +
+            '","CardCode":"' + $("#CardCode").val() + '","Remark":"' + $("#Remark").val() + '"}');
+        AjaxJson("/AmmeterModule/Ho_PartnerUser/SubmitUserForm?KeyValue=" + KeyValue, postData, function (data) {
+            tipDialog(data.Message, 3, data.Code);
+            top.frames[tabiframeId()].windowload();
+            closeDialog();
+        });
+    }
+</script>
+<form id="form1" style="margin: 1px">
+    <div id="message" style="display: none"></div>
+    <table class="form">
+        <tr>
+            <th class='formTitle' style="color:red;">用户角色：</th>
+            <td class='formValue'>
+                <select id="UserRoleNumber" class="txtselect"></select>
+            </td>
+            <th width="10"></th>
+            <td class='formValue' rowspan="5">
+                <img src="~/Content/Images/noimg.gif" id="pimg" width="200" height="150" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>身份证正面：</th>
+            <td class='formValue'>
+                <input id="uploadify" name="uploadify" type="file" />
+                <input id="CodeImg1" type="hidden" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>姓名：</th>
+            <td class='formValue'>
+                <input id="Name" maxlength=12 type="text" class="txt required" datacol="yes" err="角色名称" checkexpession="NotNull" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>手机号：</th>
+            <td class='formValue'>
+                <input id="Account" maxlength=11 type="text" class="txt required" datacol="yes" err="手机号" checkexpession="NotNull" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>身份证号：</th>
+            <td class='formValue'>
+                <input id="CardCode" maxlength=18 type="text" class="txt" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>状态：</th>
+            <td class='formValue'>
+                <select id="Status" class="txtselect">
+                    <option value="0">新注册</option>
+                    <option value="1">已提交</option>
+                    <option value="2">不通过</option>
+                    <option value="3">已审核</option>
+                    <option value="9">黑名单</option>
+                </select>
+            </td>
+            <th width="10"></th>
+            <td class='formValue' rowspan="5">
+                <img src="~/Content/Images/noimg.gif" id="pimg1" width="200" height="150" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>身份证反面：</th>
+            <td class='formValue'>
+                <input id="uploadify1" name="uploadify1" type="file" />
+                <input id="CodeImg2" type="hidden" />
+                <input id="Password" type="hidden" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>账户余额：</th>
+            <td class='formValue'>
+                <input id="Money" maxlength=11 type="text" readonly="readonly" class="txt required" datacol="yes" err="账户余额" checkexpession="NotNull" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>地址：</th>
+            <td class='formValue'>
+                <input id="Address" maxlength=64 type="text" class="txt" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>注册时间：</th>
+            <td class='formValue'>
+                <input id="CreatTime" maxlength=32 type="text" class="txt" readonly="readonly" />
+            </td>
+        </tr>
+        @*<tr>
+            <th class='formTitle'>支付密码：</th>
+            <td class='formValue'>
+                <input id="PayPassword" maxlength=11 type="password" class="txt" />
+            </td>
+        </tr>*@
+<tr>
+            <th class='formTitle'>备注：</th>
+            <td class='formValue' colspan="3">
+                <textarea id="Remark" name="Remark" maxlength="600" class="txtArea" rows="8"></textarea>
+            </td>
+        </tr>
+    </table>
+</form>

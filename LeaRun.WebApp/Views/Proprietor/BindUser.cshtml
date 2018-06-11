@@ -1,0 +1,304 @@
+﻿@model LeaRun.Entity.Am_Ammeter
+@{
+    ViewBag.Title = "关联用户";
+    Layout = "~/Views/Shared/_Partial.cshtml";
+}
+<script src="~/Content/Scripts/layui/layui.js"></script>
+<link href="~/Content/Scripts/layui/css/layui.css" rel="stylesheet" />
+<script>
+    layui.use('laydate', function () {
+        var laydate = layui.laydate;
+        laydate.render({
+            elem: '#starTime'
+        });
+        laydate.render({
+            elem: '#endTime'
+        });
+    });
+    function userInfo() {
+        var phone = $("#phone").val();
+        var name = $("#name").val();
+        if (!phone.length > 0) {
+            layer.open({ content: "请输入手机号码", skin: 'msg', time: 2 });
+            return;
+        }
+        if (!name.length > 0) {
+            layer.open({ content: "请输入姓名", skin: 'msg', time: 2 });
+            return;
+        }
+        $.post("/Proprietor/GetUserInfo", { phone: phone, name: name }, function (data) {
+            if (data.res == "Ok") {
+                var html = " <table  class=\"layui-table\">"
+                html += " <tr><td>手机号码</td><td>" + data.phone + "</td></tr>";
+                html += " <tr><td>姓名</td><td>" + data.name + "</td></tr>";
+                html += " <tr><td>身份证号码</td><td>" + data.code + "</td></tr>";
+                html += " <tr><td>身份证正面</td><td><img style=\"width:100px; height:50px;\" src=\"" + data.img1 + "\"/ onclick=\"showImg(this.src)\"></td></tr>";
+                html += " <tr><td>身份证背面</td><td><img style=\"width:100px; height:50px;\"  src=\"" + data.img2 + "\" onclick=\"showImg(this.src)\" /></td></tr>";
+                html += "</table>";
+                layer.open({
+                    type: 1,
+                    title: false,
+                    closeBtn: 1,
+                    shadeClose: true,
+                    skin: 'yourclass',
+                    area: '85%',
+                    content: html, //捕获的元素，注意：最好该指定的元素要存放在body最外层，否则可能被其它的相对元素所影响
+                    cancel: function () {
+
+                    }
+                });
+
+            } else {
+                layer.open({ content: data.msg, skin: 'msg', time: 2 });
+            }
+        });
+    }
+
+
+</script>
+@if (Model != null && Model.Number != null)
+{
+    //关联用户
+    LeaRun.Entity.Am_AmmeterPermission ammeterPermission = new LeaRun.Entity.Am_AmmeterPermission();
+    if (ViewBag.ammeterPermission != null)
+    {
+        ammeterPermission = ViewBag.ammeterPermission as LeaRun.Entity.Am_AmmeterPermission;
+    }
+    //模板
+    LeaRun.Entity.Am_Template template = new LeaRun.Entity.Am_Template();
+    if (ViewBag.template != null)
+    {
+        template = ViewBag.template as LeaRun.Entity.Am_Template;
+    }
+    //模板收费项
+    List<LeaRun.Entity.Am_TemplateContent> templateContentList = new List<LeaRun.Entity.Am_TemplateContent>();
+    if (ViewBag.templateContentList != null)
+    {
+        templateContentList = ViewBag.templateContentList as List<LeaRun.Entity.Am_TemplateContent>;
+    }
+    //系统预设收费项
+    List<LeaRun.Entity.Am_ChargeItem> chargeItemList = new List<LeaRun.Entity.Am_ChargeItem>();
+    if (ViewBag.chargeItemList != null)
+    {
+        chargeItemList = ViewBag.chargeItemList as List<LeaRun.Entity.Am_ChargeItem>;
+    }
+    <div class="all">
+        <header class="header clear">
+            <a href="javascript:history.go(-1);" class="return fl"></a>
+            <h1 class="title">关联用户</h1>
+        </header>
+        <input type="hidden" name="name" value="@Model.Number" id="number" />
+        <div class="charge-top bbot">
+            <span class="charge-span">表号：@Model.AM_Code</span>
+            <span class="charge-span">区域：@Model.Province@Model.City@Model.County</span>
+            <span class="charge-span">地址：@Model.Address @Model.Cell 单元 @Model.Floor 层 @Model.Room 号</span>
+        </div>
+        <div class="gary charge-bill binding-text bbot clear"><span class="bill-text fl">关联用户</span></div>
+        <div class="charge-bill binding-text bbot clear">
+            <span class="bill-text fl">手机号：</span>
+            <input type="number" class="l-input fl" maxlength="11" value="@(ammeterPermission.UserName==null?"":ammeterPermission.UserName)" id="phone" placeholder="输入手机号" />
+        </div>
+        <div class="charge-bill binding-text bbot clear">
+            <span class="bill-text fl">姓名：</span>
+            <input type="text" class="l-input fl" value="@(ammeterPermission.U_Name==null ?"":ammeterPermission.U_Name)" placeholder="输入姓名" id="name" style="width:70%" />
+            <span class="bill-text fr "><a href="javascript:;" onclick="userInfo()" style="color:#0080ff">查询</a></span>
+        </div>
+        <div class="charge-bill binding-text bbot clear">
+            <span class="bill-text fl">租赁时间：</span>
+            <input type="datetime" class="l-input fl" value="@(ammeterPermission.BeginTime==null ?"":ammeterPermission.BeginTime.Value.ToString("yyyy-MM-dd"))" placeholder="2018-01-01" id="starTime" />
+        </div>
+        <div class="charge-bill binding-text bbot clear">
+            <span class="bill-text fl">到期时间：</span>
+            <input type="datetime" class="l-input fl" value="@(ammeterPermission.EndTime==null?"":ammeterPermission.EndTime.Value.ToString("yyyy-MM-dd"))" placeholder="2018-01-01" id="endTime" />
+        </div>
+        <div class="charge-bill binding-text bbot clear">
+            <span class="bill-text fl">账单周期：</span>
+            <select class="charge-se" id="cycle">
+                <option value="1">1个月</option>
+                <option value="2">2个月</option>
+                <option value="3">3个月</option>
+                <option value="4">4个月</option>
+                <option value="5">5个月</option>
+                <option value="6">6个月</option>
+                <option value="7">7个月</option>
+                <option value="8">8个月</option>
+                <option value="9">9个月</option>
+                <option value="10">10个月</option>
+                <option value="11">11个月</option>
+                <option value="12">12个月</option>
+
+            </select>
+        </div>
+        <div class="charge-bill binding-text bbot clear">
+            <span class="bill-text fl">滞纳金：</span>
+            <input type="text" class="l-input fl" value="@template.OtherFees" placeholder="%" id="lateFee" />
+            <span class="bill-text fl">(百分比%)</span>
+
+        </div>
+        <div class="gary"></div>
+        <div class="acc-top bbot btop clear">
+            <span class="acc-one fl">项目</span>
+            <span class="acc-one acc-two fl">金额</span>
+        </div>
+        <div class="acc-all">
+            @if (templateContentList != null && templateContentList.Count() > 0)
+            {
+                foreach (var item in templateContentList)
+                {
+            <div class="acc-top acc-pa clear">
+                <input type="hidden" name="name" value="@item.ChargeItem_Number" />
+                <input type="hidden" name="name" value="@item.ChargeItem_ChargeType" />
+
+                <span class="acc-one fl">
+                    @if (item.ChargeItem_Number != "0")
+                            {
+                            <input type="text" class="acc-in" placeholder="租金" disabled="disabled" value="@item.ChargeItem_Title" />
+                            }
+                            else
+                            {
+                            <input type="text" class="acc-in" placeholder="租金" value="@item.ChargeItem_Title" />
+                            }
+
+                </span>
+                <span class="acc-one acc-two fl"><input type="text" class="acc-in" placeholder="0.00" value="@item.Money.Value.ToString("0.00")" onkeyup="clearNoNum(this)" /></span>
+
+                @if (chargeItemList.Where(o => o.Title == item.ChargeItem_Title).Count() == 0)
+                        {
+                        <input class="icon-close fr" type="button" onclick="test(this)" value="-" />
+                        }
+
+            </div>
+                }
+            }
+            else
+            {
+                foreach (var item in chargeItemList)
+                {
+            <div class="acc-top acc-pa clear">
+                <input type="hidden" name="name" value="@item.Number" />
+                <input type="hidden" name="name" value="@item.ChargeType" />
+                <span class="acc-one fl"><input type="text" class="acc-in" placeholder="租金" value="@item.Title" disabled="disabled" /></span>
+                <span class="acc-one acc-two fl"><input type="text" class="acc-in" placeholder="0.00" value="" onkeyup="clearNoNum(this)" /></span>
+            </div>
+                }
+
+            }
+            <div id="container"></div>
+            <div class="acc-top bbot   clear"><button id="add" class="acc-aj">+增加收费项</button></div>
+
+        </div>
+        <div class="list-index">
+            <a href="javascript:;" id="submit1" class="btn-all">保存</a>
+        </div>
+    </div>
+    <script src="~/Content/Scripts/layer.mobile-v2.0/layer_mobile/layer.js"></script>
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+
+    <script type="text/javascript">
+
+        $("#starTime").focus(function () {
+            document.activeElement.blur();
+        });
+        $("#endTime").focus(function () {
+            document.activeElement.blur();
+        });
+
+        $("#cycle").val(@template.BillCyc);
+        var add = document.getElementById('add');
+        var container = document.getElementById('container');
+        var node = container.nextSibling;
+        add.onclick = function () {
+            oDiv = document.createElement('div');
+            oDiv.innerHTML = "<div class='acc-top acc-pa clear'><span class='acc-one fl'><input type=\"hidden\" name=\"name\"  value=\"\" /><input type=\"hidden\" name=\"name\"  value=\"\" /><input type='text' class='acc-in' placeholder='其他' value=\"0\"  /></span><span class='acc-one acc-two fl'><input type='text' class='acc-in' placeholder='0.00'  onkeyup=\"clearNoNum(this)\" /></span><input class='icon-close fr' type='button' onclick='test(this)' value='-' /></div>";
+            container.parentNode.insertBefore(oDiv, node)
+            node = oDiv.nextSibling;
+        }
+        function test(test) {
+            test.parentNode.parentNode.removeChild(test.parentNode);
+        }
+        function showImg(obj) {
+            var imgsurl = [];
+            imgsurl[0] = obj;
+            wx.previewImage({
+                current: obj,
+                urls: imgsurl
+            });
+        }
+        function clearNoNum(obj) {
+            obj.value = obj.value.replace(/[^\d.]/g, ""); //清除"数字"和"."以外的字符
+            obj.value = obj.value.replace(/^\./g, ""); //验证第一个字符是数字
+            obj.value = obj.value.replace(/\.{2,}/g, "."); //只保留第一个, 清除多余的
+            obj.value = obj.value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
+            obj.value = obj.value.replace(/^(\-)*(\d+)\.(\d\d).*$/, '$1$2.$3'); //只能输入两个小数
+
+        }
+        $(function () {
+
+            $('.acc-pa').each(function (i) {
+                var thisItem = $(this);
+                thisItem.find("input:eq(2)").bind('input propertychange', function () {
+
+                });
+            });
+
+            $('#submit1').click(function () {
+                var _list = {};
+                var isTrue = true;
+                $('.acc-pa').each(function (i) {
+                    var thisItem = $(this);
+                    _list["itemList[" + i + "].Number"] = thisItem.find("input:eq(0)").val();
+                    _list["itemList[" + i + "].ChargeType"] = thisItem.find("input:eq(1)").val();
+                    _list["itemList[" + i + "].Title"] = thisItem.find("input:eq(2)").val();
+                    _list["itemList[" + i + "].Money"] = thisItem.find("input:eq(3)").val();
+                    if (thisItem.find("input:eq(3)").val().length <= 0) {
+                        thisItem.find("input:eq(3)").val(0);
+                        //layer.open({ content: '请输入正确的收费项', skin: 'msg', time: 2 });
+                        //isTrue = false;
+                    }
+                });
+                if (!isTrue) {
+                    return;
+                }
+                _list["number"] = $("#number").val();
+                _list["phone"] = $("#phone").val();
+                _list["name"] = $("#name").val();
+                _list["remark"] = $("#remark").val();
+                _list["cycle"] = $("#cycle").val();
+                _list["lateFee"] = $("#lateFee").val();
+                _list["starTime"] = $("#starTime").val();
+                _list["endTime"] = $("#endTime").val();
+
+                var text = "您是否确定要保存?";
+                layer.open({
+                    content: text
+                  , btn: ['保存', '取消']
+                  , skin: 'footer'
+                  , yes: function (index) {
+                      $.ajax({
+                          type: "POST",
+                          url: "/Proprietor/BindUser",
+                          traditional: true,
+                          data: _list,
+                          success: function (data) {
+                              if (data.res == "Ok") {
+                                  layer.open({
+                                      content: data.msg, skin: 'msg', time: 2, end: function myfunction() {
+                                          location.href = "/Common/Template?ammeterNumber=" + $("#number").val();
+                                      }
+                                  });
+                              } else {
+                                  layer.open({ content: data.msg, skin: 'msg', time: 2 });
+                              }
+                          },
+                          error: function (data) {
+                              layer.open({ content: data.msg, skin: 'msg', time: 2 });
+                          }
+                      });
+                  }
+                });
+
+                return false;
+            });
+        });
+    </script>
+}

@@ -1,0 +1,216 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>数据统计</title>
+    <!--框架必需start-->
+    <link href="~/Content/Styles/learunui-framework.css" rel="stylesheet" />
+    <script src="~/Content/Scripts/jquery/jquery-1.8.2.min.js"></script>
+    <script src="~/Content/Scripts/learunui-framework.js"></script>
+    <!--框架必需end-->
+    <!--第三方统计图start-->
+    <script src="~/Content/Scripts/highcharts/highcharts.js"></script>
+    <script src="~/Content/Scripts/highcharts/highcharts-more.js"></script>
+    <!--第三方统计图end-->
+    <script>
+        $(function () {
+            $.getJSON('/Report/GetDataCount',
+       function (data) {
+           $('#container').highcharts({
+
+               chart: {
+                   type: 'gauge',
+                   plotBackgroundColor: null,
+                   plotBackgroundImage: null,
+                   plotBorderWidth: 0,
+                   plotShadow: false
+               },
+
+               title: {
+                   text: '总浏览量 (' + data.PageView + '个)'
+               },
+
+               pane: {
+                   startAngle: -150,
+                   endAngle: 150,
+                   background: [{
+                       backgroundColor: {
+                           linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 },
+                           stops: [
+                               [0, '#FFF'],
+                               [1, '#333']
+                           ]
+                       },
+                       borderWidth: 0,
+                       outerRadius: '109%'
+                   }, {
+                       backgroundColor: {
+                           linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 },
+                           stops: [
+                               [0, '#333'],
+                               [1, '#FFF']
+                           ]
+                       },
+                       borderWidth: 1,
+                       outerRadius: '107%'
+                   }, {
+                       // default background
+                   }, {
+                       backgroundColor: '#DDD',
+                       borderWidth: 0,
+                       outerRadius: '105%',
+                       innerRadius: '103%'
+                   }]
+               },
+
+               // the value axis
+               yAxis: {
+                   min: 0,
+                   max: data.PageView * 2,
+
+                   minorTickInterval: 'auto',
+                   minorTickWidth: 1,
+                   minorTickLength: 10,
+                   minorTickPosition: 'inside',
+                   minorTickColor: '#666',
+
+                   tickPixelInterval: 30,
+                   tickWidth: 2,
+                   tickPosition: 'inside',
+                   tickLength: 10,
+                   tickColor: '#666',
+                   labels: {
+                       step: 2,
+                       rotation: 'auto'
+                   },
+                   title: {
+                       text: '个'
+                   },
+                   plotBands: [{
+                       from: 0,
+                       to: data.PageView / 2,
+                       color: '#55BF3B' // green
+                   }, {
+                       from: data.PageView / 2,
+                       to: data.PageView,
+                       color: '#DDDF0D' // yellow
+                   }, {
+                       from: data.PageView,
+                       to: data.PageView * 2,
+                       color: '#DF5353' // red
+                   }]
+               },
+
+               series: [{
+                   name: '数量',
+                   data: [data.PageView],
+                   tooltip: {
+                       valueSuffix: ' 个'
+                   }
+               }]
+
+           });
+           $('#container1').highcharts({
+
+               chart: {
+                   type: 'gauge',
+                   plotBackgroundColor: null,
+                   plotBackgroundImage: null,
+                   plotBorderWidth: 0,
+                   plotShadow: false
+               },
+
+               title: {
+                   text: '订单量 (' + data.OrderCount + '个)'
+               },
+
+               pane: {
+                   startAngle: -150,
+                   endAngle: 150,
+                   background: [{
+                       backgroundColor: {
+                           linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 },
+                           stops: [
+                               [0, '#FFF'],
+                               [1, '#333']
+                           ]
+                       },
+                       borderWidth: 0,
+                       outerRadius: '109%'
+                   }, {
+                       backgroundColor: {
+                           linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 },
+                           stops: [
+                               [0, '#333'],
+                               [1, '#FFF']
+                           ]
+                       },
+                       borderWidth: 1,
+                       outerRadius: '107%'
+                   }, {
+                       // default background
+                   }, {
+                       backgroundColor: '#DDD',
+                       borderWidth: 0,
+                       outerRadius: '105%',
+                       innerRadius: '103%'
+                   }]
+               },
+
+               // the value axis
+               yAxis: {
+                   min: 0,
+                   max: data.OrderCount * 3,
+
+                   minorTickInterval: 'auto',
+                   minorTickWidth: 1,
+                   minorTickLength: 10,
+                   minorTickPosition: 'inside',
+                   minorTickColor: '#666',
+
+                   tickPixelInterval: 30,
+                   tickWidth: 2,
+                   tickPosition: 'inside',
+                   tickLength: 10,
+                   tickColor: '#666',
+                   labels: {
+                       step: 2,
+                       rotation: 'auto'
+                   },
+                   title: {
+                       text: '个'
+                   },
+                   plotBands: [{
+                       from: 0,
+                       to: data.OrderCount,
+                       color: '#55BF3B' // green
+                   }, {
+                       from: data.OrderCount,
+                       to: data.OrderCount*2,
+                       color: '#DDDF0D' // yellow
+                   }, {
+                       from: data.OrderCount*2,
+                       to: data.OrderCount * 3,
+                       color: '#DF5353' // red
+                   }]
+               },
+
+               series: [{
+                   name: '数量',
+                   data: [data.OrderCount],
+                   tooltip: {
+                       valueSuffix: ' 个'
+                   }
+               }]
+
+           });
+       });
+        });
+    </script>
+</head>
+<body>
+    <div id="container" style="min-width: 310px; height: 400px; margin: 100px; float:left;"></div>
+    <div id="container1" style="min-width: 310px; height: 400px; margin: 100px; float:left;"></div>
+</body>
+</html>

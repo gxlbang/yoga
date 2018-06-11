@@ -1,0 +1,83 @@
+﻿@{
+    ViewBag.Title = "手机号码修改";
+    Layout = "~/Views/Shared/UiIndex.cshtml";
+}
+<script>
+    var clock = '';
+    var nums = 120;
+    var btn;
+    function sendCode(thisBtn) {
+        //var Phone = $("#txtPhone").val();
+        var phone = $.trim($("#txtPhone").val());
+        var myreg = /^(((13[0-9]{1})|(14[0-9]{1})|(17[0]{1})|(15[0-3]{1})|(15[5-9]{1})|(18[0-9]{1}))+\d{8})$/;
+        if (!IsNullOrEmpty(phone)) {
+            $.toast("电话号码不能为空");
+            return false;
+        }
+        if (phone.length != 11) {
+            $.toast("电话号码不能少于11位");
+            return false;
+        }
+        if (!myreg.test(phone)) {
+            $.toast("电话号码不正确");
+            return false;
+        }
+        btn = thisBtn;
+        btn.disabled = true;
+        btn.value = nums + '秒重新获取';
+        clock = setInterval(doLoop, 1000);
+        var postData = "";
+        AjaxJson("/Ui/GetCode?Phone=" + phone, postData, function (data) {
+            $.toast(data.Message);
+        });
+
+    }
+    function doLoop() {
+        nums--;
+        if (nums > 0) {
+            btn.value = nums + '秒重新获取';
+        } else {
+            clearInterval(clock);
+            btn.disabled = false;
+            btn.value = '获取验证码';
+            nums = 120;
+        }
+    }
+    function ModifyPhone() {
+        var phone = $.trim($("#txtPhone").val());
+        var myreg = /^(((13[0-9]{1})|(14[0-9]{1})|(17[0]{1})|(15[0-3]{1})|(15[5-9]{1})|(18[0-9]{1}))+\d{8})$/;
+        if (!IsNullOrEmpty(phone)) {
+            $.toast("电话号码不能为空");
+            return false;
+        }
+        if (phone.length != 11) {
+            $.toast("电话号码不能少于11位");
+            return false;
+        }
+        if (!myreg.test(phone)) {
+            $.toast("电话号码不正确");
+            return false;
+        }
+        var code = $.trim($("#txtcode").val());
+        if (!IsNullOrEmpty(code) || code.length != 4) {
+            $.toast("输入的验证码不正确");
+            return false;
+        }
+        var postData = "";
+        AjaxJson("/Ui/ModifyPhone?Phone=" + phone + "&Code=" + code, postData, function (data) {
+            $.toast(data.Message);
+            Urlhref("/Ui/Edit");
+        });
+    }
+</script>
+<div class="infor-list bbot clear">
+    <span class="in-name fl">手机号码：</span>
+    <input class="in-input" type="text" maxlength="11" id="txtPhone" placeholder="请输入手机号码" />
+</div>
+<div class="infor-list phone-listwo bbot clear">
+    <span class="in-name fl">验证码：</span>
+    <input class="in-input in-yan fl" type="text" id="txtcode" placeholder="请输入验证码" />
+    <input type="button" class="tab-yanzhe fr" value="获取验证码"
+           onclick="sendCode(this)" />
+</div>
+<a href="javascript:;" onclick="ModifyPhone()" class="tab-btn">确定</a>

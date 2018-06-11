@@ -1,0 +1,91 @@
+@{
+    ViewBag.Title = "Ho_MyHouseInfo》表单页面";
+    Layout = "~/Views/Shared/_LayoutForm.cshtml";
+}
+<script type="text/javascript">
+    var KeyValue = GetQuery('KeyValue');//主键
+    $(function () {
+        InitControl();
+    })
+    //得到一个对象实体
+    function InitControl() {
+        if (!!GetQuery('KeyValue')) {
+            AjaxJson("/HouseModule/Ho_MyHouseInfo/SetForm", { KeyValue: KeyValue }, function (data) {
+                SetWebControls(data);
+            });
+        }
+    }
+    //保存事件
+    function AcceptClick() {
+        if (!CheckDataValid('#form1')) {
+            return false;
+        }
+        var postData = GetWebControls("#form1");
+        AjaxJson("/HouseModule/Ho_MyHouseInfo/SubmitForm?KeyValue=" + KeyValue, postData, function (data) {
+            tipDialog(data.Message, 3, data.Code);
+            top.frames[tabiframeId()].windowload();
+            closeDialog();
+        });
+    }
+</script>
+<form id="form1" style="margin: 1px">
+    <div id="message" style="display: none"></div>
+    <table class="form">
+        <tr>
+            <th class='formTitle'>Number：</th>
+            <td class='formValue'>
+                <input id="Number" maxlength=50 type="text" class="txt"   />
+            </td>
+            <th class='formTitle'>UNumber：</th>
+            <td class='formValue'>
+                <input id="UNumber" maxlength=50 type="text" class="txt"   />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>UName：</th>
+            <td class='formValue'>
+                <input id="UName" maxlength=50 type="text" class="txt"   />
+            </td>
+            <th class='formTitle'>HNumber：</th>
+            <td class='formValue'>
+                <input id="HNumber" maxlength=50 type="text" class="txt"   />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>HName：</th>
+            <td class='formValue'>
+                <input id="HName" maxlength=50 type="text" class="txt"   />
+            </td>
+            <th class='formTitle'>Himg：</th>
+            <td class='formValue'>
+                <input id="Himg" maxlength=256 type="text" class="txt"   />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>HMoney：</th>
+            <td class='formValue'>
+                <input id="HMoney" maxlength=19 type="text" class="txt"   />
+            </td>
+            <th class='formTitle'>Status：</th>
+            <td class='formValue'>
+                <input id="Status" maxlength=5 type="text" class="txt"   />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>StatusStr：</th>
+            <td class='formValue'>
+                <input id="StatusStr" maxlength=50 type="text" class="txt"   />
+            </td>
+            <th class='formTitle'>CreateTime：</th>
+            <td class='formValue'>
+                <input id="CreateTime" maxlength=23 type="text" class="txt"   />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>Remark：</th>
+            <td class='formValue'>
+                <input id="Remark" maxlength=50 type="text" class="txt"   />
+            </td>
+        </tr>
+    </table>
+</form>

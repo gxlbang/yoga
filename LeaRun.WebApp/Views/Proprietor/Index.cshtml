@@ -1,0 +1,61 @@
+﻿@{
+    ViewBag.Title = "业主中心";
+    Layout = "~/Views/Shared/_Partial.cshtml";
+}
+
+<div class="all">
+    <header class="header clear">
+        <a href="javascript:history.go(-1);" class="return fl"></a>
+        <h1 class="title">业主中心</h1>
+    </header>
+    <div class="my-all">
+        <a href="/Proprietor/AmmeterManage" class="my-list clear bbot">
+            <i class="icon icon-one fl"></i>
+            <span class="my-edit">电表管理</span>
+            <i class="icon-next"></i>
+        </a>
+        <a href="/Proprietor/CollectorList" class="my-list clear bbot">
+            <i class="icon icon-ty fl"></i>
+            <span class="my-edit">采集器管理</span>
+            <i class="icon-next"></i>
+        </a>
+        <a href="/Proprietor/BillManageNav" class="my-list clear bbot">
+            <i class="icon icon-thy fl"></i>
+            <span class="my-edit">房屋账单管理</span>
+            <i class="icon-next"></i>
+        </a>
+        <div class="gary"></div>
+        <a href="/Proprietor/RetireNav" class="my-list clear bbot btop">
+            <i class="icon icon-fourth fl"></i>
+            <span class="my-edit">退房管理</span>
+            <i class="icon-next"></i>
+        </a>
+        <a href="/Proprietor/RepairManagement" class="my-list clear bbot">
+            <i class="icon icon-six fl"></i>
+            <span class="my-edit">报修管理</span>
+            <i class="icon-next"></i>
+        </a>
+        <a href="/Proprietor/RepairMasterList" class="my-list clear bbot">
+            <i class="icon icon-six fl"></i>
+            <span class="my-edit">维修师傅管理</span>
+            <i class="icon-next"></i>
+        </a>
+        <div class="gary"></div>
+        @*<a href="" class="my-list clear bbot btop">
+            <i class="icon icon-twelve fl"></i>
+            <span class="my-edit">报表查询</span>
+            <i class="icon-next"></i>
+        </a>*@
+        @*<a href="historical-bill.html" class="my-list clear bbot">
+            <i class="icon icon-eleven fl"></i>
+            <span class="my-edit">账号明细</span>
+            <i class="icon-next"></i>
+        </a>*@
+        <a href="/Proprietor/EquipmentDeposit" class="my-list clear bbot">
+            <i class="icon icon-three fl"></i>
+            <span class="my-edit">设备押金</span>
+            <i class="icon-next"></i>
+        </a>
+    </div>
+</div>
+

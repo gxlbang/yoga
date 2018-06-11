@@ -1,0 +1,88 @@
+@{
+    ViewBag.Title = "用户》表单页面";
+    Layout = "~/Views/Shared/_LayoutForm.cshtml";
+}
+<script type="text/javascript">
+    var KeyValue = GetQuery('KeyValue');//主键
+    $(function () {
+        //获取用户角色
+        AjaxJson("/AmmeterModule/Ho_PartnerUser/GetUserRole", "", function (data) {
+            $.each(data, function (i) {
+                $("#UserRoleNumber").append($("<option></option>").val(data[i].Number).html(data[i].RoleName));
+            });
+        });
+        InitControl();
+    })
+    //得到一个对象实体
+    function InitControl() {
+        if (!!GetQuery('KeyValue')) {
+            AjaxJson("/AmmeterModule/Ho_PartnerUser/SetForm", { KeyValue: KeyValue }, function (data) {
+                SetWebControls(data);
+                //设置select
+                $("#Password").val("******");
+                $("#UserRoleNumber").val(data.UserRoleNumber);
+            });
+        }
+    }
+    //保存事件
+    function AcceptClick() {
+        if (!CheckDataValid('#form1')) {
+            return false;
+        }
+        var postData = jQuery.parseJSON('{"Name":"' + $("#Name").val() +
+            '","Accout":"' + $("#Accout").val() + '","Password":"' + $("#Password").val() +
+            '","UserRoleNumber":"' + $("#UserRoleNumber").val() + '","UserRole":"' + $("#UserRoleNumber").find("option:selected").text() +
+            '","CardCode":"' + $("#CardCode").val() + '","Remark":"' + $("#Remark").val() + '"}');
+        AjaxJson("/AmmeterModule/Ho_PartnerUser/SubmitUserForm?KeyValue=" + KeyValue, postData, function (data) {
+            tipDialog(data.Message, 3, data.Code);
+            top.frames[tabiframeId()].windowload();
+            closeDialog();
+        });
+    }
+</script>
+<form id="form1" style="margin: 1px">
+    <div id="message" style="display: none"></div>
+    <table class="form">
+        <tr>
+            <th class='formTitle'>用户角色：</th>
+            <td class='formValue'>
+                <select id="UserRoleNumber" class="txtselect">
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>姓名：</th>
+            <td class='formValue'>
+                @*<label id="Name" />*@
+                <input id="Name" maxlength=12 type="text" class="txt required" datacol="yes" err="角色名称" checkexpession="NotNull"  />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>手机号：</th>
+            <td class='formValue'>
+                @*<label id="Mobile" />*@
+                <input id="Account" maxlength=11 type="text" class="txt required" datacol="yes" err="手机号" checkexpession="NotNull"  />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>登录密码：</th>
+            <td class='formValue'>
+                @*<label id="Mobile" />*@
+                <input id="Password" maxlength=16 type="password" class="txt required" datacol="yes" err="登录密码" checkexpession="NotNull" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>身份证号：</th>
+            <td class='formValue'>
+                @*<label id="CardCode" />*@
+                <input id="CardCode" maxlength=18 type="text" class="txt" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>备注：</th>
+            <td class='formValue'>
+                <textarea id="Remark" name="Remark" maxlength="600" class="txtArea" rows="5"></textarea>
+            </td>
+        </tr>
+    </table>
+</form>

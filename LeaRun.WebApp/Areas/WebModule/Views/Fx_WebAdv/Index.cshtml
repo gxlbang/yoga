@@ -1,0 +1,129 @@
+@{
+    ViewBag.Title = "Fx_WebAdv";
+    Layout = "~/Views/Shared/_LayoutIndex.cshtml";
+}
+<script type="text/javascript">
+    $(function () {
+        GetGrid();
+    })
+    //加载表格
+    function GetGrid() {
+        $("#gridTable").jqGrid({
+        url: "@Url.Content("~/WebModule/Fx_WebAdv/GridPageJson")",
+        datatype: "json",
+        height: $(window).height() - 149,
+        autowidth: true,
+        colModel: [
+                { label: 'Number', name: 'Number', index: 'Number', width: 0, align: 'left', hidden: true },
+                {
+                    label: '广告图片', name: 'AdvImg', index: 'AdvImg', width: 60, align: 'left',
+                    formatter: function (cellvalue, options, rowObject) {
+                        if (cellvalue) {
+                            return "<div style='padding:1px;'><img src='" + cellvalue + "' width='48' height='48' /></div>";
+                        } else {
+                            return "<div style='padding:1px;'><img src='/Content/Images/noimg.gif' width='48' height='48'/></div>";
+                        }
+                    }
+                },
+                { label: '标题', name: 'Title', index: 'Title', width: 150, align: 'left'  },
+                { label: '描述', name: 'AdvDes', index: 'AdvDes', width: 240, align: 'left'  },
+                { label: '链接', name: 'AdvLink', index: 'AdvLink', width: 240, align: 'left'  },
+                {
+                    label: "创建时间", name: "CreateTime", index: "CreateTime", width: 150,
+                    formatter: function (value, options, rowObject) {
+                        return formatDate(value, 'yyyy-MM-dd hh:mm:ss');
+                    }
+                },
+                {
+                    label: "状态", name: "Status", index: "Status", width: 80,
+                    formatter: function (value, options, rowObject) {
+                        if (value == "1") {
+                            return "正常";
+                        } else {
+                            return "禁用";
+                        }
+                    }
+                },
+                { label: '宽度', name: 'Width', index: 'Width', width: 80, align: 'left',sortable: true  },
+                { label: '高度', name: 'Height', index: 'Height', width: 80, align: 'left',sortable: true  },
+                { label: '备注', name: 'Remark', index: 'Remark', width: 150, align: 'left',sortable: true  },
+        ],
+        pager: "#gridPager",
+        sortname: '',
+        sortorder: 'desc',
+        rownumbers: true,
+        shrinkToFit: false,
+        gridview: true,
+    });
+}
+    //新增
+    function btn_add() {
+        var url = "/WebModule/Fx_WebAdv/Form"
+        openDialog(url, "Form", "新增广告", 770, 395, function (iframe) {
+            top.frames[iframe].AcceptClick()
+        });
+    }
+    //编辑
+    function btn_edit() {
+        var KeyValue = GetJqGridRowValue("#gridTable", "Number");
+        if (IsChecked(KeyValue)) {
+            var url = "/WebModule/Fx_WebAdv/Form?KeyValue=" + KeyValue;
+            openDialog(url, "Form", "编辑广告", 770, 395, function (iframe) {
+                top.frames[iframe].AcceptClick();
+            });
+        }
+    }
+    //删除
+    function btn_delete() {
+        var KeyValue = GetJqGridRowValue("#gridTable", "Number");
+        if (IsDelData(KeyValue)) {
+            var delparm = 'KeyValue=' + KeyValue;
+            delConfig('/WebModule/Fx_WebAdv/Delete', delparm, KeyValue.split(",").length);
+        }
+    }
+    //明细
+    function btn_detail() {
+        var KeyValue = GetJqGridRowValue("#gridTable", "Number");
+        if (IsChecked(KeyValue)) {
+            var url = "/WebModule/Fx_WebAdv/Detail?KeyValue=" + KeyValue;
+            Dialog(url, "Detail", "广告明细", 770, 395, function (iframe) {
+                top.frames[iframe].AcceptClick();
+            });
+        }
+    }
+    //刷新
+    function windowload() {
+        $("#gridTable").trigger("reloadGrid"); //重新载入
+
+    }
+    //搜索
+    function btn_Search() {
+        var keywords = $("#keywords").val();
+        $("#gridTable").jqGrid('setGridParam', {
+            url: "@Url.Content("~/WebModule/Fx_WebAdv/GridPageListJson")?Keyword=" + keywords, page: 1
+    }).trigger('reloadGrid');
+    }
+</script>
+<!--工具栏-->
+<div class="tools_bar leftline rightline" style="margin: 1px; margin-bottom: 0px;">
+    <div class="PartialButton">
+        @Html.Partial("_PartialButton")
+    </div>
+</div>
+<div class="leftline rightline QueryArea" style="margin: 1px; margin-top: 0px; margin-bottom: 0px;">
+    <table border="0" class="form-find" style="height: 45px;">
+        <tr>
+            <th>关键字：</th>
+            <td>
+                <input id="keywords" type="text" class="txt" style="width: 200px" />
+            </td>
+            <td>
+                <input id="btnSearch" type="button" class="btnSearch" value="搜 索" onclick="btn_Search()" />
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="topline rightline" style="margin: 1px; margin-top: -1px;">
+    <table id="gridTable"></table>
+    <div id="gridPager"></div>
+</div>

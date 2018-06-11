@@ -1,0 +1,148 @@
+@{
+    ViewBag.Title = "Am_Ammeter》明细页面";
+    Layout = "~/Views/Shared/_LayoutForm.cshtml";
+}
+<script type="text/javascript">
+    $(function () {
+        InitControl();
+    })
+    //得到一个对象实体
+    function InitControl() {
+        if (!!GetQuery('KeyValue')) {
+            AjaxJson("/AmmeterModule/Am_Ammeter/SetForm", { KeyValue: GetQuery('KeyValue') }, function (data) {
+                data.Address = data.Province + ' ' + data.City + ' ' + data.County + ' ' + data.Address;
+                SetWebLable(data);
+                $("#Remark").val(data.Remark);
+            });
+        }
+    }
+</script>
+<form id="form1" style="margin: 1px">
+    <table class="form">
+        <tr>
+            <th class='formTitle'>电表表号：</th>
+            <td class='formValue'>
+                <label id="AM_Code" />
+            </td>
+            <th class='formTitle'>电表类型：</th>
+            <td class='formValue'>
+                <label id="AmmeterType_Name" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>电表价格：</th>
+            <td class='formValue'>
+                <label id="AmmeterMoney_Name" style="color:blue;" />
+            </td>
+            <th class='formTitle'>采集器编号：</th>
+            <td class='formValue'>
+                <label id="Collector_Code" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>租户帐号：</th>
+            <td class='formValue'>
+                <label id="UserName" />
+            </td>
+            <th class='formTitle'>租户姓名：</th>
+            <td class='formValue'>
+                <label id="U_Name" style="color:blue;" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>租户入住时间：</th>
+            <td class='formValue' colspan="3">
+                <label id="UserTime"  style="color:blue;"/>
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>地址：</th>
+            <td class='formValue' colspan="3">
+                <label id="Address" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>单元：</th>
+            <td class='formValue'>
+                <label id="Cell" />
+            </td>
+            <th class='formTitle'>楼层：</th>
+            <td class='formValue'>
+                <label id="Floor" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>房号：</th>
+            <td class='formValue'>
+                <label id="Room" />
+            </td>
+            <th class='formTitle'>状态：</th>
+            <td class='formValue'>
+                <label id="StatusStr" style="color:green;font-weight:bold;" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>安装时间：</th>
+            <td class='formValue'>
+                <label id="CreateTime" />
+            </td>
+            <th class='formTitle'>互感器变化：</th>
+            <td class='formValue'>
+                <label id="HGQBB" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>报警金额：</th>
+            <td class='formValue'>
+                <label id="FirstAlarm" />
+            </td>
+            <th class='formTitle'>电费余额：</th>
+            <td class='formValue'>
+                <label id="Money" style="color:red;font-weight:bold;" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>当前总电量：</th>
+            <td class='formValue'>
+                <label id="CurrPower" />
+            </td>
+            <th class='formTitle'>电量同步时间：</th>
+            <td class='formValue'>
+                <label id="CP_Time" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>当前剩余金额：</th>
+            <td class='formValue'>
+                <label id="CurrMoney" />
+            </td>
+            <th class='formTitle'>剩余金额同步时间：</th>
+            <td class='formValue'>
+                <label id="CM_Time" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>所属业主：</th>
+            <td class='formValue'>
+                <label id="UY_UserName" />
+            </td>
+            <th class='formTitle'>业主姓名：</th>
+            <td class='formValue'>
+                <label id="UY_Name" style="color:darksalmon;font-weight:bold;" />
+            </td>
+        </tr>
+
+        <tr>
+            <th class='formTitle'>总充值金额：</th>
+            <td class='formValue' colspan="3">
+                <label id="AllMoney" />&nbsp;&nbsp;&nbsp;<span style="color:dimgray;">从建档时统计</span>
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>备注：</th>
+            <td class='formValue' colspan="3">
+                <textarea id="Remark" name="Remark" maxlength="200" class="txtArea" rows="6"></textarea>
+            </td>
+        </tr>
+    </table>
+</form>

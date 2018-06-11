@@ -1,0 +1,67 @@
+@{
+    ViewBag.Title = "Am_AmmeterOperateLog》明细页面";
+    Layout = "~/Views/Shared/_LayoutForm.cshtml";
+}
+<script type="text/javascript">
+    $(function () {
+        InitControl();
+    })
+    //得到一个对象实体
+    function InitControl() {
+        if (!!GetQuery('KeyValue')) {
+            AjaxJson("/AmmeterModule/Am_AmmeterOperateLog/SetForm", { KeyValue: GetQuery('KeyValue') }, function (data) {
+                SetWebControls(data);
+            });
+        }
+    }
+</script>
+<form id="form1" style="margin: 1px">
+    <table class="form">
+        <tr>
+            <th class='formTitle'>Number：</th>
+            <td class='formValue'>
+                <label id="Number" />
+            </td>
+            <th class='formTitle'>U_Number：</th>
+            <td class='formValue'>
+                <label id="U_Number" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>UserName：</th>
+            <td class='formValue'>
+                <label id="UserName" />
+            </td>
+            <th class='formTitle'>TaskNumber：</th>
+            <td class='formValue'>
+                <label id="TaskNumber" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>OperateType：</th>
+            <td class='formValue'>
+                <label id="OperateType" />
+            </td>
+            <th class='formTitle'>OperateTypeStr：</th>
+            <td class='formValue'>
+                <label id="OperateTypeStr" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>Result：</th>
+            <td class='formValue'>
+                <label id="Result" />
+            </td>
+            <th class='formTitle'>CreateTime：</th>
+            <td class='formValue'>
+                <label id="CreateTime" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>Remark：</th>
+            <td class='formValue'>
+                <label id="Remark" />
+            </td>
+        </tr>
+    </table>
+</form>

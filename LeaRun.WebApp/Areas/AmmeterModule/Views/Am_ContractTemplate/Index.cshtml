@@ -1,0 +1,138 @@
+@{
+    ViewBag.Title = "Am_ContractTemplate";
+    Layout = "~/Views/Shared/_LayoutIndex.cshtml";
+}
+<script type="text/javascript">
+    $(function () {
+        GetGrid();
+    })
+    //加载表格
+    function GetGrid() {
+        $("#gridTable").jqGrid({
+        url: "@Url.Content("~/AmmeterModule/Am_ContractTemplate/GridPageJson")",
+        datatype: "json",
+        height: $(window).height() - 149,
+        autowidth: true,
+        colModel: [
+                { label: 'Number', name: 'Number', index: 'Number', width: 0, align: 'left',sortable: true  },
+                { label: 'AmmeterNumber', name: 'AmmeterNumber', index: 'AmmeterNumber', width: 0, align: 'left',sortable: true  },
+                { label: 'AmmeterCode', name: 'AmmeterCode', index: 'AmmeterCode', width: 0, align: 'left',sortable: true  },
+                { label: 'ContractPaht', name: 'ContractPaht', index: 'ContractPaht', width: 0, align: 'left',sortable: true  },
+                { label: 'CreateTime', name: 'CreateTime', index: 'CreateTime', width: 0, align: 'left',sortable: true  },
+                { label: 'U_Number', name: 'U_Number', index: 'U_Number', width: 0, align: 'left',sortable: true  },
+                { label: 'UserName', name: 'UserName', index: 'UserName', width: 0, align: 'left',sortable: true  },
+                { label: 'U_Name', name: 'U_Name', index: 'U_Name', width: 0, align: 'left',sortable: true  },
+                { label: 'Province', name: 'Province', index: 'Province', width: 0, align: 'left',sortable: true  },
+                { label: 'City', name: 'City', index: 'City', width: 0, align: 'left',sortable: true  },
+                { label: 'County', name: 'County', index: 'County', width: 0, align: 'left',sortable: true  },
+                { label: 'Address', name: 'Address', index: 'Address', width: 0, align: 'left',sortable: true  },
+                { label: 'Cell', name: 'Cell', index: 'Cell', width: 0, align: 'left',sortable: true  },
+                { label: 'Floor', name: 'Floor', index: 'Floor', width: 0, align: 'left',sortable: true  },
+                { label: 'Room', name: 'Room', index: 'Room', width: 0, align: 'left',sortable: true  },
+                { label: 'RoomNum', name: 'RoomNum', index: 'RoomNum', width: 0, align: 'left',sortable: true  },
+                { label: 'HallNum', name: 'HallNum', index: 'HallNum', width: 0, align: 'left',sortable: true  },
+                { label: 'KitchenNum', name: 'KitchenNum', index: 'KitchenNum', width: 0, align: 'left',sortable: true  },
+                { label: 'ToiletNum', name: 'ToiletNum', index: 'ToiletNum', width: 0, align: 'left',sortable: true  },
+                { label: 'HouseSize', name: 'HouseSize', index: 'HouseSize', width: 0, align: 'left',sortable: true  },
+                { label: 'Useing', name: 'Useing', index: 'Useing', width: 0, align: 'left',sortable: true  },
+                { label: 'UseingSize', name: 'UseingSize', index: 'UseingSize', width: 0, align: 'left',sortable: true  },
+                { label: 'Money', name: 'Money', index: 'Money', width: 0, align: 'left',sortable: true  },
+                { label: 'MoneyStr', name: 'MoneyStr', index: 'MoneyStr', width: 0, align: 'left',sortable: true  },
+                { label: 'DepositMoney', name: 'DepositMoney', index: 'DepositMoney', width: 0, align: 'left',sortable: true  },
+                { label: 'DepositMoneyStr', name: 'DepositMoneyStr', index: 'DepositMoneyStr', width: 0, align: 'left',sortable: true  },
+                { label: 'CycleTime', name: 'CycleTime', index: 'CycleTime', width: 0, align: 'left',sortable: true  },
+                { label: 'TotalMoney', name: 'TotalMoney', index: 'TotalMoney', width: 0, align: 'left',sortable: true  },
+                { label: 'TotalMoneyStr', name: 'TotalMoneyStr', index: 'TotalMoneyStr', width: 0, align: 'left',sortable: true  },
+                { label: 'BankInfo', name: 'BankInfo', index: 'BankInfo', width: 0, align: 'left',sortable: true  },
+                { label: 'BankUserName', name: 'BankUserName', index: 'BankUserName', width: 0, align: 'left',sortable: true  },
+                { label: 'BankCode', name: 'BankCode', index: 'BankCode', width: 0, align: 'left',sortable: true  },
+                { label: 'Am_Money', name: 'Am_Money', index: 'Am_Money', width: 0, align: 'left',sortable: true  },
+                { label: 'WaterMoney', name: 'WaterMoney', index: 'WaterMoney', width: 0, align: 'left',sortable: true  },
+                { label: 'PropertyMoeny', name: 'PropertyMoeny', index: 'PropertyMoeny', width: 0, align: 'left',sortable: true  },
+                { label: 'GarbageMoney', name: 'GarbageMoney', index: 'GarbageMoney', width: 0, align: 'left',sortable: true  },
+                { label: 'NetMoney', name: 'NetMoney', index: 'NetMoney', width: 0, align: 'left',sortable: true  },
+                { label: 'PenaltyTime', name: 'PenaltyTime', index: 'PenaltyTime', width: 0, align: 'left',sortable: true  },
+                { label: 'PenaltyMoney', name: 'PenaltyMoney', index: 'PenaltyMoney', width: 0, align: 'left',sortable: true  },
+                { label: 'BackTime', name: 'BackTime', index: 'BackTime', width: 0, align: 'left',sortable: true  },
+                { label: 'BackMoney', name: 'BackMoney', index: 'BackMoney', width: 0, align: 'left',sortable: true  },
+                { label: 'GoTime', name: 'GoTime', index: 'GoTime', width: 0, align: 'left',sortable: true  },
+                { label: 'GoMoney', name: 'GoMoney', index: 'GoMoney', width: 0, align: 'left',sortable: true  },
+                { label: 'GoOnTime', name: 'GoOnTime', index: 'GoOnTime', width: 0, align: 'left',sortable: true  },
+                { label: 'RentMoneyTime', name: 'RentMoneyTime', index: 'RentMoneyTime', width: 0, align: 'left',sortable: true  },
+                { label: 'HoName', name: 'HoName', index: 'HoName', width: 0, align: 'left',sortable: true  },
+                { label: 'HoUserName', name: 'HoUserName', index: 'HoUserName', width: 0, align: 'left',sortable: true  },
+                { label: 'HoUserMobile', name: 'HoUserMobile', index: 'HoUserMobile', width: 0, align: 'left',sortable: true  },
+                { label: 'Remark', name: 'Remark', index: 'Remark', width: 0, align: 'left',sortable: true  },
+        ],
+        pager: "#gridPager",
+        sortname: '',
+        sortorder: 'desc',
+        rownumbers: true,
+        shrinkToFit: false,
+        gridview: true,
+    });
+}
+    //新增
+    function btn_add() {
+        var url = "/AmmeterModule/Am_ContractTemplate/Form"
+        openDialog(url, "Form", "新增Am_ContractTemplate", 770, 395, function (iframe) {
+            top.frames[iframe].AcceptClick()
+        });
+    }
+    //编辑
+    function btn_edit() {
+        var KeyValue = GetJqGridRowValue("#gridTable", "AmmeterNumber");
+        if (IsChecked(KeyValue)) {
+            var url = "/AmmeterModule/Am_ContractTemplate/Form?KeyValue=" + KeyValue;
+            openDialog(url, "Form", "编辑Am_ContractTemplate", 770, 395, function (iframe) {
+                top.frames[iframe].AcceptClick();
+            });
+        }
+    }
+    //删除
+    function btn_delete() {
+        var KeyValue = GetJqGridRowValue("#gridTable", "AmmeterNumber");
+        if (IsDelData(KeyValue)) {
+            var delparm = 'KeyValue=' + KeyValue;
+            delConfig('/AmmeterModule/Am_ContractTemplate/Delete', delparm, KeyValue.split(",").length);
+        }
+    }
+    //明细
+    function btn_detail() {
+        var KeyValue = GetJqGridRowValue("#gridTable", "AmmeterNumber");
+        if (IsChecked(KeyValue)) {
+            var url = "/AmmeterModule/Am_ContractTemplate/Detail?KeyValue=" + KeyValue;
+            Dialog(url, "Detail", "Am_ContractTemplate明细", 820, 500, function (iframe) {
+                top.frames[iframe].AcceptClick();
+            });
+        }
+    }
+    //刷新
+    function windowload() {
+        $("#gridTable").trigger("reloadGrid"); //重新载入
+        
+    }
+</script>
+<!--工具栏-->
+<div class="tools_bar leftline rightline" style="margin: 1px; margin-bottom: 0px;">
+    <div class="PartialButton">
+        @Html.Partial("_PartialButton")
+    </div>
+</div>
+<div class="leftline rightline QueryArea" style="margin: 1px; margin-top: 0px; margin-bottom: 0px;">
+    <table border="0" class="form-find" style="height: 45px;">
+        <tr>
+            <th>关键字：</th>
+            <td>
+                <input id="keywords" type="text" class="txt" style="width: 200px" />
+            </td>
+            <td>
+                <input id="btnSearch" type="button" class="btnSearch" value="搜 索" onclick="btn_Search()" />
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="topline rightline" style="margin: 1px; margin-top: -1px;">
+    <table id="gridTable"></table>
+    <div id="gridPager"></div>
+</div>

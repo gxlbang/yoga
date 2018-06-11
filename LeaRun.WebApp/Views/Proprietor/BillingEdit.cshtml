@@ -1,0 +1,155 @@
+﻿@model LeaRun.Entity.Am_Bill
+@{
+    ViewBag.Title = "待出账详情";
+    Layout = "~/Views/Shared/_Partial.cshtml";
+}
+
+@if (Model != null)
+{
+    <input type="hidden" name="name" id="number" value="@Model.Number" />
+    <div class="all pro-all">
+        <header class="header clear">
+            <a href="javascript:history.go(-1);" class="return fl"></a>
+            <h1 class="title">待出账详情</h1>
+        </header>
+        <div class="charge-top bbot">
+            <span class="charge-span">账单号：@Model.BillCode</span>
+            <span class="charge-span">表号：@Model.AmmeterCode</span>
+            <span class="charge-span">姓名：@Model.T_U_Name</span>
+            <span class="charge-span">手机号：@Model.T_UserName</span>
+            <span class="charge-span">区域：@Model.Province@Model.City@Model.County</span>
+            <span class="charge-span">地址：@Model.Address</span>
+            <span class="charge-span">单元：@Model.Cell 单元 @Model.Floor 层 @Model.Room 号</span>
+            <span class="charge-span">账单状态：@Model.StatusStr</span>
+            <span class="charge-span">账单出账时间：@Model.SendTime.Value.ToString("yyyy-MM-dd")</span>
+
+        </div>
+        <div class="gary"></div>
+        <div class="acc-top bbot btop clear">
+            <span class="acc-one fl">项目</span>
+            <span class="acc-one acc-two fl">金额</span>
+        </div>
+
+
+        <div class="acc-all bbot">
+            @if (ViewBag.billContentList != null)
+            {
+                var list = ViewBag.billContentList as List<LeaRun.Entity.Am_BillContent>;
+                foreach (var item in list)
+                {
+                    <div class="acc-top acc-pa clear">
+                        <input type="hidden" name="name" value="@item.Number" />
+                        <span class="acc-one fl"><input type="text" class="acc-in" value="@item.ChargeItem_Title" /></span>
+                        <span class="acc-one acc-two fl"><input type="text" class="acc-in" value="@item.Money.Value.ToString("0.00")" onkeyup="clearNoNum(this)" /></span>
+                        <input class="icon-close fr" type="button" onclick="test(this)" value="-" />
+                    </div>
+                }
+            }
+
+            <div id="container"></div>
+            <div class="acc-add"><button id="add" class="acc-aj">+增加收费项</button></div>
+
+        </div>
+        <div class="charge-top bbot">
+            <span class="charge-span">滞纳金：<label id="otherFees">@Model.OtherFees.Value.ToString("0.00")</label>元</span>
+            <span class="charge-span">账单金额：<label id="money">@Model.Money.Value.ToString("0.00")</label>元</span>
+        </div>
+        <div class="gary"></div>
+        <div class="acc-bei acc-all bbot btop clear"><span class="acc-b fl">备注：</span><textarea class="acc-text" id="remark" placeholder="备注"></textarea></div>
+        <div class="acc-btnt clear"><a href="javascript:;" id="submit1" class="acc-btno fl">保存</a></div>
+    </div>
+}
+
+<script src="~/Content/Scripts/layer.mobile-v2.0/layer_mobile/layer.js"></script>
+<script type="text/javascript">
+    var add = document.getElementById('add');
+    var container = document.getElementById('container');
+    var node = container.nextSibling;
+    add.onclick = function () {
+        oDiv = document.createElement('div');
+        oDiv.innerHTML = "<div class='acc-top acc-pa clear'><input type=\"hidden\" name=\"name\" value=\"\" /><span class='acc-one fl'><input type='text' class='acc-in' placeholder='其他'/></span><span class='acc-one acc-two fl'><input type='text' class='acc-in' placeholder='0.00'  onkeyup=\"clearNoNum(this)\"/></span><input class='icon-close fr' type='button' onclick='test(this)' value='-' /></div>";
+        container.parentNode.insertBefore(oDiv, node)
+        node = oDiv.nextSibling;
+
+    }
+    function test(test) {
+        test.parentNode.parentNode.removeChild(test.parentNode);
+    }
+    function clearNoNum(obj) {
+        obj.value = obj.value.replace(/[^\d.]/g, ""); //清除"数字"和"."以外的字符
+        obj.value = obj.value.replace(/^\./g, ""); //验证第一个字符是数字
+        obj.value = obj.value.replace(/\.{2,}/g, "."); //只保留第一个, 清除多余的
+        obj.value = obj.value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
+        obj.value = obj.value.replace(/^(\-)*(\d+)\.(\d\d).*$/, '$1$2.$3'); //只能输入两个小数
+
+    }
+
+    
+
+    $(function () {
+
+        $('.acc-pa').each(function (i) {
+            var thisItem = $(this);
+            thisItem.find("input:eq(2)").bind('input propertychange', function () {
+
+            });
+        });
+
+        $('#submit1').click(function () {
+            var total = 0;
+            var _list = {};
+            var isTrue = true;
+            $('.acc-pa').each(function (i) {
+                var thisItem = $(this);
+                _list["billList[" + i + "].Number"] = thisItem.find("input:eq(0)").val();
+                _list["billList[" + i + "].ChargeItem_Title"] = thisItem.find("input:eq(1)").val();
+                _list["billList[" + i + "].Money"] = thisItem.find("input:eq(2)").val();
+                if (thisItem.find("input:eq(1)").val().length <= 0) {
+                    layer.msg('请输入正确的收费项');
+                    isTrue = false;
+                }
+                else {
+                    total += parseFloat(thisItem.find("input:eq(2)").val());
+                }
+
+            });
+            if (!isTrue) {
+                return;
+            }
+            total = total + parseFloat($("#otherFees").text());
+            _list["number"] = $("#number").val();
+            _list["remark"] = $("#remark").val();
+            var text = "您是否确定要保存?";
+            if (parseFloat($("#money").text()) != parseFloat(total)) {
+                var text = "您的账单金额已经变为：" + total + "元，您是否确定要保存?";
+            }
+            layer.open({
+                content: text
+              , btn: ['保存', '取消']
+              , skin: 'footer'
+              , yes: function (index) {
+                  $.ajax({
+                      type: "POST",
+                      url: "/Proprietor/BillingEdit",
+                      traditional: true,
+                      data: _list,
+                      success: function (data) {
+                          if (data.res == "Ok") {
+                              layer.open({ content: data.msg, skin: 'msg', time: 2 });
+                              location.reload();
+                              layer.close(index);
+                          } else {
+                              layer.open({ content: data.msg, skin: 'msg', time: 2 });
+                          }
+                      },
+                      error: function (data) {
+                          layer.open({ content: data.msg, skin: 'msg', time: 2 });
+                      }
+                  });
+              }
+            });
+
+            return false;
+        });
+    });
+</script>

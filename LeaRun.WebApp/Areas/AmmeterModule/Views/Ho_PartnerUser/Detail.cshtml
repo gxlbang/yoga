@@ -1,0 +1,105 @@
+@{
+    ViewBag.Title = "合伙人》明细页面";
+    Layout = "~/Views/Shared/_LayoutForm.cshtml";
+}
+<script type="text/javascript">
+    $(function () {
+        InitControl();
+    })
+    //得到一个对象实体
+    function InitControl() {
+        if (!!GetQuery('KeyValue')) {
+            AjaxJson("/AmmeterModule/Ho_PartnerUser/SetForm", { KeyValue: GetQuery('KeyValue') }, function (data) {
+                SetWebLable(data);
+                $("#CreatTime").val(formatDate(data.CreatTime, "yyyy-MM-dd hh:mm:ss"));
+                $("#pimg").attr("src", ((!IsNullOrEmpty(data.CodeImg1)||data.CodeImg1=="&nbsp;") ? "/Content/Images/noimg.gif" : data.CodeImg1));
+                $("#pimg1").attr("src", ((!IsNullOrEmpty(data.CodeImg2)||data.CodeImg1=="&nbsp;")  ? "/Content/Images/noimg.gif" : data.CodeImg2));
+            });
+        }
+    }
+</script>
+<form id="form1" style="margin: 1px">
+    <table class="form">
+        <tr>
+            <th class='formTitle'>用户角色：</th>
+            <td class='formValue'>
+                @*<input id="UserRole" maxlength=18 type="text" class="txt" />*@
+                <label id="UserRole" />
+            </td>
+            <th width="10"></th>
+            <td class='formValue' rowspan="5">
+                <img src="~/Content/Images/noimg.gif" id="pimg" width="200" height="150" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>身份证正面：</th>
+            <td class='formValue'>
+                <input id="CodeImg1" type="hidden" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>姓名：</th>
+            <td class='formValue'>
+                <label id="Name" />
+                @*<input id="Name" maxlength=12 type="text" class="txt required" datacol="yes" err="角色名称" checkexpession="NotNull" />*@
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>手机号：</th>
+            <td class='formValue'>
+                <label id="Account" />
+                @*<input id="Mobile" maxlength=11 type="text" class="txt required" datacol="yes" err="手机号" checkexpession="NotNull" />*@
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>身份证号：</th>
+            <td class='formValue'>
+                <label id="CardCode" />
+                @*<input id="CardCode" maxlength=18 type="text" class="txt" />*@
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>状态：</th>
+            <td class='formValue'>
+                <label id="StatusStr" />
+                @*<input id="StatusStr" maxlength=18 type="text" class="txt" />*@
+            </td>
+            <th width="10"></th>
+            <td class='formValue' rowspan="5">
+                <img src="~/Content/Images/noimg.gif" id="pimg1" width="200" height="150" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>身份证反面：</th>
+            <td class='formValue'>
+                <input id="CodeImg2" type="hidden" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>账户余额：</th>
+            <td class='formValue'>
+                <label id="Money" />
+                @*<input id="Money" maxlength=11 type="text" class="txt" />*@
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>地址：</th>
+            <td class='formValue'>
+                <label id="Address" />
+                @*<input id="Address" maxlength=64 type="text" class="txt" />*@
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>注册时间：</th>
+            <td class='formValue'>
+                <input id="CreatTime" maxlength=32 type="text" class="txt" readonly="readonly" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>备注：</th>
+            <td class='formValue' colspan="3">
+                <textarea id="Remark" name="Remark" maxlength="600" class="txtArea" rows="8"></textarea>
+            </td>
+        </tr>
+    </table>
+</form>

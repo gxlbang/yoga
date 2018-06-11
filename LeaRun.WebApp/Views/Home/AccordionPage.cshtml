@@ -1,0 +1,179 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>欢迎使用</title>
+    <!--框架必需start-->
+    <link href="~/Content/Styles/learunui-framework.css" rel="stylesheet" />
+    <link href="~/Content/Styles/learunui-accordion.css" rel="stylesheet" />
+    <script src="~/Content/Scripts/jquery/jquery-1.8.2.min.js"></script>
+    <script src="~/Content/Scripts/learunui-framework.js"></script>
+    <!--框架必需end-->
+    <!--第三方统计图start-->
+    <script src="~/Content/Scripts/highcharts/highcharts.js"></script>
+    <script src="~/Content/Scripts/highcharts/highcharts-more.js"></script>
+    <script src="~/Content/Scripts/highcharts/modules/exporting.js"></script>
+    <!--第三方统计图end-->
+    <script>
+        $(function () {
+
+            $.getJSON('/Home/GetCurrMonthProSaleNum',
+        function (data) {
+            $('#container').highcharts({
+                chart: {
+                    type: 'spline'
+                },
+                title: {
+                    text: '近一月销售产品统计表'
+                },
+                xAxis: {
+                    categories: data.CurrDate
+                },
+                yAxis: {
+                    title: {
+                        text: '销售产品'
+                    },
+                    labels: {
+                        formatter: function () {
+                            return this.value + ' 件'
+                        }
+                    }
+                },
+                tooltip: {
+                    crosshairs: true,
+                    shared: true
+                },
+                plotOptions: {
+                    spline: {
+                        marker: {
+                            radius: 4,
+                            lineColor: '#666666',
+                            lineWidth: 1
+                        }
+                    }
+                },
+                series: [{
+                    name: data.ProName,
+                    marker: {
+                        symbol: 'square'
+                    },
+                    data: data.ProNum
+
+                }]
+            });
+        }
+            )
+        })
+    </script>
+</head>
+<body>
+    <div style="margin: 10px;">
+        <table style="width: 100%">
+            <tr>
+                <td>
+                    <div class="Task" style="background-color: #E7191B">
+                        <i></i>
+                        <div class="centre">
+                            <div class="icon">
+                                <img src="~/Content/Images/task-5.png" />
+                            </div>
+                            <div class="Number">10</div>
+                        </div>
+                        <div class="text">
+                            订单总数
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="Task" style="background-color: #EEAE44">
+                        <i></i>
+                        <div class="centre">
+                            <div class="icon">
+                                <img src="~/Content/Images/task-5.png" />
+                            </div>
+                            <div class="Number">11</div>
+                        </div>
+                        <div class="text">
+                            未发货
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="Task" style="background-color: #28B779">
+                        <i></i>
+                        <div class="centre">
+                            <div class="icon">
+                                <img src="~/Content/Images/task-5.png" />
+                            </div>
+                            <div class="Number">20</div>
+                        </div>
+                        <div class="text">
+                            已完成
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="Task" style="background-color: #A52A2A">
+                        <i></i>
+                        <div class="centre">
+                            <div class="icon">
+                                <img src="~/Content/Images/task-5.png" />
+                            </div>
+                            <div class="Number">78</div>
+                        </div>
+                        <div class="text">
+                            已退货
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="Task" style="background-color: #2BA9E3">
+                        <div class="centre">
+                            <div class="icon">
+                                <img src="~/Content/Images/task-5.png" />
+                            </div>
+                            <div class="Number">18</div>
+                        </div>
+                        <div class="text">
+                            可疑订单
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="Task" style="background-color: #C07FE7">
+                        <div class="centre">
+                            <div class="icon">
+                                <img src="~/Content/Images/task-5.png" />
+                            </div>
+                            <div class="Number">18</div>
+                        </div>
+                        <div class="text">
+                            无效订单
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        @*<div style="margin-left: 20px; margin-right: 30px;">
+                <table style="width: 100%">
+                    <tr>
+                        <td style="width: 60%">
+                            <div id="containerA"></div>
+                        </td>
+                        <td style="width: 40%">
+                            <div id="containerB"></div>
+                        </td>
+                    </tr>
+                </table>
+            </div>*@
+        <div style="margin-left: 20px; margin-right: 30px;">
+            <div id="container"></div>
+        </div>
+    </div>
+</body>
+</html>

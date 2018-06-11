@@ -1,0 +1,40 @@
+﻿@model List<LeaRun.Entity.Am_Ammeter>
+@{
+    ViewBag.Title = "我的电表";
+    Layout = "~/Views/Shared/_Partial.cshtml";
+}
+<link href="~/Content/Scripts/layui/css/layui.css" rel="stylesheet" />
+<div class="all pro-all">
+    <header class="header clear">
+        <a href="javascript:history.go(-1);" class="return fl"></a>
+        <h1 class="title">我的电表</h1>
+    </header>
+    <div class="list-index">
+        @if (Model != null&&Model.Count>0)
+        {
+            foreach (var item in Model)
+            {
+                var url = "/Personal/AmmeterDetails?Number=" +item.Number;
+                if (item.Status==0)
+                {
+                    url = "";
+                }
+                <a class="pro repair-m" href="@url">
+                    <div class="my-bill clear">
+                        <span class="bill-span fl">表号：@item.AM_Code</span>
+                    </div>
+                    <span class="bill-span">区域：@item.Province@item.City@item.County</span>
+                    
+                        <span class="bill-span">地址：@item.Address  @item.Cell 单元 @item.Floor 楼层 @item.Room 号</span>
+                    <i class="icon-next"></i>
+                </a>
+            }
+        }
+        else
+        {
+            <div class="layui-flow-more">没有更多了</div>
+        }
+
+    </div>
+</div>
+

@@ -1,0 +1,90 @@
+@{
+    ViewBag.Title = "Am_BillContent";
+    Layout = "~/Views/Shared/_LayoutIndex.cshtml";
+}
+<script type="text/javascript">
+    $(function () {
+        GetGrid();
+    })
+    //加载表格
+    function GetGrid() {
+        $("#gridTable").jqGrid({
+        url: "@Url.Content("~/AmmeterModule/Am_BillContent/GridPageJson")",
+        datatype: "json",
+        height: $(window).height() - 149,
+        autowidth: true,
+        colModel: [
+                { label: 'Number', name: 'Number', index: 'Number', width: 0, align: 'left',sortable: true  },
+                { label: 'Bill_Number', name: 'Bill_Number', index: 'Bill_Number', width: 0, align: 'left',sortable: true  },
+                { label: 'Bill_Code', name: 'Bill_Code', index: 'Bill_Code', width: 0, align: 'left',sortable: true  },
+                { label: 'ChargeItem_Number', name: 'ChargeItem_Number', index: 'ChargeItem_Number', width: 0, align: 'left',sortable: true  },
+                { label: 'ChargeItem_Title', name: 'ChargeItem_Title', index: 'ChargeItem_Title', width: 0, align: 'left',sortable: true  },
+                { label: 'ChargeItem_ChargeType', name: 'ChargeItem_ChargeType', index: 'ChargeItem_ChargeType', width: 0, align: 'left',sortable: true  },
+                { label: 'Money', name: 'Money', index: 'Money', width: 0, align: 'left',sortable: true  },
+                { label: 'UMark', name: 'UMark', index: 'UMark', width: 0, align: 'left',sortable: true  },
+                { label: 'Remark', name: 'Remark', index: 'Remark', width: 0, align: 'left',sortable: true  },
+        ],
+        pager: "#gridPager",
+        sortname: '',
+        sortorder: 'desc',
+        rownumbers: true,
+        shrinkToFit: false,
+        gridview: true,
+    });
+}
+    //新增
+    function btn_add() {
+        var url = "/AmmeterModule/Am_BillContent/Form"
+        openDialog(url, "Form", "新增Am_BillContent", 770, 395, function (iframe) {
+            top.frames[iframe].AcceptClick()
+        });
+    }
+    //编辑
+    function btn_edit() {
+        var KeyValue = GetJqGridRowValue("#gridTable", "Bill_Number");
+        if (IsChecked(KeyValue)) {
+            var url = "/AmmeterModule/Am_BillContent/Form?KeyValue=" + KeyValue;
+            openDialog(url, "Form", "编辑Am_BillContent", 770, 395, function (iframe) {
+                top.frames[iframe].AcceptClick();
+            });
+        }
+    }
+    //明细
+    function btn_detail() {
+        var KeyValue = GetJqGridRowValue("#gridTable", "Bill_Number");
+        if (IsChecked(KeyValue)) {
+            var url = "/AmmeterModule/Am_BillContent/Detail?KeyValue=" + KeyValue;
+            Dialog(url, "Detail", "Am_BillContent明细", 820, 500, function (iframe) {
+                top.frames[iframe].AcceptClick();
+            });
+        }
+    }
+    //刷新
+    function windowload() {
+        $("#gridTable").trigger("reloadGrid"); //重新载入
+        
+    }
+</script>
+<!--工具栏-->
+<div class="tools_bar leftline rightline" style="margin: 1px; margin-bottom: 0px;">
+    <div class="PartialButton">
+        @Html.Partial("_PartialButton")
+    </div>
+</div>
+<div class="leftline rightline QueryArea" style="margin: 1px; margin-top: 0px; margin-bottom: 0px;">
+    <table border="0" class="form-find" style="height: 45px;">
+        <tr>
+            <th>关键字：</th>
+            <td>
+                <input id="keywords" type="text" class="txt" style="width: 200px" />
+            </td>
+            <td>
+                <input id="btnSearch" type="button" class="btnSearch" value="搜 索" onclick="btn_Search()" />
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="topline rightline" style="margin: 1px; margin-top: -1px;">
+    <table id="gridTable"></table>
+    <div id="gridPager"></div>
+</div>

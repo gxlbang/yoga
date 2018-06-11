@@ -1,0 +1,66 @@
+﻿@{
+    ViewBag.Title = "我的新账单";
+    Layout = "~/Views/Shared/_Partial.cshtml";
+}
+
+<div class="all pro-all">
+    <header class="header clear">
+        <a href="javascript:history.go(-1);" class="return fl"></a>
+        <h1 class="title">我的账单</h1>
+    </header>
+    <div class="list-index" id="containerList">
+        
+    </div>
+</div>
+
+<link href="~/Content/Scripts/layui/css/layui.css" rel="stylesheet" />
+<script src="~/Content/Scripts/layui/layui.js"></script>
+
+<script>
+    layui.use('flow', function(){
+        var flow = layui.flow;
+        var count=0;
+        if (@ViewBag.recordCount!=null) {
+            count=@ViewBag.recordCount;
+        }
+
+        flow.load({
+            elem: '#containerList', //流加载容器
+            scrollElem: '',
+            done: function(page, next){ //执行下一页的回调
+                //模拟数据插入
+                setTimeout(function () {
+
+                    var par=window.location.search.replace("?","").split('&');
+                    var parList=[];
+                    for (var i in par) {
+                        var arr=par[i].split('=');
+                        if (arr.length>0) {
+                            parList[arr[0]]=arr[1];
+                        }
+                    }
+                    parList["pageIndex"]=page;
+                    var data='';
+                    for (var i in parList) {
+                        data+=i+"="+parList[i]+"&";
+                    }
+                    $.post("/Personal/MyNewBill",data, function (data) {
+                        var lis = [];
+                        for (var i in data) {
+                            lis.push("<a class=\"pro repair-m mt15\" href=\"/Personal/NewBillDetails?number="+data[i].Number+"\">");
+                            lis.push("<div class=\"my-bill clear\">");
+                            lis.push("<span class=\"bill-span fl\">账单号："+data[i].BillCode+"</span>");
+                            lis.push("<span class=\"bill-span fr\">"+parseFloat(data[i].Money).toFixed(2)+"元</span>");
+                            lis.push("</div>");
+                            lis.push("<span class=\"bill-span\">"+data[i].Province+data[i].City+data[i].County+"  "+data[i].Address+"</span>");
+                            lis.push("<span class=\"bill-span\">"+data[i].Cell+"单元  "+data[i].Floor+"楼层  "+data[i].Room+"号</span>");
+                            lis.push("<i class=\"icon-next\"></i></a>");
+                        }
+                        next(lis.join(''), page < count);
+                    });
+
+                }, 500);
+            }
+        });
+    });
+</script>

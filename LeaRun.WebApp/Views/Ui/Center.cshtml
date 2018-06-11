@@ -1,0 +1,79 @@
+﻿@{
+    ViewBag.Title = "个人中心";
+    Layout = "~/Views/Shared/UiIndex.cshtml";
+}
+<script src="~/Content/Scripts/uijs/jqthumb.min.js"></script>
+<script type="text/javascript">
+    jQuery(document).ready(function ($) {
+        $('#cen-er-wei').click(function () {
+            $('.nameover').fadeIn(100);
+            $('.name-popover').slideDown(200);
+        })
+        $('.closeall').click(function () {
+            $('.nameover').fadeOut(100);
+            $('.name-popover').slideUp(200);
+        })
+
+    })
+    $(function () {
+        $('.cen-left img').jqthumb({
+            width: 1.62,
+            height: 1.62,
+        });
+    });
+</script>
+<a class="cen-top" href="/Ui/Edit">
+    <div class="cen-img"><img src="/Content/UiImages/nane-top.png" alt="" /></div>
+    <div class="cen-left"><img src="@ViewBag.Ho_PartnerUser.HeadImg" alt="" /></div>
+    <span class="cen-span">@ViewBag.Ho_PartnerUser.Name：(@ViewBag.Ho_PartnerUser.StatusStr)</span>
+    <span class="cen-tai">@ViewBag.Ho_PartnerUser.CardCode</span>
+    <i class="icon-return"></i>
+</a>
+<div class="cen-one mt20">
+    <div class="cen-two clear">
+        <a href="javascript:;" class="cen-er clear fl" id="cen-er-wei">
+            <i class="icon-com fl"></i>
+            <span class="cen-name fl">私人助理</span>
+            <span class="cen-wei fl" id="wxtext">微信号：@ViewBag.Ho_Assistant.Weixin</span>
+        </a>
+        <a href="tel:@ViewBag.Ho_Assistant.Mobile" class="cen-ph">点击拨打</a>
+    </div>
+    <div class="cen-te">@ViewBag.Ho_Assistant.Appraise</div>
+</div>
+<div class="cen-nav mt10 clear">
+    <a href="/Ui/NoticeList" class="cen-nava fl"><span class="nav-span">消息通知</span></a>
+    <b class="line"></b>
+    <a href="/Ui/ht" class="cen-nava fr"><span class="nav-span nav-spantwo">售房合同</span></a>
+</div>
+<div class="cen-list mt10">
+    <h3 class="cen-h">我的业务列表</h3>
+    @if (ViewBag.List != null)
+    {
+        foreach (var item in ViewBag.List)
+        {
+            <a href="/Ui/Industry?Number=@item.Number" class="cen-details btop">
+                <div class="cen-tu fl"><img src="@item.Himg" alt="" /></div>
+                <div class="cen-text">
+                    <span class="cen-tit">楼盘名称：@item.HName</span>
+                    <span class="cen-zhuan">状态：<span>@item.StatusStr</span></span>
+                    <time class="cen-time">@item.CreateTime.ToString("yyyy-MM-dd")</time>
+                </div>
+            </a>
+        }
+    }
+</div>
+@{  ViewDataDictionary vdd = new ViewDataDictionary();
+    vdd.Add("ind", "3");
+    Html.RenderPartial("UIDown", vdd); }
+<!--二维码弹窗-->
+<div class="name-popover">
+    <div class="name-poptit"><a href="javascript:;" title="关闭" class="closeall">×</a></div>
+    <div class="name-popbod dform">
+        <div class="name-edit">
+            <img src="@ViewBag.Ho_Assistant.HeadImg" alt="" />
+            <span class="nane-span">长按二维码扫码</span>
+        </div>
+    </div>
+</div>
+<div class="nameover"></div>
+<!--二维码弹窗结束--> 

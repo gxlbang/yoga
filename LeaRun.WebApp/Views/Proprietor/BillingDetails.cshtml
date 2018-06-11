@@ -1,0 +1,86 @@
+﻿@model LeaRun.Entity.Am_Bill
+@{
+    ViewBag.Title = "账单详情";
+    Layout = "~/Views/Shared/_Partial.cshtml";
+}
+@if (Model != null)
+{
+    <input type="hidden" name="name" id="number" value="@Model.Number" />
+    <div class="all pro-all">
+        <header class="header clear">
+            <a href="javascript:history.go(-1);" class="return fl"></a>
+            <h1 class="title">账单详情</h1>
+        </header>
+        <div class="list-index">
+            <div class="pro">
+                <span class="pro-li">账单号：@Model.BillCode</span>
+                <span class="pro-li">表号：@Model.AmmeterCode</span>
+                <span class="pro-li">姓名：@Model.T_U_Name</span>
+                <span class="pro-li">手机号：@Model.T_UserName</span>
+                <span class="pro-li">区域：@Model.Province@Model.City@Model.County</span>
+                <span class="pro-li">地址：@Model.Address</span>
+                <span class="pro-li">单元：@Model.Cell 单元 @Model.Floor 层 @Model.Room 号</span>
+                <span class="pro-li" style="color:orangered">账单状态：@Model.StatusStr</span>
+                <span class="pro-li">账单出账时间：@Model.SendTime.Value.ToString("yyyy-MM-dd")</span>
+            </div>
+            <div class="pro mt15">
+                <div class="pro-explain pro-tit bbot">账单明细</div>
+                <div class="op-litwo op-lione clear">
+                    @if (ViewBag.billContentList != null)
+                    {
+                        var list = ViewBag.billContentList as List<LeaRun.Entity.Am_BillContent>;
+                        foreach (var item in list)
+                        {
+                            <span class="op-sshow his-show fl">@item.ChargeItem_Title：@item.Money.Value.ToString("0.00") 元</span>
+                        }
+                    }
+                </div>
+ 
+                <div class="op-litwo his-all btop">
+                    <span class="op-sshow his-show fl" style="color:orangered">滞纳金：@Model.OtherFees.Value.ToString("0.00") 元</span>
+                <span class="op-sshow">合计：@Model.Money.Value.ToString("0.00") 元</span></div>
+            </div>
+            <div class="pro mt15">
+                <div class="pro-explain pro-tit bbot">备注</div>
+                <div class="pro-explain">
+                    <textarea class="acc-text" id="remark" placeholder="备注">@Model.Remark</textarea>
+                </div>
+            </div>
+            @if (Model.Status.Equals(1))
+            {
+                <a href="javascript:;" onclick="sub()" class="btn-all">确定已收款</a>
+            }
+            
+        </div>
+    </div>
+}
+
+<script src="~/Content/Scripts/layer.mobile-v2.0/layer_mobile/layer.js"></script>
+<script>
+    function sub() {
+        layer.open({
+            content: '确定已收款?'
+              , btn: ['确定', '取消']
+              , skin: 'footer'
+              , yes: function (index) {
+                  var number = $("#number").val();
+                  var remark = $("#remark").val();
+                  $.post("/Proprietor/BillingHandle", { number: number, remark: remark }, function (data) {
+                      if (data.res == "Ok") {
+                          layer.open({ content: data.msg, skin: 'msg', time: 2 });
+                          layer.close(index);
+                          setTimeout("jump()", 1000);
+                      } else {
+                          layer.open({ content: data.msg, skin: 'msg', time: 2 });
+                      }
+
+                  });
+
+
+              }
+        });
+    }
+    function jump() {
+        window.location.href = '@Url.Action("Billing", "Proprietor")';
+    }
+</script>

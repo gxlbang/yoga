@@ -1,0 +1,114 @@
+﻿@{
+    ViewBag.Title = "修改手机号绑定";
+    Layout = "~/Views/Shared/_Partial.cshtml";
+}
+
+<div class="all">
+    <header class="header clear">
+        <a href="javascript:history.go(-1);" class="return fl"></a>
+        <h1 class="title">修改绑定</h1>
+    </header>
+    @using (Ajax.BeginForm("Bindings", "Personal", new { }, new AjaxOptions() { HttpMethod = "post", OnSuccess = "success" }, new { @id = "form" }))
+    {
+        @Html.AntiForgeryToken()
+        <div class="con list-index active">
+            <div class="l-p clear">
+                <span class="l-phone fl"></span>
+                <input type="text" name="mobile" id="mobile" value="" placeholder = "请输入手机号"  maxlength = "11" class = "l-input fl"/>
+            </div>
+            <div class="l-yan clear">
+                <div class="l-p clear fl">
+                    <span class="l-phone l-ycode fl"></span>
+                    <input type="text"  name="validCode" id="validCode" value=""  placeholder = "输入验证码"  class = "l-input fl"/>     
+                </div>
+                <div class="l-yz fr"><input type="button" class="l-code fr" value="获取验证码" onclick="sendCode(this)" /></div>
+            </div>
+            <a href="javascript:;" onclick="sumbit()" class="btn-all">确定修改绑定</a>
+        </div>
+    }
+</div>
+
+<script>
+    function success(data) {
+        if (data.res == "Ok") {
+            layer.msg(data.msg, { time: 1000 });
+            setTimeout("jump()", 1000);
+        } else {
+            layer.msg(data.msg, { time: 2000 });
+        }
+    }
+    function jump() {
+        window.location.href = '@Url.Action("Index", "Personal")';
+    }
+    function sumbit() {
+        var phone = $('#mobile').val();
+        var strphone = /^1[3|4|5|7|8][0-9]\d{4,8}$/;
+        if (!phone || phone.length <= 0 || !phone.match(strphone) || phone.length!=11) {
+            layer.msg('请输入正确的手机号码', { time: 2000 });
+            return;
+        }
+        var vc = $('#validCode').val();
+        if (vc.length <= 0 || vc.length > 4) {
+            layer.msg('请输入正确的验证码', { time: 2000 });
+            return;
+        }
+        $('#form').submit();
+    }
+    function getVreifyCode() {
+        var phone = $('#mobile').val();
+        $.post("/Account/GetCode", { Phone: phone }, function (data) {
+            if (data.res == "Ok") {
+                layer.msg('发送成功', { time: 2000 });
+            } else {
+                layer.msg(data.msg, { time: 2000 });
+            }
+
+        });
+    }
+</script>
+
+<script>
+    var clock = '';
+    var nums = 60;
+    var btn;
+    function sendCode(thisBtn) {
+        var phone = $('#mobile').val();
+        var strphone = /^1[3|4|5|7|8][0-9]\d{4,8}$/;
+        if (!phone || phone.length <= 0 || !phone.match(strphone)) {
+            layer.msg('请输入正确的手机号码', { time: 2000 });
+            return;
+        }
+        btn = thisBtn;
+        btn.disabled = true;
+        btn.value = nums + '秒重新获取';
+        clock = setInterval(doLoop, 1000);
+        getVreifyCode();
+    }
+    function doLoop() {
+        nums--;
+        if (nums > 0) {
+            btn.value = nums + '秒重新获取';
+        } else {
+            clearInterval(clock);
+            btn.disabled = false;
+            btn.value = '获取验证码';
+            nums = 60;
+        }
+    };
+
+    //Check
+
+    function DoCheck() {
+        var ch = document.getElementsByName("choose");
+        if (document.getElementsByName("allChecked")[0].checked == true) {
+            for (var i = 0; i < ch.length; i++) {
+                ch[i].checked = true;
+            }
+        } else {
+            for (var i = 0; i < ch.length; i++) {
+                ch[i].checked = false;
+            }
+        }
+    }
+
+</script>

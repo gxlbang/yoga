@@ -1,0 +1,87 @@
+@{
+    ViewBag.Title = "Fx_NewsClass》明细页面";
+    Layout = "~/Views/Shared/_LayoutForm.cshtml";
+}
+<!--富文本框-->
+<link rel="stylesheet" href="~/Content/Scripts/kindeditor-4.1.3/themes/default/default.css" />
+<link rel="stylesheet" href="~/Content/Scripts/kindeditor-4.1.3/plugins/code/prettify.css" />
+<script charset="utf-8" src="~/Content/Scripts/kindeditor-4.1.3/kindeditor.js"></script>
+<script charset="utf-8" src="~/Content/Scripts/kindeditor-4.1.3/lang/zh_CN.js"></script>
+<script charset="utf-8" src="~/Content/Scripts/kindeditor-4.1.3/plugins/code/prettify.js"></script>
+<script type="text/javascript">
+    var editor1;
+    KindEditor.ready(function (K) {
+        editor1 = K.create('#Class_Content', {
+            cssPath: '/Content/Scripts/kindeditor-4.1.3/plugins/code/prettify.css',
+            uploadJson: '/Tools/upload_json.ashx',
+            fileManagerJson: '/Tools/file_manager_json.ashx',
+            allowFileManager: true
+        });
+        prettyPrint();
+    });
+</script>
+<script type="text/javascript">
+    $(function () {
+        InitControl();
+    })
+    //得到一个对象实体
+    function InitControl() {
+        if (!!GetQuery('KeyValue')) {
+            AjaxJson("/NewsModule/Fx_NewsClass/SetForm", { KeyValue: GetQuery('KeyValue') }, function (data) {
+                SetWebControls(data);
+                $("#pimg").attr("src", data.ClassPic);
+            });
+        }
+    }
+</script>
+<form id="form1" style="margin: 1px">
+    <table class="form">
+        <tr>
+            <th class='formTitle'>上级栏目：</th>
+            <td class='formValue'>
+                <input id="ParenName" maxlength=50 type="text" class="txt" readonly="readonly" />
+            </td>
+            <th width="10"></th>
+            <td class='formValue' rowspan="5">
+                <img src="~/Content/Images/noimg.gif" id="pimg" width="150" height="150" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>栏目名称：</th>
+            <td class='formValue'>
+                <input id="Name" maxlength=128 type="text" class="txt" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>栏目图标：</th>
+            <td class='formValue'>
+            </td>
+        </tr>
+        <tr>
+
+            <th class='formTitle'>栏目排序：</th>
+            <td class='formValue'>
+                <input id="ClassOrder" maxlength=10 type="text" value="0" class="txt"/>
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>栏目状态：</th>
+            <td class='formValue'>
+                <input id="StatusStr" maxlength=50 type="text" class="txt"  />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>栏目备注：</th>
+            <td class='formValue' colspan="3">
+                <textarea id="Remark" maxlength="512" class="txtArea" rows="2"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>栏目内容：</th>
+            <td class='formValue' colspan="3">
+                <textarea id="Class_Content" class="txtArea" rows="29" style="width:100%;"></textarea>
+            </td>
+        </tr>
+        <tr></tr>
+    </table>
+</form>

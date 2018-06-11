@@ -1,0 +1,157 @@
+@{
+    ViewBag.Title = "Fx_Orders》表单页面";
+    Layout = "~/Views/Shared/_LayoutForm.cshtml";
+}
+<script type="text/javascript">
+    var KeyValue = GetQuery('KeyValue');//主键
+    $(function () {
+        InitControl();
+    })
+    //得到一个对象实体
+    function InitControl() {
+        if (!!GetQuery('KeyValue')) {
+            AjaxJson("/ProductModule/Fx_Orders/SetForm", { KeyValue: KeyValue }, function (data) {
+                SetWebControls(data);
+                $("#pimg").attr("src", data.Pro_Image);
+                $("#pimg").val(data.Pro_Image);
+                //设置可更改的状态
+                for (var i = data.Stuts ; i < 6; i++) {
+                    switch (i) {
+                        case 1:
+                            $("#Stuts").append('<option value="1">未发货</option>');
+                            break;
+                        case 2:
+                            $("#Stuts").append('<option value="2"' + (data.Stuts == 1 ? 'selected="selected"' : '') + '>有效订单</option>');
+                            break;
+                        case 3:
+                            $("#Stuts").append('<option value="3"' + (data.Stuts == 2 ? 'selected="selected"' : '') + '>已发货</option>');
+                            break;
+                        case 4:
+                            $("#Stuts").append('<option value="4" ' + (data.Stuts == 3 ? 'selected="selected"' : '') + '>已完成</option>');
+                            break;
+                        case 5:
+                            $("#Stuts").append('<option value="5">已退货</option>');
+                            break;
+                        case 6:
+                            $("#Stuts").append('<option value="6">可疑</option>');
+                            break;
+                        case 7:
+                            $("#Stuts").append('<option value="7">无效</option>');
+                            break;
+                    }
+
+                }
+            });
+        }
+    }
+    //保存事件
+    function AcceptClick() {
+        if (!CheckDataValid('#form1')) {
+            return false;
+        }
+        var postData = GetWebControls("#form1");
+        AjaxJson("/ProductModule/Fx_Orders/SubmitOrderForm?KeyValue=" + KeyValue, postData, function (data) {
+            tipDialog(data.Message, 3, data.Code);
+            top.frames[tabiframeId()].windowload();
+            closeDialog();
+        });
+    }
+</script>
+<form id="form1" style="margin: 1px">
+    <div id="message" style="display: none"></div>
+    <table class="form">
+        <tr>
+            <th class='formTitle'>产品名称：</th>
+            <td class='formValue'>
+                <input id="Pro_Name" maxlength=128 type="text" class="txt" readonly />
+            </td>
+            <th width="100"></th>
+            <td class='formValue' rowspan="6">
+                <img src="~/Content/Images/noimg.gif" id="pimg" width="150" height="150" />
+                <input type="hidden" id="Pro_Image" />
+            </td>
+
+        </tr>
+        <tr>
+            <th class='formTitle'>产品价格：</th>
+            <td class='formValue'>
+                <input id="Pro_Price" maxlength=19 type="text" class="txt" readonly />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>购买数量：</th>
+            <td class='formValue'>
+                <input id="Pro_Num" maxlength=10 type="text" class="txt" readonly />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>产品规格：</th>
+            <td class='formValue'>
+                <input id="Pro_Size" maxlength=50 type="text" class="txt" readonly />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>订单时间：</th>
+            <td class='formValue'>
+                <input id="CreateTime" maxlength=23 type="text" class="txt" readonly />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>买家姓名：</th>
+            <td class='formValue'>
+                <input id="Buyer" maxlength=50 type="text" class="txt" readonly />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>联系电话：</th>
+            <td class='formValue' colspan="3">
+                <input id="Mobile" maxlength=50 type="text" class="txt" readonly />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>收货地址：</th>
+            <td class='formValue' colspan="3">
+                <input id="Arddress" maxlength=256 type="text" class="txt" readonly />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>买家备注：</th>
+            <td class='formValue' colspan="3" >
+                <input id="Buyer_Mark" maxlength=512 type="text" class="txt" readonly />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>当前状态：</th>
+            <td class='formValue'>
+                <input id="Resutl" maxlength=50 type="text" style="color:red; font-weight:bold;" class="txt" readonly />
+            </td>
+            <th class='formTitle'>更改状态：</th>
+            <td class='formValue'>
+                <select id="Stuts" class="txtselect">
+                    @*<option value="2" >已发货</option>
+                        <option value="3">已完成</option>
+                        <option value="4">已退货</option>
+                        <option value="5">可疑</option>*@
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>快递名称：</th>
+            <td class='formValue' colspan="3">
+                <input id="Ex_Name" maxlength=50 type="text" class="txt" readonly />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>快递单号：</th>
+            <td class='formValue' colspan="3">
+                <input id="Ex_NO" maxlength=128 type="text" class="txt" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>订单备注：</th>
+            <td class='formValue' colspan="3">
+                <textarea id="Remark" name="Remark" maxlength="200" class="txtArea" rows="4"></textarea>
+            </td>
+        </tr>
+    </table>
+</form>

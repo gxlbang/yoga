@@ -1,0 +1,29 @@
+﻿@model List<LeaRun.Entity.Am_Contract>
+@{
+    ViewBag.Title = "我的合同";
+    Layout = "~/Views/Shared/_Partial.cshtml";
+}
+
+<div class="all pro-all">
+    <header class="header clear">
+        <a href="javascript:history.go(-1);" class="return fl"></a>
+        <h1 class="title">我的合同</h1>
+    </header>
+    <div class="ele-top">
+        @if (Model != null && Model.Count() > 0)
+        {
+            foreach (var item in Model)
+            {
+                <a href="~/Common/Contract?KeyValue=@item.Number">
+                    <div class="pro repair-m clear mt15">
+                        <span class="ele-span fl">合同编号：@item.ContractCode</span>
+                        <span class="ele-span fl">签订时间：@item.CreateTime.Value.ToString("yyyy-MM-dd")</span>
+                        <span class="ele-span fl">区域：@item.Province@item.City@item.County</span>
+                        <span class="ele-span fl">地址：@item.Address    @item.Cell 单元 @item.Floor 层 @item.Room 号</span>
+                        <i class="icon-next"></i>
+                    </div>
+                </a>
+            }
+        }
+    </div>
+</div>

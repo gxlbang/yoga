@@ -1,0 +1,113 @@
+@{
+    ViewBag.Title = "Fx_ProductClass》表单页面";
+    Layout = "~/Views/Shared/_LayoutForm.cshtml";
+}
+<!--富文本框-->
+<link rel="stylesheet" href="~/Content/Scripts/kindeditor-4.1.3/themes/default/default.css" />
+<link rel="stylesheet" href="~/Content/Scripts/kindeditor-4.1.3/plugins/code/prettify.css" />
+<script charset="utf-8" src="~/Content/Scripts/kindeditor-4.1.3/kindeditor.js"></script>
+<script charset="utf-8" src="~/Content/Scripts/kindeditor-4.1.3/lang/zh_CN.js"></script>
+<script charset="utf-8" src="~/Content/Scripts/kindeditor-4.1.3/plugins/code/prettify.js"></script>
+<script type="text/javascript">
+    var editor1;
+        KindEditor.ready(function (K) {
+             editor1 = K.create('#ClassText', {
+                cssPath: '/Content/Scripts/kindeditor-4.1.3/plugins/code/prettify.css',
+                uploadJson: '/Tools/upload_json.ashx',
+                fileManagerJson: '/Tools/file_manager_json.ashx',
+                allowFileManager: true
+            });
+            prettyPrint();
+        });
+</script>
+<!--选择颜色组件end-->
+<script type="text/javascript">
+    $(function () {
+        InitControl();
+    })
+    //得到一个对象实体
+    function InitControl() {
+        if (!!GetQuery('KeyValue')) {
+            AjaxJson("/ProductModule/Fx_ProductClass/SetPclassForm", { KeyValue: GetQuery('KeyValue') }, function (data) {
+                SetWebControls(data);
+            });
+        }
+    }
+    //保存事件
+    function AcceptClick() {
+        if (!CheckDataValid('#form1')) {
+            return false;
+        }
+        Loading(true, "正在提交数据...");
+        window.setTimeout(function () {
+            //var postData = GetWebControlsToTextarea("#form1");
+            var isShow;
+            if ($("#IsShow").attr("checked")) {
+                isShow = 1;
+            } else {
+                isShow = 0;
+            }
+            editor1.sync();//必须先同步才能获取到富文本框的值
+            var postData = jQuery.parseJSON('{"IsShow":"' + isShow + '","ClassName":"' + $("#ClassName").val() +
+                '","ClassUrl":"' + $("#ClassUrl").val() + '","ClassDes":"' + $("#ClassDes").val() + '","Remark":"' +
+                $("#Remark").val() + '","ClassText":"' + encodeURIComponent($("#ClassText").val()) + '"}');
+            AjaxJson("/ProductModule/Fx_ProductClass/SubmitUserForm?KeyValue=" + GetQuery('KeyValue'), postData, function (data) {
+                tipDialog(data.Message, 3, data.Code);
+                top.frames[tabiframeId()].windowload();
+                closeDialog();
+            });
+        }, 200);
+    }
+</script>
+<form id="form1" style="margin: 1px">
+    <div id="message" style="display: none"></div>
+    <table class="form">
+        <tr>
+            <th class='formTitle'>栏目名称：</th>
+            <td class='formValue'>
+                <input id="ClassName" style="width:100%" type="text" class="txt" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>栏目描述：</th>
+            <td class='formValue'>
+                <input id="ClassDes" style="width:100%" type="text" class="txt" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>页面地址：</th>
+            <td class='formValue'>
+                <input id="ClassUrl" style="width:100%" type="text" class="txt" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>独立域名：</th>
+            <td class='formValue'>
+                <input id="ClassPath" style="width:50%" type="text" class="txt" />
+                <label for="ClassPath" style="vertical-align: middle;color: red;">*设置二级域名,例如: tt.baidu.com</label>
+            </td>
+        </tr>
+        <tr>
+            <th class="formTitle"></th>
+            <td class="formValue" >
+                <span class="item">
+                    <input id="IsShow" name="IsShow" type="checkbox" checked="checked" style="vertical-align: middle;" />
+                    <label for="IsShow" style="vertical-align: middle;">不显示</label>
+                </span>
+                <label style="vertical-align: middle; color: red;">注意：设置不显示后，除了管理员其他用户都看不到。</label>
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>备注：</th>
+            <td class="formValue">
+                <textarea id="Remark" name="Remark" maxlength="200" class="txtArea" rows="1"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>栏目内容：</th>
+            <td class="formValue">
+                <textarea id="ClassText" rows="32" style="width:100%;" name="ClassText"></textarea>
+            </td>
+        </tr>
+    </table>
+</form>

@@ -1,0 +1,9 @@
+2018-05-30 16:23:21,790 [311] ERROR LeaRun.DataAccess.DbHelper - 
+2018-05-30 16:23:49,416 [310] ERROR LeaRun.DataAccess.DbHelper - 
+2018-05-30 16:24:16,610 [302] ERROR LeaRun.DataAccess.DbHelper - 
+2018-05-30 16:25:41,642 [291] ERROR LeaRun.DataAccess.DbHelper - 
+2018-05-30 16:25:51,540 [297] ERROR LeaRun.DataAccess.DbHelper - 
+2018-05-30 16:26:23,587 [301] ERROR LeaRun.DataAccess.DbHelper - 
+2018-05-30 16:26:42,348 [301] ERROR LeaRun.DataAccess.DbHelper - 
+2018-05-30 16:27:09,986 [311] ERROR LeaRun.DataAccess.DbHelper - 
+2018-05-30 16:30:13,017 [313] ERROR LeaRun.DataAccess.DbHelper - 

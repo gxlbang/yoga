@@ -1,0 +1,167 @@
+﻿@model LeaRun.Entity.Ho_PartnerUser
+@{
+    ViewBag.Title = "个人中心";
+    Layout = "~/Views/Shared/_Partial.cshtml";
+}
+
+<div class="all">
+    <div class="my-center clear">
+        <div class="my-img">
+            <div class="my-border"></div>
+            <img src="@(Model.HeadImg==null?"/Content/Images/top.png":Model.HeadImg)" alt="" />
+        </div>
+        <span class="my-xing">@Model.Name</span>
+    </div>
+    <div class="my-all">
+        <a href="/Personal/Information" class="my-list clear bbot">
+            <i class="icon icon-eight fl"></i>
+            <span class="my-edit">我的个人信息</span>
+            <i class="icon-next"></i>
+        </a>
+        <a href="/Personal/MyBalance" class="my-list clear bbot">
+            <i class="icon icon-two fl"></i>
+            <span class="my-edit">我的余额</span>
+            <i class="icon-next"></i>
+        </a>
+       
+        <div class="gary"></div>
+        <div class="my-list my-none clear btop">
+            <div class="repair op-list oen bbot clear">
+                <h2 class="obtain">
+                    <span class="icon icon-four fl"></span>
+                    <span class="my-edit">我的房子</span>
+                    <i class="icon-next"></i>
+                </h2>
+                <div class="secondary">
+                    <div class="op-show btop">
+                        <a href="/Personal/MyAmmeter" class="my-list clear bbot">
+                            <span class="my-edit">我的电表</span>
+                            <i class="icon-next"></i>
+                        </a>
+                        
+                        <a href="/Personal/MyNewBill" class="my-list clear bbot">
+                            <span class="my-edit">我的新账单</span>
+                            <i class="icon-next"></i>
+                        </a>
+                        <a href="/Personal/OldBill" class="my-list clear bbot">
+                            <span class="my-edit">历史账单</span>
+                            <i class="icon-next"></i>
+                        </a>
+                        <a href="/Personal/MyRent" class="my-list clear bbot">
+                            <span class="my-edit">我要退租</span>
+                            <i class="icon-next"></i>
+                        </a>
+                        <a href="/Personal/MyDeposit" class="my-list clear bbot">
+                            <span class="my-edit">我的押金</span>
+                            <i class="icon-next"></i>
+                        </a>
+                        <a href="/Personal/Contract" class="my-list clear bbot">
+                            <span class="my-edit">我的合同</span>
+                            <i class="icon-next"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        
+        <div class="gary"></div>
+        <a href="/Personal/BankCard" class="my-list clear bbot btop">
+            <i class="icon icon-five fl"></i>
+            <span class="my-edit">我的银行卡</span>
+            <i class="icon-next"></i>
+        </a>
+        <a href="/Personal/Repair" class="my-list clear bbot">
+            <i class="icon icon-six fl"></i>
+            <span class="my-edit">报修</span>
+            <i class="icon-next"></i>
+        </a>
+        <a href="/Account/ForgetPwd" class="my-list clear bbot">
+            <i class="icon icon-password fl"></i>
+            <span class="my-edit">修改密码</span>
+            <i class="icon-next"></i>
+        </a>
+        <div class="gary"></div>
+        @*<a href="tel:0771-5824097" class="my-list clear bbot btop">
+            <i class="icon icon-seven fl"></i>
+            <span class="my-edit">联系我们</span>
+            <i class="icon-next1"></i>
+        </a>*@
+
+        <a href="tel:0771-5824097" class="my-list clear bbot btop">
+            <i class="icon icon-seven fl"></i>
+            <span class="my-edit">联系我们</span>
+            <i class="icon-phone"></i>
+            <i class="icon-next"></i>
+        </a>
+ 
+        @if (Model.UserRole == "运营商")
+        {
+            <a href="/Proprietor/Index" class="my-list clear bbot">
+                <i class="icon icon-fourth fl"></i>
+                <span class="my-edit">业主中心</span>
+                <i class="icon-next"></i>
+            </a>
+        }
+        
+        @*<a href="share.html" class="my-list clear bbot">
+            <i class="icon icon-nine fl"></i>
+            <span class="my-edit">我要分享</span>
+            <i class="icon-next"></i>
+        </a>*@
+
+        
+
+    </div>
+</div>
+ 
+<div id="dialog" class="animated">
+    <a href="/Account/ForgetPwd" class="my-paw bbot">修改密码</a>
+    @*<a href="javascript:;" onclick="Exit()" class="my-paw btn-close">退出</a>*@
+    <i class="icon-top"></i>
+</div>
+
+<script src="~/Content/Scripts/jqthumb.min.js"></script>
+<script src="~/Content/Scripts/menu.js"></script>
+<script src="~/Content/Scripts/leftnav.js"></script>
+<script src="~/Content/Scripts/layer/layer.js"></script>
+<link href="~/Content/Scripts/layui/css/layui.css" rel="stylesheet" />
+<script src="~/Content/Scripts/layui/layui.js"></script>
+<script>
+ 
+    $(".all").click(function(){
+        //layer.closeAll();
+    });
+    function showNav(obj) {
+        layer.tips('修改密码', $(obj), {
+            tips: [1, '#3595CC'],
+            area: ['70px', '30px'],
+            time: 10000
+        });
+    }
+
+    
+
+    $(function () {
+        $('.my-img img').jqthumb({
+            width: 2.8,
+            height: 2.8,
+        });
+    });
+    function Exit() {
+        $.post("/Account/Exit",null,  function (data) {
+            if (data.res == "Ok") {
+                window.location.href = '@Url.Action("Login", "Account")';
+            } else {
+                layer.msg(data.msg, { time: 2000 });
+            }
+
+        });
+    }
+ 
+    $(function () {
+       
+    });
+
+
+</script>

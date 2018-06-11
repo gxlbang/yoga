@@ -1,0 +1,259 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <title>合同信息</title>
+    <link href="~/Content/Styles/ui/ht.css?j=1.20" rel="stylesheet" />
+    <link href="~/Content/Scripts/mtip/jquery.m.toast.css" rel="stylesheet" type="text/css">
+    <script src="~/Content/Scripts/jquery/jquery-1.8.2.min.js"></script>
+    <script type="text/javascript" src="~/Content/Scripts/mtip/jquery.m.toast.js"></script>
+    <script src="~/Content/Scripts/uijs/TouchSlide.1.1.js"></script>
+    @*<script src="~/Content/Scripts/uijs/main.js"></script>*@
+    @*<script src="~/Content/Scripts/uijs/js.js"></script>*@
+    <script src="~/Content/Scripts/learunui-framework.js"></script>
+    <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+    <link href="~/Content/Scripts/layui/css/layui.css" rel="stylesheet" />
+    <script type="text/javascript" src="~/Content/Scripts/layer/layer.js"></script>
+
+    <script type="text/javascript">
+        !function (J) { function H() { var d = E.getBoundingClientRect().width; var e = (d / 7.5 > 100 * B ? 100 * B : (d / 7.5 < 42 ? 42 : d / 7.5)); E.style.fontSize = e + "px", J.rem = e } var G, F = J.document, E = F.documentElement, D = F.querySelector('meta[name="viewport"]'), B = 0, A = 0; if (D) { var y = D.getAttribute("content").match(/initial\-scale=([\d\.]+)/); y && (A = parseFloat(y[1]), B = parseInt(1 / A)) } if (!B && !A) { var u = (J.navigator.appVersion.match(/android/gi), J.navigator.appVersion.match(/iphone/gi)), t = J.devicePixelRatio; B = u ? t >= 3 && (!B || B >= 3) ? 3 : t >= 2 && (!B || B >= 2) ? 2 : 1 : 1, A = 1 / B } if (E.setAttribute("data-dpr", B), !D) { if (D = F.createElement("meta"), D.setAttribute("name", "viewport"), D.setAttribute("content", "initial-scale=" + A + ", maximum-scale=" + A + ", minimum-scale=" + A + ", user-scalable=no"), E.firstElementChild) { E.firstElementChild.appendChild(D) } else { var s = F.createElement("div"); s.appendChild(D), F.write(s.innerHTML) } } J.addEventListener("resize", function () { clearTimeout(G), G = setTimeout(H, 300) }, !1), J.addEventListener("pageshow", function (b) { b.persisted && (clearTimeout(G), G = setTimeout(H, 300)) }, !1), H() }(window);
+        if (typeof (M) == 'undefined' || !M) {
+            window.M = {};
+        }
+
+    </script>
+</head>
+<body>
+    <div class="par-top">
+        <h3 class="top">《房屋租赁合同》</h3>
+        <div class="l-mot clear"><span class="nane fl">甲方（出租方）：<input id="F_U_Name" type="text" class="inp inp-long" /></span></div>
+        <div class="l-mot clear"><span class="nane fl">乙方（承租方）：<input id="U_Name" type="text" class="inp inp-long" /></span></div>
+        <p class="mt15">甲方自愿将名下位于<span class="red"><input id="Province" type="text" class="inp" />省<input id="City" type="text" class="inp" />市<input id="County" type="text" class="inp" />区<input id="Address" type="text" class="inp" />小区<input id="Floor" type="text" class="inp" />栋<input id="Cell" type="text" class="inp" />单元<input id="Room" type="text" class="inp" />号<input id="RoomNum" type="text" class="inp" />房<input id="HallNum" type="text" class="inp" />厅<input id="KitchenNum" type="text" class="inp" />厨<input id="ToiletNum" type="text" class="inp" />卫</span>户型房屋，（建筑面积约为<span class="red"><input id="HouseSize" type="text" class="inp" />平米</span>）出租给乙方作为<input id="Useing" type="text" class="inp in-lot" />使用。（以下简称：<span class="red">该房屋、铺面</span>）。为明确各事项，经协商一致签订本合同。</p>
+
+        <strong class="textbold">第一条<span class="span-pa">房屋基本情况</span></strong>
+        <p>1.1使用面积约为<b class="b-blod"><input id="UseingSize" type="text" class="inp" value="120" /></b>平方米。 配套设备及装修情况详见（附件1）</p>
+
+        <strong class="textbold">第二条<span class="span-pa">租赁时间：</span></strong>
+        <p>2.1租赁时间自<span class="red"><input id="RentBeginYear" type="text" class="inp" />年<input id="RentBeginMonth" type="text" class="inp" />月<input id="RentBeginDay" type="text" class="inp" />日</span>起至<span class="red"><input id="RentEndYear" type="text" class="inp" />年<input id="RentEndMonth" type="text" class="inp" />月<input id="RentEndDay" type="text" class="inp" />日</span>止。共计租期<input id="RentDate" type="text" class="inp" />个月。</p>
+
+        <strong class="textbold">第三条<span class="span-pa">租金押金及支付方式</span></strong>
+        <p>3.1月租金人民币：<span class="red"><input id="Money" type="text" class="inp" />元（大写：<input id="MoneyStr" type="text" class="inp in-lo" />元整）</span>乙方支付租房履约押金人民币：<span class="red"><input id="DepositMoney" type="text" class="inp" />元（大写：<input id="DepositMoneyStr" type="text" class="inp in-lo" />元整）</span>乙方租赁期届满满且未续租并达成退租条件的甲方应一次性无息退回。</p>
+        <p>3.2租金每<span class="red"><input id="CycleTime" type="text" class="inp" />月</span> 支付一次合计人民币：<span class="red"><input id="TotalMoney" type="text" class="inp" />元（大写：<input id="TotalMoneyStr" type="text" class="inp in-lo" />元整）</span>。租金支付应在当期租金届满前<span class="red"><input id="AgoDay" type="text" class="inp" />个</span>工作日支付下期房屋租金。租金转账至本合同中甲方约定账户，乙方的转账凭条或汇款凭条作为支付依据。</p>
+        @*<p>开户行：<input id="BankInfo" type="text" class="inp inp-long" /></p>
+        <p>户  名：<input id="BankUserName" type="text" class="inp inp-long" /></p>
+        <p>账  号：<input id="BankCode" type="text" class="inp inp-long" /></p>*@
+
+        <strong class="textbold">第四条<span class="span-pa">相关费用：</span></strong>
+        <p>
+            4.1电费<input id="Am_Money" type="text" class="inp" /><span class="red">元/度</span>
+            <span class="span-pa">水费<input id="WaterMoney" type="text" class="inp" /><span class="red">元/立方</span></span>
+            <span class="span-pa">物业费<input id="PropertyMoeny" type="text" class="inp" /><span class="red">元</span></span>
+            <span class="span-pa">垃圾费<input id="GarbageMoney" type="text" class="inp" /><span class="red">元</span></span>
+            <span class="span-pa">宽带费<input id="NetMoney" type="text" class="inp" /><span class="red">元</span></span>
+        </p>
+
+        <strong class="textbold">第五条<span class="span-pa">甲方义务、责任与权利</span></strong>
+        <p>5.1甲方有义务协助乙方在租赁期间需要办理的相关经营证件或者证明材料的提供。</p>
+        <p>5.2甲方有权要求乙方按期准时足额缴纳租金。逾期缴纳租金的，甲方有权利每日收取应缴纳租金总额的<span class="red"><input id="PenaltyMoney" type="text" class="inp" />%</span>为滞纳金。逾期时间达<input id="PenaltyTime" type="text" class="inp" />日未支付对应租金的视为乙方违约。甲方有权单方面终止合同并收回该<span class="red">房屋/铺面。</span></p>
+        <p>5.3甲方有权要求乙方不能擅自转让转借转租该房屋使用权或擅自改变装修和改变使用性质。禁止进行违法乱纪等不正当经营活动如：黄赌毒、传销、邪教等法律禁止的项目视。发生相应时间甲方有权按照本合同（第7.3条款）处理。视情节严重，甲方将有权将其移交当地公安机关处理并保有法律追溯权力。</p>
+
+        <strong class="textbold">第六条<span class="span-pa">乙方义务、责任与权益</span></strong>
+        <p>6.1、乙方在承租期间有义务对<span class="red">该房屋/该铺面</span>内配套的一切设备设施进行维修和保养义务。</p>
+        <p>6.2、乙方应确保承租期间的人生安全，用电，用气安全，防火安全，防盗措施负有完全责任和义务并应起到监督和维护义务。</p>
+        <p>6.3、乙方承租期间应实际需要办理经营执照或资料时有权要求甲方提供协助和帮助。</p>
+
+        <strong class="textbold">第七条<span class="span-pa">违约责任</span></strong>
+        <p>7.1、租期内甲乙双方任何单方面终止本合同，无法履行或违反相关约定的视为违约行为。</p>
+        <p>7.2甲方单方面终止本合同，无法履行或违反相关约定或需要中途收回该房屋的，应提前<b class="b-blod"><input id="BackTime" type="text" class="inp" /></b>个工作日通知乙方。全额退还乙方押金及剩余未缴纳租金的<span class="red"><input id="BackMoney" type="text" class="inp" />%</span>作为违约赔偿。</p>
+        <p>7.3乙方单方面终止本合同，无法履行或违反相关约定或需要中途退租的应<b class="b-blod"><input id="GoTime" type="text" class="inp" /></b>个工作日通知甲方。押金予以退回（需满足本合同中第8.2条款内容），但需要支付剩余未缴纳租金的<span class="red"><input id="GoMoney" type="text" class="inp" />%</span>作为违约赔偿。</p>
+
+        <strong class="textbold">第八条<span class="span-pa">续租、退租</span></strong>
+        <p>8.1续租：乙方续租应在租赁期满前<b class="b-blod"><input id="GoOnTime" type="text" class="inp" /></b>个工作日告知甲方。同等条件下乙方享有优先租赁权。续租租金价格按届时市场行情另签订租赁合同。</p>
+        <p>8.2 退租：合同期满未达成续租的，进行退租。经双方确认附件中配套的设备设施装修等完好，并结清所有相关费用后，甲方在<b class="b-blod"><input id="RentMoneyTime" type="text" class="inp" /></b>个工作日内全额退回乙方租赁押金。</p>
+
+        <strong class="textbold">第九条<span class="span-pa">免责条款</span></strong>
+        <p>9.1凡因不可抗因素，不可预见，不能克服的：如地震、洪水、战争或政府行为造成损失或至使本合同无法履行的，甲乙双方互不负责任。</p>
+
+        <strong class="textbold">第十条<span class="span-pa">补充协议，争议处理</span></strong>
+        <p>10.1 本合同未尽事宜，依照有关法律法规，经甲、乙双方协商可签增补协议，增补协议视为本合同组成部分，具有同等的法律效力。合同履行中有争议的，甲乙双方应友好协商解决，协商不成的任意一方有权向该房屋所在地人民法院申诉处理。</p>
+
+        <strong class="textbold">第十一条<span class="span-pa">本合同正本一式二份，甲、乙双方各执一份。自签订之日起生效，期满自动作废。</span></strong>
+
+
+        <p class="mt15">甲方（出租方）：<input id="HoName" type="text" class="inp inp-long" /></p>
+        <p>代表人签字：<input id="HoUserName" type="text" class="inp inp-long" /></p>
+        <p>联 系电话：<input id="HoUserMobile" type="text" class="inp inp-long" /></p>
+
+        <p class="mt15">乙方（承租方）：<input id="U_Name1" type="text" class="inp inp-long" /></p>
+        <p>身份证号码：<input id="U_Code" type="text" class="inp inp-long" /></p>
+        <p>联系 电话：<input id="U_Mobile" type="text" class="inp inp-long" /></p>
+
+        <div class="text-right">
+            <p>签订时间：<input id="CreateTimeYear" type="text" class="inp" />年<input id="CreateTimeMonth" type="text" class="inp" />月<input id="CreateTimeDay" type="text" class="inp" />日</p>
+            <p>签订地址：<input id="CreateAddress" type="text" class="inp inp-long" /></p>
+        </div>
+    </div>
+    <div class="par-top pa-btm" id="ContractImage">
+        <strong class="textbold"><span class="red">附件（1）</span></strong>
+        <p>以下附件中列明的配套设备及装修情况，乙方在承租期届满退租时应完好整洁交付给甲方验收，出现损坏或无法正常使用的甲方有权要求乙方等价赔偿或维修正常使用。</p>
+        <div class="form mt15 clear">
+            <span class="form-li fl" style="border-top:0.02rem solid #ccc">名称</span><span style="border-top:0.02rem solid #ccc" class="form-li fl">数量</span><span style="border-top:0.02rem solid #ccc" class="form-li fl">单价</span><span style="border-top:0.02rem solid #ccc" class="form-li fl">图片</span><span style="border-top:0.02rem solid #ccc" class="form-li fl">详情描述</span>
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text" style="text-align:center;display:none;" id="btnprintpage">
+        <button class="layui-btn layui-btn-normal" type="button" onclick="printpage()">打印合同</button>
+    </div>
+    <div class="layui-form-item layui-form-text" style="text-align:center;display:none;" id="btnContract">
+        <button class="layui-btn layui-btn-normal" type="button" onclick="sub()">同意并签订合同</button>
+    </div>
+</body>
+</html>
+<script type="text/javascript">
+    var KeyValue = GetQuery('KeyValue');//主键
+    var Device = GetQuery('Device');
+    var curSrc, srcList;
+    $(function () {
+        if (Device == "PC") {
+            $("#btnprintpage").show();
+        }
+        InitControl();
+        $("input").attr("readonly", "readonly");
+    })
+    function printpage() {
+        window.print();
+    }
+    //得到一个对象实体
+    function InitControl() {
+        if (!!GetQuery('KeyValue')) {
+            AjaxJson("/Common/GetContract", { KeyValue: KeyValue }, function (data) {
+                SetWebControls(data);
+                if (Device != "PC"&&data.Status == 0) {
+                    $("#btnContract").show();
+                }
+                $("#U_Name1").val(data.U_Name);
+                var myDate = new Date(data.CreateTime);
+                $("#CreateTimeYear").val(myDate.getFullYear());
+                $("#CreateTimeMonth").val(myDate.getMonth() + 1);
+                $("#CreateTimeDay").val(myDate.getDate());
+
+                var myDate1 = new Date(data.RentBeginTime);
+                $("#RentBeginYear").val(myDate1.getFullYear());
+                $("#RentBeginMonth").val(myDate1.getMonth() + 1);
+                $("#RentBeginDay").val(myDate1.getDate());
+
+                var myDate2 = new Date(data.RentEndTime);
+                $("#RentEndYear").val(myDate2.getFullYear());
+                $("#RentEndMonth").val(myDate2.getMonth() + 1);
+                $("#RentEndDay").val(myDate2.getDate());
+
+                //获取附件
+                AjaxJson("/Common/GetContractImage", { KeyValue: data.Number }, function (data1) {
+                    $.each(data1, function (i) {
+                        var tempstr = '<div class="form clear">';
+                        if (i == data1.length - 1) {
+                            tempstr = '<div class="form form-bom clear">';
+                        }
+                        var id = "xx" + i;
+                        tempstr += '<span class="form-li fl">' + data1[i].Name + '</span><span class="form-li fl"><input type="text" class="inp" value="' + data1[i].Num + '" /></span><span class="form-li fl"><input type="text" class="inp" value="' + data1[i].Price + '" /></span><span class="form-li fl">' +
+                            '<a href="javascript:;" onclick="ViewImage(this)">' + '<img width="32" height="32" src="' + data1[i].ImagePath + '" /></a>'
+                            + '</span><span class="form-li fl"><a href="javascript:;" onclick="SeeMark(' + i + ')">查看</a><input type="hidden" id="' + id + '" value="' + data1[i].ImageMark + '" /></span></div>';
+                        $("#ContractImage").append(tempstr);
+                    });
+                });
+                var input_size = $("#Address").val().length;
+                var current_width = parseInt(input_size) * 16;
+                $("#Address").css("width", current_width + "px");
+            });
+        }
+    }
+
+    function sub() {
+        if (!!GetQuery('KeyValue')) {
+            AjaxJson("/Common/SetContract", { KeyValue: KeyValue }, function (data) {
+                if (data.res == "Ok") {
+                    layer.msg(data.msg, {
+                        time: 2000, end: function myfunction() {
+                            location.href = "/Personal/Index";
+                        }
+                    });
+                } else {
+                    layer.msg(data.msg, { time: 2000 });
+                }
+            });
+        }
+    }
+
+    function SeeMark(s) {
+        layer.open({
+            type: 1,
+            title: false,
+            closeBtn: 1,
+            shadeClose: true,
+            area: ['85%', '20%'],
+            //skin: 'yourclass',
+            content: $("#xx" + s).val()
+        });
+    }
+    //打开图片查看器
+    function ViewImage(a) {
+        var image = $(a).find("img").attr("src");
+        if (IsChecked(image)) {
+            if (Device == "PC") {
+                var url = "/SystemModule/Images/Index?Title=图片&Image=" + image;
+                Dialog(url, "Image", "图片", 1000, 680, function (iframe) {
+                    top.frames[iframe].AcceptClick();
+                });
+            } else {
+                OpenImages();
+            }
+        }
+    }
+    function OpenImages() {
+        var image = $("#ContractImage").find("img");
+        var src = [];
+        for (var i = 0; i < image.length; i++) {
+            src[i] = RootPath() + $(image[i]).attr("src");
+        }
+        //var srclist = arrayToJson(src);
+        srcList = src;//不用arrayToJson,用了苹果手机黑屏
+        curSrc = $(image[0]).attr("src");
+        imagePreview();
+    }
+    function arrayToJson(o) {
+        var r = [];
+        if (typeof o == "string") return "\"" + o.replace(/([\'\"\\])/g, "\\$1").replace(/(\n)/g, "\\n").replace(/(\r)/g, "\\r").replace(/(\t)/g, "\\t") + "\"";
+        if (typeof o == "object") {
+            if (!o.sort) {
+                for (var i in o)
+                    r.push(i + ":" + arrayToJson(o[i]));
+                if (!!document.all && !/^\n?function\s*toString\(\)\s*\{\n?\s*\[native code\]\n?\s*\}\n?\s*$/.test(o.toString)) {
+                    r.push("toString:" + o.toString.toString());
+                }
+                r = "{" + r.join() + "}";
+            } else {
+                for (var i = 0; i < o.length; i++) {
+                    r.push(arrayToJson(o[i]));
+                }
+                r = "[" + r.join() + "]";
+            }
+            return r;
+        }
+        return o.toString();
+    }
+    //这个是调用微信图片浏览器的函数
+    function imagePreview() {
+        if (!curSrc || !srcList || srcList.length == 0) {
+            return;
+        }
+        WeixinJSBridge.invoke('imagePreview', {
+            'current': curSrc,
+            'urls': srcList
+        });
+    };
+</script>

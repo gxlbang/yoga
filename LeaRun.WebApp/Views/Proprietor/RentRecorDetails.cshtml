@@ -1,0 +1,74 @@
+﻿@model LeaRun.Entity.Am_Rent
+@{
+    ViewBag.Title = "退租记录详情";
+    Layout = "~/Views/Shared/_Partial.cshtml";
+}
+
+@if (Model != null)
+{
+    var userDeposit = ViewBag.userDeposit as LeaRun.Entity.Am_UserDeposit;
+
+    var rentBillList = ViewBag.rentBillList as List<LeaRun.Entity.Am_RentBill>;
+    var ammeter = ViewBag.ammeter as LeaRun.Entity.Am_Ammeter;
+
+    <input type="hidden" name="name" value="@Model.Number" id="number" />
+    <div class="all pro-all">
+        <header class="header clear">
+            <a href="javascript:history.go(-1);" class="return fl"></a>
+            <h1 class="title">退租记录详情</h1>
+        </header>
+        <div class="list-index">
+            <div class="pro">
+                <span class="pro-li">租户：@Model.U_Name</span>
+                <span class="pro-li">手机号：@Model.UserName</span>
+
+
+                <span class="pro-li">区域：@Model.Province@Model.City@Model.County</span>
+                <span class="pro-li">地址：@Model.Address @Model.Cell 单元 @Model.Floor 层 @Model.Room 号</span>
+                @if (ViewBag.ammeter != null)
+                {
+                    <span class="pro-li">电表号：@ammeter.AM_Code</span>
+                    <span class="pro-li">剩余电费：@ammeter.CurrMoney.Value.ToString("0.00") 元</span>
+                    <span class="pro-li">电费同步时间：@ammeter.CM_Time.Value.ToString("yyyy-MM-dd HH:mm:ss")</span>
+
+                }
+
+
+                <span class="pro-li">押金：@(userDeposit == null ? "0.00" : userDeposit.Money.Value.ToString("0.00"))元</span>
+
+
+                @if (ViewBag.ammeterPermission != null)
+                {
+                    var ammeterPermission = ViewBag.ammeterPermission as LeaRun.Entity.Am_AmmeterPermission;
+                    if (ammeterPermission != null && ammeterPermission.Number != null)
+                    {
+                        <span class="pro-li">租赁时间：@ammeterPermission.BeginTime.Value.ToString("yyyy-MM-dd")</span>
+                        <span class="pro-li">到期时间：@ammeterPermission.EndTime.Value.ToString("yyyy-MM-dd")</span>
+                    }
+                }
+
+            </div>
+            <div class="pro mt15">
+                <div class="pro-explain pro-tit bbot">退还款项</div>
+                <div class="acc-all">
+                    <div class="op-litwo op-lione clear">
+                    @if (rentBillList!=null)
+                    {
+                        foreach (var item in rentBillList)
+                        {
+                            <span class="op-sshow his-show fl">@item.ChargeItem_Title：@item.Money.Value.ToString("0.00") 元	</span>
+                        }
+                    }
+                    
+                    </div>
+                </div>
+            </div>
+            <div class="pro mt15">
+                <div class="pro-explain pro-tit bbot">备注</div>
+                <div class="pro-explain">
+                    <p>@Model.Remark</p>
+                </div>
+            </div>
+        </div>
+    </div>
+}

@@ -1,0 +1,267 @@
+@{
+    ViewBag.Title = "Am_Collector";
+    Layout = "~/Views/Shared/_LayoutIndex.cshtml";
+}
+<script type="text/javascript">
+    $(function () {
+        GetGrid();
+        BindCombobox();
+    })
+    //初始化绑定下拉框
+    function BindCombobox() {
+        //所在省
+        $("#ProvinceId").append("<option value=''>==请选择==</option>");
+        $("#CityId").append("<option value=''>==请选择==</option>");
+        $("#CountyId").append("<option value=''>==请选择==</option>");
+        AjaxJson("/Utility/GetProvinceCityListJson", { ParentId: 0 }, function (DataJson) {
+            $.each(DataJson, function (i) {
+                $("#ProvinceId").append($("<option></option>").val(DataJson[i].Code).html(DataJson[i].FullName));
+            });
+        })
+        //所在市
+        $("#ProvinceId").change(function () {
+            BindCityId();
+            BindCountyId();
+        });
+        //所在县区
+        $("#CityId").change(function () {
+            BindCountyId();
+        });
+    }
+    //所在市下拉框
+    function BindCityId() {
+        $("#CityId").html("");
+        $("#CityId").append("<option value=''>==请选择==</option>");
+        AjaxJson("/Utility/GetProvinceCityListJson", { ParentId: $("#ProvinceId").val() }, function (DataJson) {
+            $.each(DataJson, function (i) {
+                $("#CityId").append($("<option></option>").val(DataJson[i].Code).html(DataJson[i].FullName));
+            });
+        })
+    }
+    //所在县区
+    function BindCountyId() {
+        $("#CountyId").html("");
+        $("#CountyId").append("<option value=''>==请选择==</option>");
+        AjaxJson("/Utility/GetProvinceCityListJson", { ParentId: $("#CityId").val() }, function (DataJson) {
+            $.each(DataJson, function (i) {
+                $("#CountyId").append($("<option></option>").val(DataJson[i].Code).html(DataJson[i].FullName));
+            });
+        })
+    }
+    //加载表格
+    function GetGrid() {
+        $("#gridTable").jqGrid({
+        url: "@Url.Content("~/AmmeterModule/Am_Collector/GridPageListJson")",
+        datatype: "json",
+        height: $(window).height() - 149,
+        autowidth: true,
+        colModel: [
+                { label: 'Number', name: 'Number', index: 'Number', width: 0, align: 'left', hidden: true },
+                { label: 'UNumber', name: 'UNumber', index: 'UNumber', width: 0, align: 'left', hidden: true },
+                { label: '业主帐号', name: 'UserName', index: 'UserName', width: 120, align: 'left'  },
+                { label: '业主姓名', name: 'URealName', index: 'URealName', width: 80, align: 'left' },
+                { label: '采集器编号', name: 'CollectorCode', index: 'CollectorCode', width: 150, align: 'left'  },
+                { label: '省', name: 'Province', index: 'Province', width: 80, align: 'left'  },
+                { label: '市', name: 'City', index: 'City', width: 80, align: 'left'  },
+                { label: '区', name: 'County', index: 'County', width: 80, align: 'left' },
+                { label: '地址', name: 'Address', index: 'Address', width: 150, align: 'left' },
+                {
+                    label: "状态", name: "STATUS", index: "STATUS", width: 150,
+                    formatter: function (value, options, rowObject) {
+                        if (parseInt(value) == 1) {
+                            return "<font color='green' style='font-weight:bolder'>已链接</font>";
+                        } else {
+                            return "<font color='red' style='font-weight:bolder'>未链接</font>";
+                        }
+                    }
+                },
+                { label: '电表数', name: 'AmCount', index: 'AmCount', width: 80, align: 'left', cellattr: addCellAttr },
+                {
+                    label: "创建时间", name: "CreateTime", index: "CreateTime", width: 150,
+                    formatter: function (value, options, rowObject) {
+                        return formatDate(value, 'yyyy-MM-dd hh:mm:ss');
+                    }
+                },
+                {
+                    label: "上次连接", name: "LastConnectTime", index: "LastConnectTime", width: 150,
+                    formatter: function (value, options, rowObject) {
+                        return formatDate(value, 'yyyy-MM-dd hh:mm:ss');
+                    }
+                },
+                {
+                    label: "累积在线时间", name: "LastConnectTime", index: "LastConnectTime", width: 80,
+                    formatter: function (value, options, rowObject) {
+                        return DateMinus(formatDate(value, 'yyyy-MM-dd hh:mm:ss'))+"天";
+                    }
+                },
+        ],
+        viewrecords: true,
+        pager: "#gridPager",
+        sortname: 'CreateTime',
+        sortorder: 'desc',
+        rownumbers: true,
+        shrinkToFit: false,
+        gridview: true,
+    });
+    }
+
+    function addCellAttr(rowId, val, rawObject, cm, rdata) {
+        if (rawObject.planId == null) {
+            return "style='color:blue'";
+        }
+    }
+    //计算日期相减天数
+    function DateMinus(sDate) {
+        var sdate = new Date(sDate.replace(/-/g, "/"));
+        var now = new Date();
+        var days = now.getTime() - sdate.getTime();
+        var day = parseInt(days / (1000 * 60 * 60 * 24));
+        return day;
+    }
+    //新增
+    function btn_add() {
+        var url = "/AmmeterModule/Am_Collector/Form"
+        openDialog(url, "Form", "新增", 770, 395, function (iframe) {
+            top.frames[iframe].AcceptClick()
+        });
+    }
+    //编辑
+    function btn_edit() {
+        var KeyValue = GetJqGridRowValue("#gridTable", "Number");
+        if (IsChecked(KeyValue)) {
+            var url = "/AmmeterModule/Am_Collector/Form?KeyValue=" + KeyValue;
+            openDialog(url, "Form", "编辑", 770, 395, function (iframe) {
+                top.frames[iframe].AcceptClick();
+            });
+        }
+    }
+    //删除
+    function btn_delete() {
+        var KeyValue = GetJqGridRowValue("#gridTable", "Number");
+        if (IsDelData(KeyValue)) {
+            var delparm = 'KeyValue=' + KeyValue;
+            delConfig('/AmmeterModule/Am_Collector/DeleteCollector', delparm, KeyValue.split(",").length);
+        }
+    }
+    //明细
+    function btn_detail() {
+        var KeyValue = GetJqGridRowValue("#gridTable", "Number");
+        if (IsChecked(KeyValue)) {
+            var url = "/AmmeterModule/Am_Collector/Detail?KeyValue=" + KeyValue;
+            Dialog(url, "Detail", "明细", 560, 300, function (iframe) {
+                top.frames[iframe].AcceptClick();
+            });
+        }
+    }
+    //刷新
+    function windowload() {
+        $("#gridTable").trigger("reloadGrid"); //重新载入
+
+    }
+    //搜索
+    function btn_Search() {
+        var keywords = $("#keywords").val();
+        var Stuts = $("#Stuts").val();
+        var ProvinceId = "", CityId = "", CountyId = "";
+        if (IsNullOrEmpty($("#ProvinceId").val())) {
+            ProvinceId = $("#ProvinceId").find("option:selected").text();
+        }
+        if (IsNullOrEmpty($("#CityId").val())) {
+            CityId = $("#CityId").find("option:selected").text();
+        }
+        if (IsNullOrEmpty($("#CountyId").val())) {
+            CountyId = $("#CountyId").find("option:selected").text();
+        }
+        $("#gridTable").jqGrid('setGridParam', {
+            url: "@Url.Content("~/AmmeterModule/Am_Collector/GridPageListJson")?Stuts=" + Stuts + '&Keyword=' + keywords +
+                '&ProvinceId=' + ProvinceId + '&CityId=' + CityId + '&CountyId=' + CountyId, page: 1
+    }).trigger('reloadGrid');
+    }
+    //要打印数据源，子页面调用的函数
+    function PrintDataSource() {
+        var columnModel = $("#gridTable").jqGrid('getGridParam', 'colModel');
+        var dataModel = $("#gridTable").jqGrid("getRowData");
+        //var footerData = $("#gridTable").jqGrid("footerData");
+        var JsonData = {
+            columnModel: columnModel,
+            dataModel: dataModel,
+            //footerData: footerData,
+        }
+        return JsonData;
+    }
+    //点击打印
+    function btn_Print() {
+        PrintDialog("/Utility/PrintPage", "PrintPage", "打印当前页", 1200, 500, function (iframe) {
+            top.frames[iframe].SubmitPrint()
+        });
+    }
+    //导出Excel
+    function btn_derive() {
+        //SetDeriveExcel("#gridTable", "订单信息");
+        //openDialog("/CommonModule/ExcelImport/DeriveDialog", "DeriveDialog", "订单信息", 600, 300, function (iframe) {
+        //    top.frames[iframe].AcceptClick();
+        //});
+        //var SelectedField = ""; $('#AccessView .selected a').each(function () { SelectedField += $(this).attr('id') + ","; });
+        Loading(true, "正在处理要导出数据...");
+        var keywords = $("#keywords").val();
+        var Stuts = $("#Stuts").val();
+        var ProvinceId="", CityId="", CountyId="";
+        if (IsNullOrEmpty($("#ProvinceId").val())) {
+            ProvinceId = $("#ProvinceId").find("option:selected").text();
+        }
+        if (IsNullOrEmpty($("#CityId").val())) {
+            CityId = $("#CityId").find("option:selected").text();
+        }
+        if (IsNullOrEmpty($("#CountyId").val())) {
+            CountyId = $("#CountyId").find("option:selected").text();
+        }
+        window.setTimeout(function () {
+            location.href = "/AmmeterModule/Am_Collector/ExportExcel??Keyword=" + keywords + '&Stuts=' + Stuts +
+                '&ProvinceId=' + ProvinceId + '&CityId=' + CityId + '&CountyId=' + CountyId;
+            Loading(false);
+        }, 200);
+    }
+</script>
+<!--工具栏-->
+<div class="tools_bar leftline rightline" style="margin: 1px; margin-bottom: 0px;">
+    <div class="PartialButton">
+        @Html.Partial("_PartialButton")
+    </div>
+</div>
+<div class="leftline rightline QueryArea" style="margin: 1px; margin-top: 0px; margin-bottom: 0px;">
+    <table border="0" class="form-find" style="height: 45px;">
+        <tr>
+            <th>关键字：</th>
+            <td>
+                <input id="keywords" type="text" class="txt" style="width: 200px" />
+            </td>
+            <th class="formTitle">所在省：</th>
+            <td class="formValue">
+                <select id="ProvinceId" class="select" style="width: 120px"></select>
+            </td>
+            <th class="formTitle">所在市：</th>
+            <td class="formValue">
+                <select id="CityId" class="select" style="width: 120px"></select>
+            </td>
+            <th class="formTitle">所在县区：</th>
+            <td class="formValue">
+                <select id="CountyId" class="select" style="width: 120px"></select>
+            </td>
+            <th>状态：</th>
+            <td>
+                <select id="Stuts" class="select" style="width: 120px">
+                    <option value="-1">请选择</option>
+                    <option value="0">未连接</option>
+                    <option value="1">已连接</option>
+                </select>
+            </td>
+            <td>
+                <input id="btnSearch" type="button" class="btnSearch" value="搜 索" onclick="btn_Search()" />
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="topline rightline" style="margin: 1px; margin-top: -1px;">
+    <table id="gridTable"></table>
+    <div id="gridPager"></div>
+</div>

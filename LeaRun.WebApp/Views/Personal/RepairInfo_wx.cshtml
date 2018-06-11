@@ -1,0 +1,59 @@
+﻿@model LeaRun.Entity.Am_Repair
+@{
+    ViewBag.Title = "报修详情";
+    Layout = "~/Views/Shared/_Partial.cshtml";
+}
+
+<div class="all pro-all">
+    <header class="header clear">
+        <a href="javascript:history.go(-1);" class="return fl"></a>
+        <h1 class="title">报修信息</h1>
+    </header>
+    @if (Model != null && Model.Number != null)
+    {
+        <div class="list-index">
+            <div class="pro">
+                <span class="pro-li">编号：@Model.RepairCode</span>
+                <span class="pro-li">表号：@Model.AmmeterCode</span>
+                <span class="pro-li">姓名：@Model.U_Name &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 手机号：@Model.UserName</span>
+                <span class="pro-li">区域：@Model.Province@Model.City@Model.County@Model.Address</span>
+                <span class="pro-li">地址：@Model.Cell 单元 @Model.Floor 层 @Model.Room 号</span>
+                <span class="pro-li">状态：@Model.StatusStr</span>
+                <div class="pro-img clear" data-am-widget="gallery" data-am-gallery="{ pureview: true }">
+                    @if (ViewBag.repairImage != null)
+                    {
+                        var list = ViewBag.repairImage as List<LeaRun.Entity.Am_RepairImage>;
+                        foreach (var item in list)
+                        {
+                            <div class="example pro-i fl"><img class="img-rounded" src="@item.ImagePath" alt="" /></div>
+                        }
+                    }
+                </div>
+                <div class="pro-explain btop mt10">说明：@Model.RContent</div>
+            </div>
+            <div class="pro mt15">
+                <div class="pro-explain pro-tit bbot">反馈信息</div>
+                <div class="pro-explain">
+                    @if (ViewBag.repairAnswer!=null)
+                    {
+                        var repairAnswer = ViewBag.repairAnswer as LeaRun.Entity.Am_RepairAnswer;
+                        if (repairAnswer!=null&& repairAnswer.Number !=null && repairAnswer.Number !="")
+                        {
+                            <p>已安排师傅过去维修</p>
+                            <p>联系方式：<a href="tel:@repairAnswer.Mobile">@repairAnswer.Mobile</a> @repairAnswer.Mobile<span style="padding-left: 0.3rem;">@repairAnswer.U_Name</span></p>
+                            <p>备注：@repairAnswer.AContent</p>
+                        }
+                    }
+
+                </div>
+            </div>
+        </div>
+    }
+    
+</div>
+<script src="~/Content/Scripts/zoomify.min.js"></script>
+<script type="text/javascript">
+	$('.example img').zoomify();
+</script>
+
+

@@ -1,0 +1,12 @@
+LeaRun.Cache		--缓存层
+LeaRun.Resource		--本地语言
+LeaRun.Utilities	--公共类库
+LeaRun.DataAccess	--数据库访问核心组件
+LeaRun.ServiceFactory	--未用
+LeaRun.WCFHost		--未用
+LeaRun.WCFLibrary	--未用
+LeaRun.WebService	--接口层
+LeaRun.Business		--业务层
+LeaRun.Entity		--实体层
+LeaRun.Repository	--数据仓库层
+LeaRun.WebApp		--UI层

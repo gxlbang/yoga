@@ -1,0 +1,63 @@
+﻿@model List<LeaRun.Entity.Am_Ammeter>
+@{
+    ViewBag.Title = "我要退租";
+    Layout = "~/Views/Shared/_Partial.cshtml";
+}
+
+<div class="all">
+    <header class="header clear">
+        <a href="javascript:history.go(-1);" class="return fl"></a>
+        <h1 class="title">我要退租</h1>
+    </header>
+    @if (Model != null&&Model .Count()>0)
+    {
+        foreach (var item in Model)
+        {
+            <a class="reti-re bbot clear" href="javascript:;" onclick="rent('@item.Number')">
+                <span class="pen-span">区域：@item.Province@item.City@item.County</span>
+                <span class="pen-span">地址：@item.Address @item.Cell 单元 @item.Floor 层 @item.Room 号</span>
+                <i class="icon-next fr "></i>
+            </a>
+        }
+    }
+    else
+    {
+        <div class="layui-flow-more">没有更多了</div>
+    }
+</div>
+<link href="~/Content/Scripts/layui/css/layui.css" rel="stylesheet" />
+<script src="~/Content/Scripts/layer.mobile-v2.0/layer_mobile/layer.js"></script>
+<script>
+    function rent(number) {
+
+        layer.open({
+            content: '您是否确定要退租？'
+              , btn: ['退租', '取消']
+              , skin: 'footer'
+              , yes: function (index) {
+                  $.post("/Personal/RentCreate", { number: number }, function (data) {
+                      if (data.res == "Ok") {
+                          layer.open({ content: data.msg, skin: 'msg', time: 2000 });
+                          setTimeout("location.reload();", 2000);
+                      } else {
+                          layer.open({ content: data.msg, skin: 'msg', time: 2000 });
+                      }
+
+                  });
+
+
+              }
+        });
+
+
+        //layer.msg('您是否确定要删除？', {
+        //    time: 0 //不自动关闭
+        //  ,btn: ['删除', '取消']
+        //  ,yes: function(index){
+        //      //layer.close(index);
+        //      layer.msg('已删除', { time: 1000 });
+        //      location.reload();
+        //  }});
+    }
+</script>
+

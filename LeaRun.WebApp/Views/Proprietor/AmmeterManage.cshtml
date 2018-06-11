@@ -1,0 +1,26 @@
+﻿@{
+    ViewBag.Title = "电表管理";
+    Layout = "~/Views/Shared/_Partial.cshtml";
+}
+
+<div class="all">
+    <header class="header clear">
+        <a href="javascript:history.go(-1);" class="return fl"></a>
+        <h1 class="title">电表管理</h1>
+    </header>
+    <div class="bill-all">
+        <a href="/Proprietor/AmmeterAdd" class="repair bbot clear">
+            <span class="bill-text m-man fl">添加电表</span>
+            <i class="icon-next fr"></i>
+        </a>
+        @*<a href="/Proprietor/AmmeterMoneyList" class="repair bbot clear">
+            <span class="bill-text m-man fl">电价设置</span><i class="icon-next fr"></i>
+        </a>*@
+        <a href="/Proprietor/AmmeterUser" class="repair bbot clear">
+            <span class="bill-text m-man fl">电表历史用户查询</span><i class="icon-next fr"></i>
+        </a>
+        <a href="/Proprietor/AmmeterList" class="repair bbot clear">
+            <span class="bill-text m-man fl">电表列表</span><i class="icon-next fr"></i>
+        </a>
+    </div>
+</div>

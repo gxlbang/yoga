@@ -1,0 +1,213 @@
+@{
+    ViewBag.Title = "Fx_News》表单页面";
+    Layout = "~/Views/Shared/_LayoutForm.cshtml";
+}
+<!--富文本框-->
+<link rel="stylesheet" href="~/Content/Scripts/kindeditor-4.1.3/themes/default/default.css" />
+<link rel="stylesheet" href="~/Content/Scripts/kindeditor-4.1.3/plugins/code/prettify.css" />
+<script charset="utf-8" src="~/Content/Scripts/kindeditor-4.1.3/kindeditor.js"></script>
+<script charset="utf-8" src="~/Content/Scripts/kindeditor-4.1.3/lang/zh_CN.js"></script>
+<script charset="utf-8" src="~/Content/Scripts/kindeditor-4.1.3/plugins/code/prettify.js"></script>
+<script type="text/javascript">
+    var editor1;
+    KindEditor.ready(function (K) {
+        editor1 = K.create('#NewsContent', {
+            cssPath: '/Content/Scripts/kindeditor-4.1.3/plugins/code/prettify.css',
+            uploadJson: '/Tools/upload_json.ashx',
+            fileManagerJson: '/Tools/file_manager_json.ashx',
+            allowFileManager: true,
+            filterMode: false
+        });
+        prettyPrint();
+    });
+</script>
+<!--选择颜色组件start-->
+<link href="~/Content/Scripts/cxColor/css/jquery.cxcolor.css" rel="stylesheet" />
+<script src="~/Content/Scripts/cxColor/js/jquery.cxcolor.js"></script>
+<!--选择颜色组件end-->
+<!--上传文件组件start-->
+<link href="~/Content/Scripts/uploadify/uploadify.css" rel="stylesheet" />
+<script src="~/Content/Scripts/uploadify/jquery.uploadify.js"></script>
+<script type="text/javascript">
+    //上传文件
+    function uploadify() {
+        $("#uploadify").uploadify({
+            uploader: '/HouseModule/Ho_HouseInfo/ImgUpload',
+            swf: '/Content/Scripts/uploadify/uploadify.swf',
+            buttonText: "上传图片",
+            height: 24,
+            width: 70,
+            removeCompleted: true,               // 上传成功后移除进度条
+            removeTimeout: 0,
+            onFallback: function () {
+                alert("您未安装FLASH控件，无法上传！请安装FLASH控件后再试。");
+            },
+            onUploadSuccess: function (file, data, response) {
+                var DataJson = JSON.parse(data);
+                $("#pimg").attr("src", DataJson.Path);
+                $("#NewsPic").val(DataJson.Path);
+            }
+        });
+    }
+</script>
+<script type="text/javascript">
+    var KeyValue = GetQuery('KeyValue');//主键
+    $(function () {
+        InitControl();
+        uploadify();
+    })
+    //得到一个对象实体
+    function InitControl() {
+        if (!!GetQuery('KeyValue')) {
+            AjaxJson("/NewsModule/Fx_News/SetForm", { KeyValue: KeyValue }, function (data) {
+                SetWebControls(data);
+                $("#pimg").attr("src", data.NewsPic);
+            });
+        } else {
+            AjaxJson("/NewsModule/Fx_NewsClass/SetForm", { KeyValue: GetQuery('PNumber') }, function (data) {
+                if (!!data.Number) {
+                    $("#NewsClassNumber").val(data.Number);
+                    $("#NewsClassName").val(data.Name);
+                } else {
+                    alertDialog("栏目不正确", 0);
+                    closeDialog();
+                }
+            });
+        }
+    }
+    //保存事件
+    function AcceptClick() {
+        if (!CheckDataValid('#form1')) {
+            return false;
+        }
+        var IsFirst, IsHot, IsRec;
+        if ($("#IsFirst").attr("checked")) {
+            IsFirst = 1;
+        } else { IsFirst = 0 }
+        if ($("#IsHot").attr("checked")) {
+            IsHot = 1;
+        } else { IsHot = 0 }
+        if ($("#IsRec").attr("checked")) {
+            IsRec = 1;
+        } else { IsRec = 0 }
+        editor1.sync();
+        var postData = jQuery.parseJSON('{"NewsClassName":"' + $("#NewsClassName").val() + '","NewsClassNumber":"' + $("#NewsClassNumber").val() +
+            '","NewsName":"' + $("#NewsName").val() + '","Title":"' + $("#Title").val() + '","NewsKeyword":"' + $("#NewsKeyword").val() +
+            '","NewsDes":"' + $("#NewsDes").val() + '","NewsPic":"' + $("#NewsPic").val() + '","IsFirst":"' + IsFirst +
+                '","IsHot":"' + IsHot + '","IsRec":"' + IsRec + '","NewsHit":"' + $("#NewsHit").val() +
+                '","NewsOrder":"' + $("#NewsOrder").val() + '","Status":"' + $("#Status").val() +
+                '","ShortContent":"' + $("#ShortContent").val() +
+                '","NewsContent":"' + encodeURIComponent($("#NewsContent").val()) + '"}');
+        AjaxJson("/NewsModule/Fx_News/SubmitUserForm?KeyValue=" + KeyValue, postData, function (data) {
+            tipDialog(data.Message, 3, data.Code);
+            top.frames[tabiframeId()].windowload();
+            closeDialog();
+        });
+    }
+</script>
+<form id="form1" style="margin: 1px">
+    <div id="message" style="display: none"></div>
+    <table class="form">
+        <tr>
+            <th class='formTitle'>栏目名称：</th>
+            <td class='formValue'>
+                <input id="NewsClassName" maxlength=50 type="text" class="txt" readonly="readonly" />
+                <input type="hidden" id="NewsClassNumber" />
+            </td>
+            <th width="10"></th>
+            <td class='formValue' rowspan="6">
+                <img src="~/Content/Images/noimg.gif" id="pimg" width="150" height="150" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>标题：</th>
+            <td class='formValue'>
+                <input id="NewsName" maxlength=256 type="text" class="txt required"  datacol="yes" err="标题" checkexpession="NotNull" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>Title：</th>
+            <td class='formValue'>
+                <textarea id="Title" class="txtArea" rows="2"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>Keyword：</th>
+            <td class='formValue'>
+                <textarea id="NewsKeyword" class="txtArea" rows="2"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>Descrption：</th>
+            <td class='formValue'>
+                <textarea id="NewsDes" class="txtArea" rows="4"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>图片：</th>
+            <td class='formValue'>
+                <input id="uploadify" name="uploadify" type="file" />
+                <input id="NewsPic" type="hidden" />
+            </td>
+        </tr>
+    </table>
+    <table class="form">
+        <tr>
+            <th class='formTitle'>首页：</th>
+            <td class='formValue'>
+                <span class="item">
+                    <input id="IsFirst" name="IsFirst" valeu="1" type="checkbox" checked="checked" style="vertical-align: middle;" />
+                    <label for="IsFirst" style="vertical-align: middle;">热点</label>
+                </span>
+                <label style="vertical-align: middle; color: red;">注意：推荐后将显示到首页位置。</label>
+            </td>
+            <th class='formTitle'>热点：</th>
+            <td class='formValue'>
+                <span class="item">
+                    <input id="IsHot" name="IsHot" type="checkbox" valeu="1" checked="checked" style="vertical-align: middle;" />
+                    <label for="IsHot" style="vertical-align: middle;">热点</label>
+                </span>
+                <label style="vertical-align: middle; color: red;">注意：推荐后将显示到热点位置。</label>
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>推荐：</th>
+            <td class='formValue'>
+                <span class="item">
+                    <input id="IsRec" name="IsRec" type="checkbox" valeu="1" checked="checked" style="vertical-align: middle;" />
+                    <label for="IsRec" style="vertical-align: middle;">推荐</label>
+                </span>
+                <label style="vertical-align: middle; color: red;">注意：推荐后将显示到推荐位置。</label>
+            </td>
+            <th class='formTitle'>排序：</th>
+            <td class='formValue'>
+                <input id="NewsOrder" value="0" type="text" class="txt required" datacol="yes" err="排序" checkexpession="Num"  />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>点击量：</th>
+            <td class='formValue'>
+                <input id="NewsHit" value="0" type="text" class="txt required" datacol="yes" err="点击量" checkexpession="Num" />
+            </td>
+            <th class='formTitle'>状态：</th>
+            <td class='formValue'>
+                <select id="Status" class="txtselect">
+                    <option value="1">正常</option>
+                    <option value="0">禁用</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>简述：</th>
+            <td class='formValue' colspan="3">
+                <textarea id="ShortContent" class="txtArea" rows="4"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>内容：</th>
+            <td class='formValue' colspan="3">
+                <textarea id="NewsContent" class="txtArea" rows="40" style="width:100%;"></textarea>
+            </td>
+        </tr>
+    </table>
+</form>

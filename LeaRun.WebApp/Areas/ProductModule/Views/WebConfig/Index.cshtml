@@ -1,0 +1,96 @@
+@{
+    ViewBag.Title = "网站配置";
+    Layout = "~/Views/Shared/_LayoutIndex.cshtml";
+}
+<script type="text/javascript">
+    $(function () {
+        GetGrid();
+    })
+    //加载表格
+    function GetGrid() {
+        $("#gridTable").jqGrid({
+        url: "@Url.Content("~/ProductModule/WebConfig/GridPageJson")",
+        datatype: "json",
+        height: $(window).height() - 110,
+        autowidth: true,
+        colModel: [
+                { label: '主键', name: 'Number', index: 'Number', width: 20, align: 'left', hidden: true },
+                { label: '网站名称', name: 'Web_Name', index: 'Web_Name', width: 180, align: 'left'  },
+                { label: '网站地址', name: 'Web_Url', index: 'Web_Url', width: 220, align: 'left' },
+                { label: '备案号', name: 'Web_ICP', index: 'Web_ICP', width: 120, align: 'left'},
+                {
+                    label: '是否开启邮件', name: 'IsEmail', index: 'IsEmail', width: 100, align: 'left',
+                    formatter: function (cellvalue, options, rowObject) {
+                        if (cellvalue == '1') return "<img src='/Content/Images/checkokmark.gif'/>";
+                        if (cellvalue == '0') return "<img src='/Content/Images/checknomark.gif'/>";
+                    }
+                },
+                { label: '邮箱地址', name: 'Email', index: 'Email', width: 150, align: 'left' },
+                //{ label: '用户层级', name: 'UserLevel', index: 'UserLevel', width: 80, align: 'left' },
+                //{ label: 'AppID', name: 'AppID', index: 'AppID', width: 150, align: 'left' },
+                //{ label: 'AppSecret', name: 'AppSecret', index: 'AppSecret', width: 300, align: 'left' },
+                { label: '账单日', name: 'BillDate', index: 'BillDate', width: 80, align: 'left', sortable: true },
+                 { label: '出账日', name: 'SendBillDate', index: 'SendBillDate', width: 80, align: 'left', sortable: true },
+                { label: '提现费率', name: 'ChargeFee', index: 'ChargeFee', width: 80, align: 'left', sortable: true },
+                { label: '电表首充', name: 'AmCharge', index: 'AmCharge', width: 80, align: 'left', sortable: true },
+                { label: '电表押金', name: 'AmDeposit', index: 'AmDeposit', width: 80, align: 'left', sortable: true },
+                { label: '备注', name: 'Remark', index: 'Remark', width: 100, align: 'left' },
+        ],
+        viewrecords: true,
+        pager: "#gridPager",
+        sortname: 'Number',
+        sortorder: 'desc',
+        rownumbers: true,
+        shrinkToFit: false,
+        gridview: true,
+    });
+}
+    //编辑
+    function btn_edit() {
+        var KeyValue = GetJqGridRowValue("#gridTable", "Number");
+        if (IsChecked(KeyValue)) {
+            var url = "/ProductModule/WebConfig/Form?KeyValue=" + KeyValue;
+            openDialog(url, "Form", "编辑网站设置", 770, 395, function (iframe) {
+                top.frames[iframe].AcceptClick();
+            });
+        }
+    }
+    //明细
+    function btn_detail() {
+        var KeyValue = GetJqGridRowValue("#gridTable", "Number");
+        if (IsChecked(KeyValue)) {
+            var url = "/ProductModule/WebConfig/Detail?KeyValue=" + KeyValue;
+            Dialog(url, "Detail", "网站设置明细", 770, 395, function (iframe) {
+                top.frames[iframe].AcceptClick();
+            });
+        }
+    }
+    //刷新
+    function windowload() {
+        $("#gridTable").trigger("reloadGrid"); //重新载入
+        
+    }
+</script>
+<!--工具栏-->
+<div class="tools_bar leftline rightline" style="margin: 1px; margin-bottom: 0px;">
+    <div class="PartialButton">
+        @Html.Partial("_PartialButton")
+    </div>
+</div>
+@*<div class="leftline rightline QueryArea" style="margin: 1px; margin-top: 0px; margin-bottom: 0px;">
+    <table border="0" class="form-find" style="height: 45px;">
+        <tr>
+            <th>关键字：</th>
+            <td>
+                <input id="keywords" type="text" class="txt" style="width: 200px" />
+            </td>
+            <td>
+                <input id="btnSearch" type="button" class="btnSearch" value="搜 索" onclick="btn_Search()" />
+            </td>
+        </tr>
+    </table>
+</div>*@
+<div class="topline rightline" style="margin: 1px; margin-top: -1px;">
+    <table id="gridTable"></table>
+    <div id="gridPager"></div>
+</div>

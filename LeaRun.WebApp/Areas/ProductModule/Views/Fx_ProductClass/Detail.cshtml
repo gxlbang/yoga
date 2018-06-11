@@ -1,0 +1,77 @@
+@{
+    ViewBag.Title = "Fx_ProductClass》明细页面";
+    Layout = "~/Views/Shared/_LayoutForm.cshtml";
+}
+<!--编辑器组件start-->
+<script src="~/Content/Scripts/ckeditor/ckeditor.js"></script>
+<!--编辑器组件endt-->
+<!--选择颜色组件start-->
+<link href="~/Content/Scripts/cxColor/css/jquery.cxcolor.css" rel="stylesheet" />
+<script src="~/Content/Scripts/cxColor/js/jquery.cxcolor.js"></script>
+<!--选择颜色组件end-->
+<script type="text/javascript">
+    $(function () {
+        InitControl();
+    })
+    //得到一个对象实体
+    function InitControl() {
+        if (!!GetQuery('KeyValue')) {
+            AjaxJson("/ProductModule/Fx_ProductClass/SetPclassForm", { KeyValue: GetQuery('KeyValue') }, function (data) {
+                SetWebControls(data);
+            });
+        }
+    }
+</script>
+<form id="form1" style="margin: 1px">
+    <table class="form">
+        <tr>
+            <th class='formTitle'>栏目名称：</th>
+            <td class='formValue'>
+                <input id="ClassName" style="width:100%" type="text" class="txt" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>页面地址：</th>
+            <td class='formValue'>
+                <input id="ClassUrl" style="width:100%" type="text" class="txt" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>独立域名：</th>
+            <td class='formValue'>
+                <input id="ClassPath" style="width:100%" type="text" class="txt" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>备注：</th>
+            <td class="formValue">
+                <textarea id="Remark" name="Description" maxlength="200" class="txtArea" rows="2"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>栏目内容：</th>
+            <td class="formValue">
+                <textarea id="ClassText" name="ClassText" class="txtArea" rows="13" ></textarea>
+            </td>
+        </tr>
+    </table>
+</form>
+<script type="text/javascript">
+    //初始化编辑器
+    CKEDITOR.replace("ClassText", { toolbar: 'Basic', height: 290 });
+    //选择颜色-设置标题色彩
+    function SelectColorEvent() {
+        var mycolor = $("#select_color").cxColor();
+        mycolor.show();
+        $("#select_color").bind("change", function () {
+            $("#Theme").css("color", this.value)
+        });
+    }
+</script>
+<style type="text/css">
+    .cke_chrome .cke_top {
+        border-right: none;
+        border-left: none;
+        padding-bottom: 0px;
+    }
+</style>

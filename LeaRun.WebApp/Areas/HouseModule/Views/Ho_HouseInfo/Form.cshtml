@@ -1,0 +1,484 @@
+@{
+    ViewBag.Title = "Ho_HouseInfo》表单页面";
+    Layout = "~/Views/Shared/_LayoutForm.cshtml";
+}
+<!--选择颜色组件start-->
+<link href="~/Content/Scripts/cxColor/css/jquery.cxcolor.css" rel="stylesheet" />
+<script src="~/Content/Scripts/cxColor/js/jquery.cxcolor.js"></script>
+<!--选择颜色组件end-->
+<!--上传文件组件start-->
+<link href="~/Content/Scripts/uploadify/uploadify.css" rel="stylesheet" />
+<script src="~/Content/Scripts/uploadify/jquery.uploadify.js"></script>
+<!--富文本框-->
+<link rel="stylesheet" href="~/Content/Scripts/kindeditor-4.1.3/themes/default/default.css" />
+<link rel="stylesheet" href="~/Content/Scripts/kindeditor-4.1.3/plugins/code/prettify.css" />
+<script charset="utf-8" src="~/Content/Scripts/kindeditor-4.1.3/kindeditor.js"></script>
+<script charset="utf-8" src="~/Content/Scripts/kindeditor-4.1.3/lang/zh_CN.js"></script>
+<script charset="utf-8" src="~/Content/Scripts/kindeditor-4.1.3/plugins/code/prettify.js"></script>
+<script type="text/javascript">
+    var editor1;
+    KindEditor.ready(function (K) {
+        editor1 = K.create('#HouseContent', {
+            cssPath: '/Content/Scripts/kindeditor-4.1.3/plugins/code/prettify.css',
+            uploadJson: '/Tools/upload_json.ashx',
+            fileManagerJson: '/Tools/file_manager_json.ashx',
+            allowFileManager: true,
+            filterMode: false
+        });
+        prettyPrint();
+    });
+</script>
+<script type="text/javascript">
+    //上传文件
+    function uploadify() {
+        $("#uploadify").uploadify({
+            uploader: '/HouseModule/Ho_HouseInfo/ImgUpload',
+            swf: '/Content/Scripts/uploadify/uploadify.swf',
+            buttonText: "上传图片",
+            height: 24,
+            width: 70,
+            removeCompleted: true,               // 上传成功后移除进度条
+            removeTimeout: 0,
+            onFallback: function () {
+                alert("您未安装FLASH控件，无法上传！请安装FLASH控件后再试。");
+            },
+            onUploadSuccess: function (file, data, response) {
+                var DataJson = JSON.parse(data);
+                $("#pimg").attr("src", DataJson.Path);
+                $("#img").val(DataJson.Path);
+            }
+        });
+        $("#uploadify1").uploadify({
+            uploader: '/HouseModule/Ho_HouseInfo/ImgUpload',
+            swf: '/Content/Scripts/uploadify/uploadify.swf',
+            buttonText: "上传图片",
+            cancelImg: "/Content/Images/ui_close.png",
+            height: 24,
+            width: 70,
+            removeCompleted: true,               // 上传成功后移除进度条
+            removeTimeout: 0,
+            onFallback: function () {
+                alert("您未安装FLASH控件，无法上传！请安装FLASH控件后再试。");
+            },
+            onUploadSuccess: function (file, data, response) {
+                var DataJson = JSON.parse(data);
+                $("#pimg1").attr("src", DataJson.Path);
+                $("#Certificate").val(DataJson.Path);
+            }
+        });
+        $("#uploadify2").uploadify({
+            uploader: '/HouseModule/Ho_HouseInfo/ImgUpload',
+            swf: '/Content/Scripts/uploadify/uploadify.swf',
+            buttonText: "上传图片",
+            height: 24,
+            width: 70,
+            removeCompleted: true,               // 上传成功后移除进度条
+            removeTimeout: 0,
+            onFallback: function () {
+                alert("您未安装FLASH控件，无法上传！请安装FLASH控件后再试。");
+            },
+            onUploadSuccess: function (file, data, response) {
+                var DataJson = JSON.parse(data);
+                $("#pimg2").attr("src", DataJson.Path);
+                $("#DesignImage").val(DataJson.Path);
+            }
+        });
+        $("#uploadify3").uploadify({
+            uploader: '/HouseModule/Ho_HouseInfo/ImgUpload',
+            swf: '/Content/Scripts/uploadify/uploadify.swf',
+            buttonText: "上传图片",
+            height: 24,
+            width: 70,
+            removeCompleted: true,               // 上传成功后移除进度条
+            removeTimeout: 0,
+            onFallback: function () {
+                alert("您未安装FLASH控件，无法上传！请安装FLASH控件后再试。");
+            },
+            onUploadSuccess: function (file, data, response) {
+                var DataJson = JSON.parse(data);
+                $("#pimg3").attr("src", DataJson.Path);
+                $("#RealImage").val(DataJson.Path);
+            }
+        });
+        $("#uploadify4").uploadify({
+            uploader: '/HouseModule/Ho_HouseInfo/ImgUpload',
+            swf: '/Content/Scripts/uploadify/uploadify.swf',
+            buttonText: "上传图片",
+            height: 24,
+            width: 70,
+            removeCompleted: true,               // 上传成功后移除进度条
+            removeTimeout: 0,
+            onFallback: function () {
+                alert("您未安装FLASH控件，无法上传！请安装FLASH控件后再试。");
+            },
+            onUploadSuccess: function (file, data, response) {
+                var DataJson = JSON.parse(data);
+                $("#pimg4").attr("src", DataJson.Path);
+                $("#HouseImage").val(DataJson.Path);
+            }
+        });
+        $("#uploadify5").uploadify({
+            uploader: '/HouseModule/Ho_HouseInfo/ImgUpload',
+            swf: '/Content/Scripts/uploadify/uploadify.swf',
+            buttonText: "上传图片",
+            height: 24,
+            width: 70,
+            removeCompleted: true,               // 上传成功后移除进度条
+            removeTimeout: 0,
+            onFallback: function () {
+                alert("您未安装FLASH控件，无法上传！请安装FLASH控件后再试。");
+            },
+            onUploadSuccess: function (file, data, response) {
+                var DataJson = JSON.parse(data);
+                $("#pimg5").attr("src", DataJson.Path);
+                $("#HouseTypeImage").val(DataJson.Path);
+            }
+        });
+    }
+</script>
+<script type="text/javascript">
+    var KeyValue = GetQuery('KeyValue');//主键
+    $(function () {
+        BindCityId();
+        InitControl();
+        uploadify();
+    })
+    //得到一个对象实体
+    function InitControl() {
+        if (!!GetQuery('KeyValue')) {
+            AjaxJson("/HouseModule/Ho_HouseInfo/SetForm", { KeyValue: KeyValue }, function (data) {
+                SetWebControls(data);
+                if (IsNullOrEmpty(data.img)) {
+                    $("#pimg").attr("src", data.img);
+                }
+                if (IsNullOrEmpty(data.Certificate)) {
+                    $("#pimg1").attr("src", data.Certificate);
+                }
+                if (IsNullOrEmpty(data.DesignImage)) {
+                    $("#pimg2").attr("src", data.DesignImage);
+                }
+                if (IsNullOrEmpty(data.RealImage)) {
+                    $("#pimg3").attr("src", data.RealImage);
+                }
+                if (IsNullOrEmpty(data.HouseImage)) {
+                    $("#pimg4").attr("src", data.HouseImage);
+                }
+                if (IsNullOrEmpty(data.HouseTypeImage)) {
+                    $("#pimg5").attr("src", data.HouseTypeImage);
+                }
+                $("#StartTime").val(formatDate(data.StartTime, "yyyy-MM-dd"));
+                $("#GiveTime").val(formatDate(data.GiveTime, "yyyy-MM-dd"));
+                $("#HouseContent").val(decodeURIComponent(data.HouseContent));
+                
+                //绑定地市
+                BindCityId();
+                $("#City").val(data.City);
+            });
+        }
+    }
+    function IsNullOrEmpty(str) {
+        var isOK = true;
+        if (str == undefined || str == "" || str == 'null' || str == '&nbsp;') {
+            isOK = false;
+        }
+        return isOK;
+    }
+    function DeleteCertificate(s,m) {
+        confirmDialog("提示", "确定要删除此图片么?", function (res) {
+            if (res) {
+                $("#" + s).attr("src", '/Content/Images/noimg.gif');
+                $("#" + m).val('&nbsp;');
+            }
+        });
+    }
+    //保存事件
+    function AcceptClick() {
+        if (!CheckDataValid('#form1')) {
+            return false;
+        }
+        //var postData = GetWebControls("#form1");
+        editor1.sync();
+        var postData = jQuery.parseJSON('{"City":"' + $("#City").val() +
+           '","Name":"' + $("#Name").val() + '","Characteristic":"' + $("#Characteristic").val() +
+           '","Address":"' + $("#Address").val() + '","Money":"' + $("#Money").val() +
+           '","CommissionMoney":"' + $("#CommissionMoney").val() + '","img":"' + $("#img").val() +
+           '","Certificate":"' + $("#Certificate").val() + '","Video":"' + encodeURIComponent($("#Video").val()) +
+           '","Label":"' + $("#Label").val() + '","StatusStr":"' + $("#StatusStr").val() +
+           '","HOrder":"' + $("#HOrder").val() + '","Developers":"' + $("#Developers").val() +
+           '","StartTime":"' + $("#StartTime").val() + '","GiveTime":"' + $("#GiveTime").val() +
+           '","DesignImage":"' + $("#DesignImage").val() + '","RealImage":"' + $("#RealImage").val() +
+           '","VolumeRate":"' + $("#VolumeRate").val() + '","Green":"' + $("#Green").val() +
+           '","HouseNow":"' + $("#HouseNow").val() + '","Manager":"' + $("#Manager").val() +
+           '","PropertyRight":"' + $("#PropertyRight").val() + '","HouseType":"' + $("#HouseType").val() +
+           '","HouseImage":"' + $("#HouseImage").val() + '","HouseTypeImage":"' + $("#HouseTypeImage").val() +
+              '","HouseContent":"' + encodeURIComponent($("#HouseContent").val()) + '","Remark":"' + $("#Remark").val() + '"}');
+        AjaxJson("/HouseModule/Ho_HouseInfo/SubmitUserForm?KeyValue=" + KeyValue, postData, function (data) {
+            tipDialog(data.Message, 3, data.Code);
+            top.frames[tabiframeId()].windowload();
+            closeDialog();
+        });
+    }
+    //所在市下拉框
+    function BindCityId() {
+        $("#City").html("");
+        $("#City").append("<option value=''>==请选择==</option>");
+        AjaxJson("/HouseModule/Ho_HouseInfo/GetCityListJson", { ParentId: 0 }, function (DataJson) {
+            $.each(DataJson, function (i) {
+                $("#City").append($("<option></option>").val(DataJson[i].CityNumber).html(DataJson[i].City));
+            });
+        })
+    }
+</script>
+<form id="form1" style="margin: 1px">
+    <div id="message" style="display: none"></div>
+    <table class="form">
+        <tr>
+            <th class="formTitle">所在市：</th>
+            <td class="formValue">
+                <select id="City" class="txtselect required" datacol="yes" err="所在市" checkexpession="NotNull" ></select>
+            </td>
+            <th width="10"></th>
+            <td class='formValue' rowspan="8">
+                <div class="k-one">
+                    <img src="~/Content/Images/noimg.gif" id="pimg" width="150" height="150" title="楼盘主图" />
+                    @*<div class="k-none">
+                        <a class="k-close" href="#" onclick="DeleteCertificate('pimg', 'img')">
+                            x
+                        </a>
+                        <div class="k-bgg"></div>
+                    </div>*@
+                    </div>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <div class="k-one">
+                        <img src="~/Content/Images/noimg.gif" id="pimg1" width="150" height="150" title="授权书" />
+                        <div class="k-none">
+                            <a class="k-close" href="#" onclick="DeleteCertificate('pimg1', 'Certificate')">
+                                x
+                            </a>
+                            <div class="k-bgg"></div>
+                        </div>
+                    </div>
+                    @*<img src="~/Content/Images/noimg.gif" id="pimg1" width="150" height="150" title="授权书" />*@
+</td>
+        </tr>
+        <tr>
+            <th class='formTitle'>楼盘名称：</th>
+            <td class='formValue'>
+                <input id="Name" maxlength=50 type="text" class="txt required" datacol="yes" err="楼盘名称" checkexpession="NotNull" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>楼盘特色：</th>
+            <td class='formValue'>
+                <input id="Characteristic" maxlength=50 type="text" class="txt required" datacol="yes" err="楼盘特色" checkexpession="NotNull" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>项目地址：</th>
+            <td class='formValue'>
+                <input id="Address" maxlength=128 type="text" class="txt required" datacol="yes" err="项目地址" checkexpession="NotNull" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>楼盘均价：</th>
+            <td class='formValue'>
+                <input id="Money" maxlength=19 type="text" class="txt required" datacol="yes" err="楼盘均价" checkexpession="NotNull" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>佣金：</th>
+            <td class='formValue'>
+                <input id="CommissionMoney" maxlength=19 type="text" class="txt required" datacol="yes" err="佣金" checkexpession="NotNull" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>楼盘主图：</th>
+            <td class='formValue'>
+                <input id="uploadify" name="uploadify" type="file" />
+                <input id="img" type="hidden" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>授权书：</th>
+            <td class='formValue'>
+                <input id="uploadify1" name="uploadify1" type="file" />
+                @*&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="image" src="~/Content/Images/ui_close.png" onclick="DeleteCertificate()" />删除图片*@
+                <input id="Certificate" type="hidden" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>视频资料：</th>
+            <td class='formValue' colspan="3">
+                <input id="Video" maxlength=256 type="text" class="txt" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>楼盘要点：</th>
+            <td class='formValue' colspan="3">
+                <input id="Label" maxlength=50 type="text" class="txt" style="width:400px;" />
+                <label for="Label" style="vertical-align: middle; color:red;">* 多个要点之间用|分割,例如:五证齐全|不限购|最后几套</label>
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>状态：</th>
+            <td class='formValue'>
+                <select id="StatusStr" class="txtselect">
+                    <option value="在售">在售</option>
+                    <option value="停售">停售</option>
+                </select>
+            </td>
+            <th width="10"></th>
+            <td class='formValue' rowspan="7">
+                <div class="k-one">
+                    <img src="~/Content/Images/noimg.gif" id="pimg2" width="150" height="150" title="效果图册" />
+                    <div class="k-none">
+                        <a class="k-close" href="#" onclick="DeleteCertificate('pimg2', 'DesignImage')">
+                            x
+                        </a>
+                        <div class="k-bgg"></div>
+                    </div>
+                </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                <div class="k-one">
+                    <img src="~/Content/Images/noimg.gif" id="pimg3" width="150" height="150" title="实景图册" />
+                    <div class="k-none">
+                        <a class="k-close" href="#" onclick="DeleteCertificate('pimg3', 'RealImage')">
+                            x
+                        </a>
+                        <div class="k-bgg"></div>
+                    </div>
+                </div>
+                @*<img src="~/Content/Images/noimg.gif" id="pimg2" width="150" height="150" title="效果图册" />&nbsp;&nbsp;&nbsp;&nbsp;
+                <img src="~/Content/Images/noimg.gif" id="pimg3" width="150" height="150" title="实景图册" />*@
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>排序：</th>
+            <td class='formValue'>
+                <input id="HOrder" type="number" class="txt required" datacol="yes" err="排序" checkexpession="Num" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>开发商：</th>
+            <td class='formValue'>
+                <input id="Developers" maxlength=50 type="text" class="txt" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>开盘时间：</th>
+            <td class='formValue'>
+                <input id="StartTime" type="text" class="txt Wdate" value="@LeaRun.Utilities.DateTimeHelper.GetToday()" style="width: 120px" onfocus="var endDate = $dp.$('GiveTime'); WdatePicker()" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>交房时间：</th>
+            <td class='formValue'>
+                <input id="GiveTime" type="text" class="txt Wdate" value="@LeaRun.Utilities.DateTimeHelper.GetToday()" style="width: 120px" onfocus="WdatePicker()" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>效果图册：</th>
+            <td class='formValue'>
+                <input id="uploadify2" name="uploadify1" type="file" />
+                <input id="DesignImage" type="hidden" />
+                @*<input id="DesignImageNumber" type="hidden" value="5f69b268-504e-44f8-950b-dfda8e00ee19" />*@
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>实景图册：</th>
+            <td class='formValue'>
+                <input id="uploadify3" name="uploadify1" type="file" />
+                <input id="RealImage" type="hidden" />
+                @*<input id="RealImageNumber" type="hidden" value="bc4a267a-3404-4e2e-9053-a0788bd53789" />*@
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>容积率：</th>
+            <td class='formValue' colspan="3">
+                <input id="VolumeRate" maxlength=50 type="text" class="txt" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>绿化率：</th>
+            <td class='formValue' colspan="3">
+                <input id="Green" maxlength=50 type="text" class="txt" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>工程进度：</th>
+            <td class='formValue'>
+                <input id="HouseNow" maxlength=50 type="text" class="txt" />
+            </td>
+            <th width="10"></th>
+            <td class='formValue' rowspan="6">
+                <div class="k-one">
+                    <img src="~/Content/Images/noimg.gif" id="pimg4" width="150" height="150" title="样板图册" />
+                    <div class="k-none">
+                        <a class="k-close" href="#" onclick="DeleteCertificate('pimg4', 'HouseImage')">
+                            x
+                        </a>
+                        <div class="k-bgg"></div>
+                    </div>
+                </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                <div class="k-one">
+                    <img src="~/Content/Images/noimg.gif" id="pimg5" width="150" height="150" title="户型图册" />
+                    <div class="k-none">
+                        <a class="k-close" href="#" onclick="DeleteCertificate('pimg5', 'HouseTypeImage')">
+                            x
+                        </a>
+                        <div class="k-bgg"></div>
+                    </div>
+                </div>
+                @*<img src="~/Content/Images/noimg.gif" id="pimg4" width="150" height="150" title="样板图册" />
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <img src="~/Content/Images/noimg.gif" id="pimg5" width="150" height="150" title="户型图册" />*@
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>物业公司：</th>
+            <td class='formValue'>
+                <input id="Manager" maxlength=128 type="text" class="txt" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>产权年限：</th>
+            <td class='formValue'>
+                <input id="PropertyRight" maxlength=50 type="text" class="txt" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>建筑类型：</th>
+            <td class='formValue'>
+                <input id="HouseType" maxlength=50 type="text" class="txt" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>样板图册：</th>
+            <td class='formValue'>
+                <input id="uploadify4" name="uploadify1" type="file" />
+                <input id="HouseImage" type="hidden" />
+                @*<input id="HouseImageNumber" type="hidden" value="b8af3e9b-aea0-4618-9f66-67987b081731" />*@
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>户型图册：</th>
+            <td class='formValue'>
+                <input id="uploadify5" name="uploadify1" type="file" />
+                <input id="HouseTypeImage" type="hidden" />
+                @*<input id="HouseTypeImageNumber" type="hidden" value="e6b2a2ee-9744-4902-9ad1-d29b06c883ab" />*@
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>其他信息：</th>
+            <td class='formValue' colspan="3">
+                <textarea id="HouseContent" class="txtArea" rows="40" style="width:100%;"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>备注：</th>
+            <td class='formValue' colspan="3">
+                <textarea id="Remark" name="Remark" maxlength="600" class="txtArea" rows="4"></textarea>
+            </td>
+        </tr>
+    </table>
+</form>

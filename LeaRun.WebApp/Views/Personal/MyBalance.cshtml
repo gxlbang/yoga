@@ -1,0 +1,19 @@
+﻿@{
+    ViewBag.Title = "我的余额";
+    Layout = "~/Views/Shared/_Partial.cshtml";
+}
+<div class="all">
+    <header class="header clear">
+        <a href="javascript:history.go(-1);" class="return fl"></a>
+        <a href="/Personal/MyBalanceDetail" class="top-right fr">余额明细</a>
+        <h1 class="title">我的余额</h1>
+    </header>
+    <div class="con list-index active">
+        <i class="icon-money"></i>
+        <span class="my-yu">我的余额</span>
+        <span class="yellow">￥@ViewBag.Balance</span>
+        <a href="/Personal/BalanceRecharge" class="btn-all">充值</a>
+        <a href="/Personal/Withdraw" class="btn-all btn-my">提现</a>
+    </div>
+</div>
+

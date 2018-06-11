@@ -1,0 +1,64 @@
+@{
+    ViewBag.Title = "Am_AmmeterMoney》明细页面";
+    Layout = "~/Views/Shared/_LayoutForm.cshtml";
+}
+<script type="text/javascript">
+    $(function () {
+        InitControl();
+    })
+    //得到一个对象实体
+    function InitControl() {
+        if (!!GetQuery('KeyValue')) {
+            AjaxJson("/AmmeterModule/Am_AmmeterMoney/SetForm", { KeyValue: GetQuery('KeyValue') }, function (data) {
+                SetWebLable(data);
+            });
+        }
+    }
+</script>
+<form id="form1" style="margin: 1px">
+    <table class="form">
+        <tr>
+            <th class='formTitle'>名称：</th>
+            <td class='formValue'>
+                <label id="Name" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>价格类型：</th>
+            <td class='formValue'>
+                <label id="Classify" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>费率(元/kwh)：</th>
+            <td class='formValue'>
+                <label id="FirstMoney" />
+            </td>
+        </tr>
+        <tr>
+        <tr>
+            <th class='formTitle'>业主帐号：</th>
+            <td class='formValue'>
+                <label id="UserName" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>业主姓名：</th>
+            <td class='formValue'>
+                <label id="UserRealName" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>创建时间：</th>
+            <td class='formValue'>
+                <label id="CreateTime" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>备注：</th>
+            <td class='formValue'>
+                <label id="Remark" />
+            </td>
+        </tr>
+    </table>
+</form>

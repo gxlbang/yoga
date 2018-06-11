@@ -1,0 +1,52 @@
+﻿@model List<LeaRun.Entity.Am_AmmeterMoney>
+@{
+    ViewBag.Title = "AmmeterMoneyList";
+    Layout = "~/Views/Shared/_Partial.cshtml";
+}
+
+<div class="all pro-all">
+    <header class="header clear">
+        <a href="javascript:history.go(-1);" class="return fl"></a>
+        <h1 class="title">电价设置</h1>
+    </header>
+    <div class="ele-top">
+        @if (Model != null && Model.Count() > 0)
+        {
+            foreach (var item in Model)
+            {
+                <div class="pro repair-m clear mt15">
+                    <span class="ele-span fl">名称：@item.Name</span>
+                    <span class="ele-span fl">电价：@item.FirstMoney.Value.ToString("0.00")元/度</span>
+                    <span class="ele-span ele-pa clear"><a href="javascript:;" onclick="del('@item.Number')" class="ele-a fr">删除</a><a href="/Proprietor/AmmeterMoneyEidt?number=@item.Number" class="ele-a fr">编辑</a></span>
+                </div>
+            }
+
+        }
+
+        <a href="/Proprietor/AmmeterMoneyEidt" class="btn-all">+添加电价</a>
+    </div>
+</div>
+<script src="~/Content/Scripts/layer.mobile-v2.0/layer_mobile/layer.js"></script>
+<script>
+    function del(number) {
+        layer.open({
+            content: '您是否确定要删除'
+              , btn: ['删除', '取消']
+              , skin: 'footer'
+              , yes: function (index) {
+                  $.post("/Proprietor/AmmeterMoneyDel", { number: number }, function (data) {
+                      if (data.res == "Ok") {
+                          layer.open({ content: data.msg, skin: 'msg', time: 2 });
+                          location.reload();
+                          layer.close(index);
+                      } else {
+                          layer.open({ content: data.msg, skin: 'msg', time: 2 });
+                      }
+
+                  });
+
+
+              }
+        });
+    }
+</script>

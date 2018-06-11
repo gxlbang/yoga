@@ -1,0 +1,324 @@
+﻿@{
+    ViewBag.Title = "预约看房";
+    Layout = "~/Views/Shared/UiIndex.cshtml";
+}
+@model List<LeaRun.Entity.Ho_SetSubscribe>
+<a href="javascript:; " class="cen-details in-details">
+    <div class="cen-tu fl"><img src="@ViewBag.Ho_MyHouseInfo.Himg" alt="" /></div>
+    <div class="cen-text">
+        <span class="cen-tit">楼盘名称：@ViewBag.Ho_MyHouseInfo.HName</span>
+        <span class="cen-zhuan">状态：<span>@ViewBag.Ho_MyHouseInfo.StatusStr</span></span>
+        <span class="cen-zhuan">佣金：<span>@ViewBag.Ho_MyHouseInfo.HMoney 元/㎡</span></span>
+    </div>
+</a>
+<div id="Tab1" class="mt20">
+    <div class="Menubox">
+        <ul class="clear">
+            <li id="one1" onclick="setTab('one',1,2)" class="hover">预约</li>
+            <li id="one2" onclick="setTab('one',2,2)">接待</li>
+        </ul>
+    </div>
+    <div class="Contentbox">
+        <div id="con_1" class="hover">
+            @if (ViewBag.Ho_MyHouseInfo.Status == 0)
+            {
+                <div class="in-tab btop">
+                    <div class="tab-list clear">
+                        <span class="tab-span fl">看房人数：</span>
+                        <div class="tab-m clear">
+                            <div class="tab-bao fl">
+                                <div class="in-put fl">
+                                    <input type="radio" id="checkbox-2-1" onclick="backInfo(this)" value="1" name="choosex" />
+                                    <label for="checkbox-2-1"></label>
+                                </div><span class="tab-s fl">1人</span>
+                            </div>
+                            <div class="tab-bao fl">
+                                <div class="in-put fl">
+                                    <input type="radio" id="checkbox-2-2" onclick="backInfo(this)" value="2" name="choosex" />
+                                    <label for="checkbox-2-2"></label>
+                                </div><span class="tab-s fl">2人</span>
+                            </div>
+                            <div class="tab-bao fl">
+                                <div class="in-put fl">
+                                    <input type="radio" id="checkbox-2-3" onclick="backInfo(this)" value="3" name="choosex" />
+                                    <label for="checkbox-2-3"></label>
+                                </div><span class="tab-s fl">3人</span>
+                            </div>
+                            <div class="tab-bao fl">
+                                <div class="in-put fl">
+                                    <input type="radio" id="checkbox-2-4" value="4" name="choosex" />
+                                    <input type="hidden" id="myNum" />
+                                    <label for="checkbox-2-4"></label>
+                                </div><span class="tab-s fl" id="otherman">多人</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-list clear">
+                        <span class="tab-span fl">看房时间：</span>
+                        <div class="tab-m clear">
+                            <div class="tab-bao fl">
+                                <div class="in-put fl">
+                                    <input type="radio" id="checkbox-3-1" value="0" onclick="backInfo2(this)" name="chooset" />
+                                    <label for="checkbox-3-1"></label>
+                                </div><span class="tab-s fl">今天</span>
+                            </div>
+                            <div class="tab-bao fl">
+                                <div class="in-put fl">
+                                    <input type="radio" id="checkbox-3-2" value="1" onclick="backInfo2(this)" name="chooset" />
+                                    <label for="checkbox-3-2"></label>
+                                </div><span class="tab-s fl">明天</span>
+                            </div>
+                            <div class="tab-bao fl">
+                                <div class="in-put fl">
+                                    <input type="radio" id="checkbox-3-3" value="2" onclick="backInfo2(this)" name="chooset" />
+                                    <label for="checkbox-3-3"></label>
+                                </div><span class="tab-s fl">后天</span>
+                            </div>
+                            <div class="tab-bao fl">
+                                <div class="in-put fl">
+                                    <input type="radio" id="checkbox-3-4" name="chooset" />
+                                    <input type="hidden" id="myNum2" />
+                                    <label for="checkbox-3-4"></label>
+                                </div><span class="tab-s fl" id="otherman2">其他</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-list clear">
+                        <span class="tab-span fl">行程安排：</span>
+                        <div class="tab-m clear">
+                            <div class="tab-bao tab-baotwo fl">
+                                <div class="in-put fl">
+                                    <input type="radio" id="checkbox-4-1" value="公司专车" name="chooses" />
+                                    <label for="checkbox-4-1"></label>
+                                </div><span class="tab-s fl">公司专车</span>
+                            </div>
+                            <div class="tab-bao tab-baotwo fl">
+                                <div class="in-put fl">
+                                    <input type="radio" id="checkbox-4-2" value="公司大巴" name="chooses" />
+                                    <label for="checkbox-4-2"></label>
+                                </div><span class="tab-s fl">公司大巴</span>
+                            </div>
+                            <div class="tab-bao tab-baotwo fl">
+                                <div class="in-put fl">
+                                    <input type="radio" id="checkbox-4-3" value="自行安排" name="chooses" />
+                                    <label for="checkbox-4-3"></label>
+                                </div><span class="tab-s fl">自行安排</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-list clear">
+                        <span class="tab-span fl">合伙人电话：</span>
+                        <input type="hidden" value="@ViewBag.Phone" id="phone" />
+                        <div class="tab-m clear">@ViewBag.Mobile</div>
+                    </div>
+                    <div class="tab-list clear">
+                        <span class="tab-span fl">输入验证码：</span>
+                        <div class="tab-m clear">
+                            <input class="tab-yan fl" type="text" id="txtCode" placeholder="输入验证码" />
+                            <input type="button" class="tab-yanzhe fr" value="获取验证码" onclick="sendCode(this)" />
+                        </div>
+                    </div>
+                    <a href="javascript:;" onclick="submitOrders()" class="tab-btn">提交预约</a>
+
+                </div>
+            }
+            else
+            {
+                @*<div class="down-all in-all mt20">
+                    <span class="down-con">
+                        预约成功
+                        @if (ViewBag.Ho_MySubscribe.Status == 0)
+                        {
+                            <a href="javascript:;" onclick="CloseSubscribe(@ViewBag.Ho_MySubscribe.Number)" class="in-qu">取消预约</a>
+                        }
+                    </span>
+                    <span class="down-con">人数：@ViewBag.Ho_MySubscribe.PeopleNum 人</span>
+                    <span class="down-con">行程：@ViewBag.Ho_MySubscribe.CarOrBus</span>
+                    <span class="down-con">
+                        提交时间：
+                        @Convert.ToDateTime(ViewBag.Ho_MySubscribe.CreateTime).ToString("yyyy-MM-dd HH:mm:ss")
+                    </span>
+                    <span class="down-con">请保持电话畅通，耐心等待客服电话安排接待，24小时内处理</span>
+                    <span class="down-con in-con">（24小时内关机视为订单取消）</span>
+                </div>*@
+            }
+        </div>
+        @*<div id="con_2" style="display:none">
+            @if (ViewBag.Ho_MyHouseInfo.Status == 0)
+            {
+                <div class="down-all in-all btop">
+                    <span class="down-con">暂无接待信息</span>
+                </div>
+            }
+            else
+            {
+                <div class="down-all in-all btop">
+                    <span class="down-con">合作人姓名：@ViewBag.User.Name ： @ViewBag.User.InnerCode</span>
+                    <span class="down-con">身份证号：@ViewBag.User.CardCode</span>
+                </div>
+                foreach (var item in Model)
+                {
+                    <div class="down-all in-all mt20">
+                        <span class="down-con">接待人数：@item.PeopleNum 人</span>
+                        <span class="down-con">接待方式：@item.CarOrBus</span>
+                        <span class="down-con">接待地点：@item.Address</span>
+                        <span class="down-con">接待时间：@item.MYTime</span>
+                        <span class="down-con">公司接待人:@item.Reception — 电话 @item.ReMobile</span>
+                        <span class="down-con">车型：@item.CarType</span>
+                        <span class="down-con">车牌号：@item.CarNumer</span>
+                        <span class="down-con">车颜色： @item.CarColor</span>
+                    </div>
+                }
+            }
+        </div>*@
+    </div>
+</div>
+<div class="theme-popover" style="height:200px;">
+    <div class="theme-poptit">
+        <a href="javascript:;" title="关闭" class="close">×</a>
+    </div>
+    <div class="theme-popbod dform">
+        &nbsp;&nbsp;&nbsp;<input type="number" class="in-input" style="width:100%" placeholder="请输入具体人数" id="txtNum1" />
+        <a href="javascript:;" onclick="SubmitMan()" class="tab-btn">确定</a>
+    </div>
+</div>
+<div class="popover"></div>
+
+<div class="theme-popover2" style="height:200px;">
+    <div class="theme-poptit">
+        <a href="javascript:;" title="关闭" class="close">×</a>
+    </div>
+    <div class="theme-popbod dform">
+        &nbsp;&nbsp;&nbsp;<input type="number" class="in-input" style="width:100%" placeholder="输入几天以后" id="txtNum2" />
+        <a href="javascript:;" onclick="SubmitMan2()" class="tab-btn">确定</a>
+    </div>
+</div>
+<div class="popover2"></div>
+@{  ViewDataDictionary vdd = new ViewDataDictionary();
+    vdd.Add("ind", "3");
+    Html.RenderPartial("UIDown", vdd); }
+<script type="text/javascript" src="~/Content/Scripts/layer/layer.js"></script>
+<script type="text/javascript">
+    jQuery(document).ready(function ($) {
+        $('#checkbox-2-4').click(function () {
+            $('.popover').fadeIn(100);
+            $('.theme-popover').slideDown(200);
+        })
+        $('.theme-poptit .close').click(function () {
+            $('.popover').fadeOut(100);
+            $('.theme-popover').slideUp(200);
+        })
+        $('#checkbox-3-4').click(function () {
+            $('.popover2').fadeIn(100);
+            $('.theme-popover2').slideDown(200);
+        })
+        $('.theme-poptit2 .close2').click(function () {
+            $('.popover2').fadeOut(100);
+            $('.theme-popover2').slideUp(200);
+        })
+    });
+    function CloseSubscribe(n) {
+        alert(n);
+    }
+    /*第一种形式 第二种形式 更换显示样式*/
+    function setTab(name, cursel, n) {
+        for (i = 1; i <= n; i++) {
+            var menu = document.getElementById(name + i);
+            var con = document.getElementById("con_" + i);
+            menu.className = i == cursel ? "hover" : "";
+            con.style.display = i == cursel ? "block" : "none";
+        }
+    }
+    //Check
+    function SubmitMan() {
+        var txtNum1 = $.trim($("#txtNum1").val());
+        $("#otherman").text(txtNum1 + "人");
+        $("#myNum").val(txtNum1);
+        $('.popover').fadeOut(100);
+        $('.theme-popover').slideUp(200);
+    }
+    function backInfo(elm) {
+        $("#otherman").text("多人");
+        $("#myNum").val($(elm).val());
+    }
+    function SubmitMan2() {
+        var txtNum2 = $.trim($("#txtNum2").val());
+        $("#otherman2").text(txtNum2 + "天后");
+        $("#myNum2").val(txtNum2);
+        $('.popover2').fadeOut(100);
+        $('.theme-popover2').slideUp(200);
+    }
+    function backInfo2(elm) {
+        $("#otherman2").text("其他");
+        $("#myNum2").val($(elm).val());
+    }
+    function DoCheck() {
+        var ch = document.getElementsByName("choose");
+        if (document.getElementsByName("allChecked")[0].checked == true) {
+            for (var i = 0; i < ch.length; i++) {
+                ch[i].checked = false;
+            }
+        } else {
+            for (var i = 0; i < ch.length; i++) {
+                ch[i].checked = true;
+            }
+        }
+    }
+    var clock = '';
+    var nums = 60;
+    var btn;
+    function sendCode(thisBtn) {
+        btn = thisBtn;
+        btn.disabled = true;
+        btn.value = nums + '秒重新获取';
+        clock = setInterval(doLoop, 1000);
+        var postData = "";
+        AjaxJson("/Ui/GetCode?Phone=" + $("#phone").val(), postData, function (data) {
+            $.toast(data.Message);
+        });
+    }
+    function doLoop() {
+        nums--;
+        if (nums > 0) {
+            btn.value = nums + '秒重新获取';
+        } else {
+            clearInterval(clock);
+            btn.disabled = false;
+            btn.value = '获取验证码';
+            nums = 60;
+        }
+    }
+
+    function submitOrders() {
+        var myNum = $.trim($("#myNum").val());
+        if (!IsNullOrEmpty(myNum)) {
+            $.toast("请选择看房人数");
+            return false;
+        }
+        var myNum2 = $.trim($("#myNum2").val());
+        if (!IsNullOrEmpty(myNum2)) {
+            $.toast("请选择看房时间");
+            return false;
+        }
+        var name = $.trim($("input[name='chooses']:checked").val());
+        if (!IsNullOrEmpty(name)) {
+            $.toast("请选择行程安排");
+            return false;
+        }
+        var txtCode = $.trim($("#txtCode").val());
+        if (!IsNullOrEmpty(txtCode)) {
+            $.toast("请先获取验证码");
+            return false;
+        }
+        var postData = jQuery.parseJSON('{"PeopleNum":"' + myNum + '","MYTime":"' + myNum2 +
+            '","CarOrBus":"' + name + '","MHNumber":"' + GetQuery('Number') +
+            '","Code":"' + txtCode + '"}');
+        AjaxJson("/Ui/SubmitOrders", postData, function (data) {
+            $.toast(data.Message);
+            if (data.Code == 1 || data.Code == "1") {
+                //刷新页面
+                Replace();
+            }
+        });
+    }
+</script>

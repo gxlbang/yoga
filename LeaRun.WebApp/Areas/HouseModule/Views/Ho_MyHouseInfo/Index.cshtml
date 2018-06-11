@@ -1,0 +1,102 @@
+@{
+    ViewBag.Title = "Ho_MyHouseInfo";
+    Layout = "~/Views/Shared/_LayoutIndex.cshtml";
+}
+<script type="text/javascript">
+    $(function () {
+        GetGrid();
+    })
+    //加载表格
+    function GetGrid() {
+        $("#gridTable").jqGrid({
+        url: "@Url.Content("~/HouseModule/Ho_MyHouseInfo/GridPageJson")",
+        datatype: "json",
+        height: $(window).height() - 149,
+        autowidth: true,
+        colModel: [
+               { label: 'Number', name: 'Number', index: 'Number', width: 0, align: 'left', hidden: true },
+                { label: 'UNumber', name: 'UNumber', index: 'UNumber', width: 0, align: 'left', hidden: true },
+                { label: 'HNumber', name: 'HNumber', index: 'HNumber', width: 0, align: 'left', hidden: true },
+                {
+                    label: '楼盘图片', name: 'Himg', index: 'Himg', width: 60, align: 'left',
+                    formatter: function (cellvalue, options, rowObject) {
+                        if (cellvalue) {
+                            return "<div style='padding:1px;'><img src='" + cellvalue + "' width='48' height='48' /></div>";
+                        }
+                        else {
+                            return "<div style='padding:1px;'><img src='/Content/Images/noimg.gif' width='48' height='48'/></div>";
+                        }
+                    }
+                },
+                { label: '合伙人姓名', name: 'UName', index: 'UName', width: 120, align: 'left' },
+                { label: '楼盘名称', name: 'HName', index: 'HName', width: 150, align: 'left' },
+                { label: '楼盘均价', name: 'HMoney', index: 'HMoney', width: 120, align: 'left' },
+                { label: '状态', name: 'StatusStr', index: 'StatusStr', width: 120, align: 'left' },
+                { label: '代售时间', name: 'CreateTime', index: 'CreateTime', width: 180, align: 'left' },
+                { label: '备注', name: 'Remark', index: 'Remark', width: 400, align: 'left' },
+        ],
+        pager: "#gridPager",
+        sortname: '',
+        sortorder: 'desc',
+        rownumbers: true,
+        shrinkToFit: false,
+        gridview: true,
+    });
+}
+    //编辑
+    function btn_edit() {
+        var KeyValue = GetJqGridRowValue("#gridTable", "Number");
+        if (IsChecked(KeyValue)) {
+            var url = "/HouseModule/Ho_MyHouseInfo/Form?KeyValue=" + KeyValue;
+            openDialog(url, "Form", "编辑Ho_MyHouseInfo", 770, 395, function (iframe) {
+                top.frames[iframe].AcceptClick();
+            });
+        }
+    }
+    //删除
+    function btn_delete() {
+        var KeyValue = GetJqGridRowValue("#gridTable", "Number");
+        if (IsDelData(KeyValue)) {
+            var delparm = 'KeyValue=' + KeyValue;
+            delConfig('/HouseModule/Ho_MyHouseInfo/Delete', delparm, KeyValue.split(",").length);
+        }
+    }
+    //明细
+    function btn_detail() {
+        var KeyValue = GetJqGridRowValue("#gridTable", "Number");
+        if (IsChecked(KeyValue)) {
+            var url = "/HouseModule/Ho_MyHouseInfo/Detail?KeyValue=" + KeyValue;
+            Dialog(url, "Detail", "Ho_MyHouseInfo明细", 820, 500, function (iframe) {
+                top.frames[iframe].AcceptClick();
+            });
+        }
+    }
+    //刷新
+    function windowload() {
+        $("#gridTable").trigger("reloadGrid"); //重新载入
+        
+    }
+</script>
+<!--工具栏-->
+<div class="tools_bar leftline rightline" style="margin: 1px; margin-bottom: 0px;">
+    <div class="PartialButton">
+        @Html.Partial("_PartialButton")
+    </div>
+</div>
+<div class="leftline rightline QueryArea" style="margin: 1px; margin-top: 0px; margin-bottom: 0px;">
+    <table border="0" class="form-find" style="height: 45px;">
+        <tr>
+            <th>关键字：</th>
+            <td>
+                <input id="keywords" type="text" class="txt" style="width: 200px" />
+            </td>
+            <td>
+                <input id="btnSearch" type="button" class="btnSearch" value="搜 索" onclick="btn_Search()" />
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="topline rightline" style="margin: 1px; margin-top: -1px;">
+    <table id="gridTable"></table>
+    <div id="gridPager"></div>
+</div>

@@ -1,0 +1,26 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <title>@ViewBag.Title</title>
+    <link href="~/Areas/Wechat/Content/css/com.css" rel="stylesheet" type="text/css">
+    <link href="~/Areas/Wechat/Content/layer/skin/layer.css" rel="stylesheet" type="text/css" />
+
+    @RenderSection("css", false)
+</head>
+
+<body class="bg">
+
+    @RenderBody()
+  
+    <script type="text/javascript" src="~/Areas/Wechat/Content/validate/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="~/Areas/Wechat/Content/layer/layer.js"></script>
+
+    @RenderSection("scripts", false)
+
+</body>
+</html>

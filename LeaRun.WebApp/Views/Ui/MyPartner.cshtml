@@ -1,0 +1,54 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>合伙人</title>
+    <style type="text/css">
+        *, html {
+            margin: 0;
+            padding: 0;
+            -moz-box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            max-width: 640px;
+            margin: 0 auto;
+            background: #f5f5f5;
+        }
+
+        body {
+            -webkit-text-size-adjust: none;
+            -webkit-tap-highlight-color: rgba(0,0,0,0);
+            font-size: 0.28rem;
+            font-family: "Microsoft Yahei","微软雅黑",Tahoma,Arial,Helvetica,STHeiti;
+            color: #333;
+            padding: 0;
+            margin: 0;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        img {
+            display: block;
+            border: none;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <img src="~/Content/UiImages/main-img.jpg" />
+    </div>
+    @if (ViewBag.IsSign == "YES")
+    {
+        <div>
+            <a href="/Ui/Information"><img src="~/Content/UiImages/btn.jpg" /></a>
+        </div>
+    }
+</body>
+</html>

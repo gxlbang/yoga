@@ -1,0 +1,100 @@
+﻿@model LeaRun.Entity.Am_Ammeter
+@{
+    ViewBag.Title = "添加报修";
+    Layout = "~/Views/Shared/_Partial.cshtml";
+}
+
+<div class="all pro-all">
+    <header class="header clear">
+        <a href="javascript:history.go(-1);" class="return fl"></a>
+        <h1 class="title">报修页面</h1>
+    </header>
+    @if (Model != null)
+    {
+        <input type="hidden" name="ammeterNumber" id="ammeterNumber" value="@Model.Number" />
+        <div class="list-index">
+            <div class="pro">
+                <span class="pro-li">表号：@Model.AM_Code</span>
+                <span class="pro-li">姓名：@Model.U_Name</span>
+                <span class="pro-li">手机号：@Model.UserName</span>
+                <span class="pro-li">区域：@Model.Province@Model.City@Model.County</span>
+                <span class="pro-li">地址：@Model.Address</span>
+                <span class="pro-li">单元：@Model.Cell 单元</span>
+                <span class="pro-li">楼层：@Model.Floor 层</span>
+                <span class="pro-li">房号：@Model.Room 号</span>
+                <div>
+                    <ul class="upload-ul clearfix">
+                        <li class="upload-pick">
+                            <div class="webuploader-container clear" id="goodsUpload"></div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="pro-explain btop mt10"><textarea id="explain" class="text-t" placeholder="说明："></textarea></div>
+            </div>
+            <a href="javascript:;" onclick="myfunction()" class="btn-all">提交</a>
+
+        </div>
+    }
+
+    
+</div>
+<script src="~/Content/Scripts/webuploader.min.js?j=1.2"></script>
+<script src="~/Content/Scripts/diyUpload.js?j=1"></script>
+<script>
+$(function(){
+	//上传图片
+	var $tgaUpload = $('#goodsUpload').diyUpload({
+	    url:'',
+	    success: function (data) {
+	        alert('上传成功');
+	    },
+	    error: function (err) {  },
+		buttonText : '',
+		accept: {
+			title: "Images",
+			extensions: 'gif,jpg,jpeg,bmp,png'
+		},
+		thumb: {
+		    width: 10000,
+            height:10000,
+			quality:100,
+			allowMagnify:false,
+			crop:false,
+			type: "image/jpeg",
+			fileNumLimit: 2
+		}
+	});
+
+});
+
+function myfunction() {
+    var _list = [];
+    $(".upload-ul img").each(function (i) {
+        var thisItem = $(this).attr("src");
+        _list.push({ name: 'imgList', value: thisItem });
+    })
+    console.log(_list);
+    _list.push({ name: 'ammeterNumber', value: $('#ammeterNumber').val() });
+    _list.push({ name: 'explain', value: $('#explain').val() });
+    $.ajax({
+        type: "POST",
+        url: "/Personal/RepairAdd",
+        traditional: true,
+        data: _list,
+        success: function (data) {
+            if (data.res == "Ok") {
+                layer.msg(data.msg, {time: 2000, end: function myfunction() {
+                        window.location.href = '@Url.Action("RepairRecord", "Personal")';
+                    }
+                });
+            } else {
+                layer.msg(data.msg, { time: 2000 });
+            }
+        },
+        error: function (data) {
+            layer.msg(data.msg, { time: 2000 });
+        }
+    });
+}
+</script>
+

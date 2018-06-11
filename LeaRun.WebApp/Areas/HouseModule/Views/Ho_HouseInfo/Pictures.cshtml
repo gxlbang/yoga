@@ -1,0 +1,259 @@
+﻿@{
+    ViewBag.Title = "图册管理";
+    Layout = "~/Views/Shared/_LayoutIndex.cshtml";
+}
+<style type="text/css">
+    .UserCard {
+        width: 114px;
+        height: 114px;
+        position: relative;
+    }
+
+        .UserCard a {
+            border: 1px solid #F0F0E8;
+            background-color: #FFF;
+            display: block;
+        }
+
+            .UserCard a:hover {
+                border: 2px solid #CD6600;
+                background-color: #333;
+                text-decoration: none;
+            }
+
+            .UserCard a span {
+                display: none;
+                text-align: center;
+                font-size: 18px;
+            }
+
+            .UserCard a:hover span {
+                color: #FFF;
+                display: block;
+                background-color: #333;
+                opacity: 0.5;
+                width: 100%;
+                position: absolute;
+                bottom: 0px;
+                left: 0px;
+                line-height: 40px;
+            }
+</style>
+<script type="text/javascript">
+    $(document).ready(function () {
+        GetTree();
+        GetGrid();
+        SwitchListAndView();
+    });
+    var HouseNumber = GetQuery('HouseNumber');//传递过来的楼盘编号
+    var GroupNumber = GetQuery('GroupNumber');
+    //加载左边树
+    function GetTree() {
+        var itemtree = {
+            onnodeclick: function (item) {
+                if (item.Type == "House") {
+                    GroupNumber = "";
+                    HouseNumber = item.id;
+                } else if (item.Type == "Group") {
+                    GroupNumber = item.id;
+                    HouseNumber = item.value;
+                    btn_Search();
+                }
+                $("#CenterTitle").html(" - " + item.text);
+            },
+            url: "/HouseModule/Ho_HouseInfo/TreeJson?Number=" + HouseNumber
+        };
+        $("#ItemsTree").treeview(itemtree);
+    }
+    //加载表格
+    function GetGrid() {
+        var SelectRowIndx;
+        $("#gridTable").jqGrid({
+            url: "@Url.Content("~/HouseModule/Ho_HouseInfo/GridPictureListJson")?Hnumber=" + HouseNumber + "&Gnumber=" + GroupNumber,
+            datatype: "json",
+            height: $(window).height() - 128,
+            autowidth: true,
+            colModel: [
+                { label: '主键', name: 'Number', index: 'Number', width: 80, align: 'left', hidden: true },
+                { label: '隐藏主图', name: 'ImageUrl', index: 'ImageUrl', width: 80, align: 'left', hidden: true },
+                {
+                    label: '主图', name: 'ImageUrl', index: 'ImageUrl', width: 60, align: 'left',
+                    formatter: function (cellvalue, options, rowObject) {
+                        if (cellvalue) {
+                            return "<div style='padding:1px;'><img src='" + cellvalue + "' width='48' height='48' /></div>";
+                        } else {
+                            return "<div style='padding:1px;'><img src='/Content/Images/noimg.gif' width='48' height='48'/></div>";
+                        }
+                    }
+                },
+                { label: '分组', name: 'GroupName', index: 'GroupName', width: 150, align: 'left' },
+                { label: '标题', name: 'ImageTitle', index: 'ImageTitle', width: 200, align: 'left' },
+                { label: '顺序', name: 'Orders', index: 'Orders', width: 80, align: 'center' },
+                { label: '说明', name: 'ImageDes', index: 'ImageDes', width: 500, align: 'left' }
+            ],
+            viewrecords: true,
+            rowNum: 30,
+            rowList: [30, 50, 100, 500, 1000],
+            pager: "#gridPager",
+            shrinkToFit: false,
+            gridview: true,
+            multiselect: true,
+            onSelectRow: function () {
+                SelectRowIndx = GetJqGridRowIndx("#" + this.Number);
+            },
+            gridComplete: function () {
+                LoadViewList();
+                $("#" + this.Number).jqGrid('setSelection', SelectRowIndx);
+            }
+        });
+        columnModelData("#gridTable");
+        //自应高度
+        $(window).resize(function () {
+            $("#gridTable").setGridHeight($(window).height() - 178);
+        });
+    }
+    //返回
+    function btn_Back() {
+        Urlhref("/HouseModule/Ho_HouseInfo/Index");
+    }
+    //搜索 - 不能删除,选择楼盘的时候要用
+    function btn_Search() {
+        var keywords = $("#keywords").val();
+        $("#gridTable").jqGrid('setGridParam', {
+            url: "@Url.Content("~/HouseModule/Ho_HouseInfo/GridPictureListJson")?Hnumber=" + HouseNumber + "&Gnumber=" + GroupNumber, page: 1
+    }).trigger('reloadGrid');
+    }
+    //新增
+    function btn_add() {
+        if (!!HouseNumber || !!GroupNumber) {
+            var url = "/HouseModule/Ho_HouseImage/UploadImageIndex?HouseNumber=" + HouseNumber + "&GroupNumber=" + GroupNumber
+            Dialog(url, "UploadImageIndex", "新增图册内容", 1000, 650);
+        } else {
+            alertDialog("请选择左边的图册", 0);
+        }
+    }
+    //编辑
+    function btn_edit() {
+        var KeyValue = GetJqGridRowValue("#gridTable", "Number");
+        if (IsChecked(KeyValue)) {
+            var url = "/HouseModule/Ho_HouseImage/Form?KeyValue=" + KeyValue;
+            openDialog(url, "Form", "编辑Ho_HouseImage", 770, 395, function (iframe) {
+                top.frames[iframe].AcceptClick();
+            });
+        }
+    }
+    //删除
+    function btn_delete() {
+        var KeyValue = GetJqGridRowValue("#gridTable", "Number");
+        if (IsDelData(KeyValue)) {
+            var delparm = 'KeyValue=' + KeyValue;
+            delConfig('/HouseModule/Ho_HouseImage/Delete', delparm, KeyValue.split(",").length);
+        }
+    }
+    //明细
+    function btn_detail() {
+        var KeyValue = GetJqGridRowValue("#gridTable", "Number");
+        if (IsChecked(KeyValue)) {
+            var url = "/HouseModule/Ho_HouseImage/Detail?KeyValue=" + KeyValue;
+            Dialog(url, "Detail", "Ho_HouseImage明细", 820, 500, function (iframe) {
+                top.frames[iframe].AcceptClick();
+            });
+        }
+    }
+    //刷新
+    //刷新
+    function windowload() {
+        $("#gridTable").trigger("reloadGrid"); //重新载入
+    }
+    /*视图begin=========================================================================*/
+    //切换到列表/视图
+    function SwitchListAndView() {
+        $('#grid_View').height($(window).height() - 78)
+        $('.switch-btns li').click(function () {
+            $('.switch-btns li').removeClass('selected');
+            $(this).addClass('selected');
+            if ($(this).attr('id') == 'li-switch-list') {
+                $(this).find('div').addClass('icon-btn-switch-list-select');
+                $("#li-switch-view").find('div').addClass('icon-btn-switch-view');
+                $("#li-switch-view").find('div').removeClass('icon-btn-switch-view-select');
+                $('#grid_List').show();
+                $('#grid_View').hide();
+            }
+            //显示视图
+            if ($(this).attr('id') == 'li-switch-view') {
+                $(this).find('div').addClass('icon-btn-switch-view-select');
+                $("#li-switch-list").find('div').addClass('icon-btn-switch-list');
+                $("#li-switch-list").find('div').removeClass('icon-btn-switch-list-select');
+                $('#grid_List').hide();
+                $('#grid_View').show();
+            }
+        })
+    }
+    //加载视图
+    function LoadViewList() {
+        var data = $("#gridTable").jqGrid("getRowData");
+        var html = "";
+        for (var i = 0; i < data.length; i++) {
+            html += ' <div class="UserCard" style="width:240px;height:240px;padding:1px;">';
+            html += '<a href="#" onclick="ViewImage(this)" ><span>' + data[i].ImageTitle + '</span>';
+            html += '<img style="width:100%;height:?" src="' + $(data[i].ImageUrl).find("img").attr("src") + '" /></a>'
+            html += '</div>'
+        }
+        $("#grid_View").html(html);
+    }
+    /*视图end=========================================================================*/
+    //打开图片查看器
+    function ViewImage(a) {
+        var title = $(a).find("span").text();
+        var image = $(a).find("img").attr("src");
+        if (IsChecked(image)) {
+            var url = "/SystemModule/Images/Index?Title=" + title + "&Image=" + image;
+            Dialog(url, "Image", title, 1000, 680, function (iframe) {
+                top.frames[iframe].AcceptClick();
+            });
+        }
+    }
+</script>
+<div id="layout" class="layout">
+    <!--左边-->
+    <div class="layoutPanel layout-west">
+        <div class="btnbartitle">
+            <div>
+                楼盘信息
+            </div>
+        </div>
+        <div class="ScrollBar" id="ItemsTree"></div>
+    </div>
+    <!--中间-->
+    <div class="layoutPanel layout-center">
+        <div class="btnbartitle">
+            <div>
+                图册管理 <span id="CenterTitle"></span>
+            </div>
+        </div>
+        <!--工具栏-->
+        <div class="tools_bar" style="border-top: none; margin-bottom: 0px;">
+            <div class="PartialButton">
+                @Html.Partial("_PartialButton")
+            </div>
+            <div style="padding-top: 6px; padding-right: 5px;">
+                <ul class="switch-btns" style="float: right;">
+                    <li id="li-switch-list" class="selected" style="border: 1px solid #ccc;" title="切换到列表视图">
+                        <div class="icon icon-btn-switch-list-select"></div>
+                    </li>
+                    <li id="li-switch-view" style="border: 1px solid #ccc; border-left: none;" title="切换到大图视图">
+                        <div class="icon icon-btn-switch-view"></div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!--列表-->
+        <div id="grid_List">
+            <table id="gridTable"></table>
+            <div id="gridPager"></div>
+        </div>
+        <!--视图-->
+        <div id="grid_View" class="ScrollBar">
+        </div>
+    </div>
+</div>

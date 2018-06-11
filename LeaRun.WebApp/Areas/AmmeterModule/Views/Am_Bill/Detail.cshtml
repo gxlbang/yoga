@@ -1,0 +1,133 @@
+@{
+    ViewBag.Title = "Am_Bill》明细页面";
+    Layout = "~/Views/Shared/_LayoutForm.cshtml";
+}
+<script type="text/javascript">
+    $(function () {
+        InitControl();
+    })
+    //得到一个对象实体
+    function InitControl() {
+        if (!!GetQuery('KeyValue')) {
+            AjaxJson("/AmmeterModule/Am_Bill/SetForm", { KeyValue: GetQuery('KeyValue') }, function (data) {
+                SetWebLable(data);
+            });
+            AjaxJson("/AmmeterModule/Am_Bill/GetBillContent", { KeyValue: GetQuery('KeyValue') }, function (data) {
+                $.each(data, function (i) {
+                    var tempstr = '<tr> <td class="formValue" style="text-align:center;">' + data[i].ChargeItem_Title + '</td>' +
+                '<td class="formValue" style="text-align:center;">' + data[i].Money + '</td>' +
+                '<td class="formValue">' + data[i].UMark + '</td></tr>';
+                    $("#billcontent").append(tempstr);
+                });
+            });
+        }
+    }
+</script>
+<form id="form1" style="margin: 1px">
+    <table class="form">
+        <tr><td colspan="4" style="text-align:center;font-weight:bold; font-size:16px;">账单信息</td></tr>
+    </table>
+    <table class="form">
+        <tr>
+            <th class='formTitle'>账单编号：</th>
+            <td class='formValue'>
+                <label id="BillCode" />
+            </td>
+            <th class='formTitle'>电表编号：</th>
+            <td class='formValue'>
+                <label id="AmmeterCode" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>运营商：</th>
+            <td class='formValue'>
+                <label id="F_UserName" />
+            </td>
+
+            <th class='formTitle'>运营商姓名：</th>
+            <td class='formValue'>
+                <label id="F_U_Name"  style="color:coral;font-weight:bold;" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>租户：</th>
+            <td class='formValue'>
+                <label id="T_UserName" />
+            </td>
+            <th class='formTitle'>租户姓名：</th>
+            <td class='formValue'>
+                <label id="T_U_Name" style="color:green;font-weight:bold;" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>状态：</th>
+            <td class='formValue'>
+                <label id="StatusStr" style="color:blue;font-weight:bold;" />
+            </td>
+            <th class='formTitle'>账单金额：</th>
+            <td class='formValue'>
+                <label id="Money" style="color:red;font-weight:bold;" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>滞纳金：</th>
+            <td class='formValue'>
+                <label id="OtherFees" />
+            </td>
+            <th class='formTitle'>账单日期：</th>
+            <td class='formValue'>
+                <label id="SendTime" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>支付时间：</th>
+            <td class='formValue'>
+                <label id="PayTime" />
+            </td>
+            <th class='formTitle'>省：</th>
+            <td class='formValue'>
+                <label id="Province" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>市：</th>
+            <td class='formValue'>
+                <label id="City" />
+            </td>
+            <th class='formTitle'>区：</th>
+            <td class='formValue'>
+                <label id="County" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>单元：</th>
+            <td class='formValue'>
+                <label id="Cell" />
+            </td>
+            <th class='formTitle'>楼层：</th>
+            <td class='formValue'>
+                <label id="Floor" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>房号：</th>
+            <td class='formValue'>
+                <label id="Room" />
+            </td>
+            <th class='formTitle'>地址：</th>
+            <td class='formValue'>
+                <label id="Address" />
+            </td>
+        </tr>
+    </table>
+    <table class="form">
+        <tr><td colspan="4" style="text-align:center;font-weight:bold; font-size:16px;">账单详情</td></tr>
+    </table>
+    <table class="form" id="billcontent">
+        <tr>
+            <th class='formTitle' style="width:30%;text-align:center;">收费项目</th>
+            <th class='formTitle' style="width:20%;text-align:center;">金额</th>
+            <th class='formTitle' style="width:50%;text-align:center;">说明</th>
+        </tr>
+    </table>
+</form>

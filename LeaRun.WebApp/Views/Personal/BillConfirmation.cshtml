@@ -1,0 +1,118 @@
+﻿@model LeaRun.Entity.Am_Bill
+@{
+    ViewBag.Title = "账单确认";
+    Layout = "~/Views/Shared/_Partial.cshtml";
+}
+@if (Model != null)
+{
+    <div class="all">
+        <header class="header clear">
+            <a href="javascript:history.go(-1);" class="return fl"></a>
+            <h1 class="title">账单确认</h1>
+        </header>
+        <div class="re-all bbot">
+            <span class="re-span"><span class="re-name">表号：</span>@Model.AmmeterCode</span>
+            <span class="re-span"><span class="re-name">账单号：</span>@Model.BillCode</span>
+            <span class="re-span"><span class="re-name">区域：</span>@Model.Province  @Model.City @Model.County</span>
+            <span class="re-span"><span class="re-name">地址：</span>@Model.Address @Model.Cell 单元 @Model.Floor 层 @Model.Room 号</span>
+            <span class="re-span"><span class="re-name">金额：</span>@Model.Money.Value.ToString("0.00")</span>
+        </div>
+        <div class="re-all clear">
+            <div class="re-fu fl clear">
+                <span class="l-ch fl">
+                    <input type="radio" id="checkbox-3-1"  checked="checked" class="btn-xuan" name="radio" value="0" />
+                    <label for="checkbox-3-1" class="checked" ></label>
+                    <span class="re-t">微信</span>
+                </span>
+
+            </div>
+            @*<div class="re-fu fl clear">
+                <span class="l-ch fl">
+                    <input type="radio" id="checkbox-3-2" checked="checked" class="btn-xuan" name="radio" value="1" />
+                    <label for="checkbox-3-2" ></label>
+                    <span class="re-t">余额</span>
+                </span>
+
+            </div>*@
+        </div>
+        <input type="hidden" id="number" name="number" value="@Model.Number " />
+        <a href="javascript:;" onclick="jsApiCall()" class="btn-all">确认支付</a>
+
+
+    </div>
+}
+
+<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script>
+
+    function jsApiCall() {
+        var jsonParm = '';
+        
+        var number = $("#number").val();
+        var type = $("input[name='radio']:checked").val();
+        var pwd = "";
+
+        if (type == 1) {
+            layer.prompt({
+                title: '',
+                formType: 1
+            }, function (pass,index) {
+                pwd = pass;
+                myfunction(number, type, pwd);
+            });
+
+        } else {
+            myfunction(number, type, pwd);
+        }
+    }
+    function myfunction(number, type, pwd) {
+        $.ajax({
+            type: "Post",
+            url: "/Personal/PayNewBill",
+            dataType: "json",
+            data: { number: number, type: type, pwd: pwd },
+            success: function (data) {
+                if (data.res == "Ok") {
+                    if (type==1) {
+                        layer.msg("支付成功", {
+                            time: 2000, end: function myfunction() {
+                                location.href = "/Personal/OldBill";
+                            }
+                        });
+                    }
+                    else {
+                        jsonParm = jQuery.parseJSON(data.json);
+                        WeixinJSBridge.invoke(
+                        'getBrandWCPayRequest',
+                         jsonParm,
+                            function (res) {
+                                WeixinJSBridge.log(res.err_msg);
+                                if (res.err_msg == "get_brand_wcpay_request:ok") {
+                                    layer.msg("支付成功", {
+                                        time: 2000, end: function myfunction() {
+                                            location.href = "/Personal/OldBill";
+                                        }
+                                    });
+
+
+                                } else {
+                                    if (res.err_msg == "get_brand_wcpay_request:cancel") {
+                                        layer.msg("支付取消", { time: 2000 });
+                                        return false;
+                                    } else {
+                                        layer.msg("支付失败", { time: 2000 });
+                                        return false;
+                                    }
+                                }
+                            }
+                        );
+                    }
+
+                }
+                else {
+                    layer.msg(data.msg, { time: 2000 });
+                }
+            }
+        });
+    }
+</script>

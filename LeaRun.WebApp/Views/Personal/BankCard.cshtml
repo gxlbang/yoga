@@ -1,0 +1,71 @@
+﻿@model LeaRun.Entity.Am_BankInfo
+@{
+    ViewBag.Title = "我的银行卡";
+    Layout = "~/Views/Shared/_Partial.cshtml";
+}
+
+<div class="all pro-all">
+    <header class="header clear">
+        <a href="javascript:history.go(-1);" class="return fl"></a>
+        <h1 class="title">我的银行卡</h1>
+    </header>
+    <div class="list-index">
+        <div class="pro my-card">
+            @if (Model != null && Model.Number != null)
+            {
+                <span class="my-span clear"><span class="my-left fl">银行卡号：</span>@Model.BankCode</span>
+                <span class="my-span clear"><span class="my-left fl">银行名称：</span>@Model.BankName</span>
+                <span class="my-span clear"><span class="my-left fl">用户姓名：</span>@Model.U_Name</span>
+                <div class="my-right">
+                    <a href="javascript:;" onclick="delBank('@Model.Number')" class="my-edti">删除</a>
+                    @*<a href="" class="my-edt my-gary">删除</a>*@
+                </div>
+            }else
+            {
+                <div>请绑定银行卡</div>
+            }
+
+
+        </div>
+    </div>
+    @if (Model==null || Model.Number == null)
+    {
+        <a href="/Personal/AddBandCard" class="btn-all btn-col">绑定银行卡</a>
+    }
+</div>
+<script src="~/Content/Scripts/layer.mobile-v2.0/layer_mobile/layer.js"></script>
+<script>
+    function delBank(number) {
+
+        layer.open({
+            content: '您是否确定要删除'
+              , btn: ['删除', '取消']
+              , skin: 'footer'
+              , yes: function (index) {
+                  $.post("/Personal/BandCardDel", { number: number }, function (data) {
+                      if (data.res == "Ok") {
+                          layer.open({ content: data.msg, skin: 'msg', time: 2 });
+                          location.reload();
+                          layer.close(index);
+                      } else {
+                          layer.open({ content: data.msg, skin: 'msg', time: 2 });
+                      }
+
+                  });
+
+
+              }
+        });
+
+
+        //layer.msg('您是否确定要删除？', {
+        //    time: 0 //不自动关闭
+        //  ,btn: ['删除', '取消']
+        //  ,yes: function(index){
+        //      //layer.close(index);
+        //      layer.msg('已删除', { time: 1000 });
+        //      location.reload();
+        //  }});
+    }
+</script>
+

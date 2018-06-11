@@ -1,0 +1,282 @@
+﻿@{
+    ViewBag.Title = "楼盘详情";
+    Layout = "~/Views/Shared/UiIndex.cshtml";
+}
+<link rel="stylesheet" href="~/Content/Styles/ui/swiper-0a42d0f7ef.min.css" />
+<link rel="stylesheet" href="~/Content/Styles/ui/index_v5-648855bc5b.css" />
+<script type="text/javascript" src="~/Content/Scripts/layer/layer.js"></script>
+<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script type="text/javascript">
+    var KeyValue = GetQuery('KeyValue');//主键
+    $(function () {
+        InitControl();
+    })
+    function arrayToJson(o) {
+        var r = [];
+        if (typeof o == "string") return "\"" + o.replace(/([\'\"\\])/g, "\\$1").replace(/(\n)/g, "\\n").replace(/(\r)/g, "\\r").replace(/(\t)/g, "\\t") + "\"";
+        if (typeof o == "object") {
+            if (!o.sort) {
+                for (var i in o)
+                    r.push(i + ":" + arrayToJson(o[i]));
+                if (!!document.all && !/^\n?function\s*toString\(\)\s*\{\n?\s*\[native code\]\n?\s*\}\n?\s*$/.test(o.toString)) {
+                    r.push("toString:" + o.toString.toString());
+                }
+                r = "{" + r.join() + "}";
+            } else {
+                for (var i = 0; i < o.length; i++) {
+                    r.push(arrayToJson(o[i]));
+                }
+                r = "[" + r.join() + "]";
+            }
+            return r;
+        }
+        return o.toString();
+    }
+    //这个是调用微信图片浏览器的函数
+    function imagePreview(curSrc, srcList) {
+        if (!curSrc || !srcList || srcList.length == 0) {
+            return;
+        }
+        WeixinJSBridge.invoke('imagePreview', {
+            'current': curSrc,
+            'urls': srcList
+        });
+    };
+    //得到一个对象实体
+    function InitControl() {
+        if (!!GetQuery('KeyValue')) {
+            AjaxJson("/Ui/GetHouse", { KeyValue: KeyValue }, function (data) {
+                SetWebLable(data);
+                $("#StartTime").text(formatDate(data.StartTime, "yyyy-MM-dd"));
+                $("#GiveTime").text(formatDate(data.GiveTime, "yyyy-MM-dd"));
+                if (IsNullOrEmpty(decodeURIComponent(data.HouseContent))) {
+                    $("#housecontent").html(decodeURIComponent(data.HouseContent));
+                }
+                if (!!data.Video && data.Video.length > 0 && data.Video != '&nbsp;') {
+
+                    $("#VideoStr").html(data.Video);
+                } else {
+                    $("#VideoStr img").attr("src", data.img);
+                }
+                //alert(data.DesignImage);
+                var imgstr = '<ul class="swiper-wrapper list-subject clear">';
+                if (IsNullOrEmpty(data.DesignImage)) {
+                    imgstr += '<li class="swiper-slide fl">' +
+                    '<a href="#" onclick="OpenImages(0)">' +
+                    '<img class="ware-img" src="' + data.DesignImage + '" alt="" id="i-Image0" />' +
+                    '<span class="de-span">效果图册</span>' +
+                    '</a></li>';
+                }
+               
+                if (IsNullOrEmpty(data.RealImage)) {
+                    imgstr += '<li class="swiper-slide fl">' +
+                    '<a href="#" onclick="OpenImages(1)">' +
+                    '<img class="ware-img" src="' + data.RealImage + '" alt="" id="i-Image1" />' +
+                    '<span class="de-span">实景图册</span>' +
+                    '</a></li>';
+                }
+                if (IsNullOrEmpty(data.HouseImage)) {
+                    imgstr += '<li class="swiper-slide fl">' +
+                    '<a href="#" onclick="OpenImages(2)">' +
+                    '<img class="ware-img" src="' + data.HouseImage + '" alt="" id="i-Image2" />' +
+                    '<span class="de-span">样板图册</span>' +
+                    '</a></li>';
+                }
+                if (IsNullOrEmpty(data.HouseTypeImage)) {
+                    imgstr += '<li class="swiper-slide fl">' +
+                    '<a href="#" onclick="OpenImages(3)">' +
+                    '<img class="ware-img" src="' + data.HouseTypeImage + '" alt="" id="i-Image3" />' +
+                    '<span class="de-span">户型图册</span>' +
+                    '</a></li>';
+                }
+                imgstr += '</ul>';
+                $("#nav-swiper-container").html(imgstr);
+                if (IsNullOrEmpty(data.Certificate)) {
+                    var imgstr1 = '<h3 class="de-tit">开发商授权书</h3>' +
+                    '<div class="de-all">' +
+                    '<img src="' + data.Certificate + '" alt="" id="Certificatestr" />' +
+                    '</div>';
+                    $("#Certificatestrimg").html(imgstr1);
+                } else {
+                    $("#Certificatestrimg").hide();
+                }
+            });
+        }
+    }
+    function IsNullOrEmpty(str) {
+        var isOK = true;
+        if (str == undefined || str == "" || str == 'null'||str=='&nbsp;') {
+            isOK = false;
+        }
+        return isOK;
+    }
+    function OpenImages(g) {
+        var strs = ['5f69b268-504e-44f8-950b-dfda8e00ee19', 'bc4a267a-3404-4e2e-9053-a0788bd53789',
+            'b8af3e9b-aea0-4618-9f66-67987b081731', 'e6b2a2ee-9744-4902-9ad1-d29b06c883ab'];
+        var KeyValue = GetQuery('KeyValue');  
+        if (!!GetQuery('KeyValue')) {
+            AjaxJson("/Ui/GetImagesList?GroupNumber=" + strs[g], { KeyValue: KeyValue }, function (data) {
+                var src = [];
+                for (var i = 0; i < data.length; i++) {
+                    src[i] = RootPath()+data[i];
+                }
+                var srclist = arrayToJson(src);
+                imagePreview($("#i-Image" + g).attr("src"), srclist);
+            });
+        }
+    }
+    //js获取网站根路径(站点及虚拟目录)
+    function RootPath() {
+        var strFullPath = window.document.location.href;
+        var strPath = window.document.location.pathname;
+        var pos = strFullPath.indexOf(strPath);
+        var prePath = strFullPath.substring(0, pos);
+        var postPath = strPath.substring(0, strPath.substr(1).indexOf('/') + 1);
+        //return (prePath + postPath);如果发布IIS，有虚假目录用用这句
+        return (prePath);
+    }
+    function SellerOk() {
+        layer.msg('确定要代理此业务么?', {
+            time: 20000, //20s后自动关闭
+            btn: ['确定', '点错啦']
+        , yes: function (index) {
+            layer.close(index);
+            var KeyValue = GetQuery('KeyValue');
+            if (!!KeyValue) {
+                AjaxJson("/Ui/SetMyHouseList", { KeyValue: KeyValue }, function (data) {
+                    layer.msg(data.Message);
+                    if (data.Code == 1 || data.Code == "1") {
+                        Urlhref("/Ui/Center");
+                    } else if (data.Code == 9 || data.Code == "9") {
+                        Urlhref("/Ui/Information");
+                    }
+                })
+            }
+        }
+        });
+    }
+</script>
+<div class="main-list">
+    <div class="img-main"><div id="VideoStr"><img src="/Content/UiImages/img.png" alt="" /></div></div>
+    <div class="details-text">
+        <h3 class="main-tit main-titwo">楼盘名称：<label id="Name"></label></h3>
+        <div class="li-text li-add clear"><span class="li-two fr">均价<em class="li-co"><label id="Money"></label>元/㎡</em></span>
+       <span class="li-two fr">佣金<em class="li-co"><label id="CommissionMoney"></label>元/㎡</em></span>
+       <span class="li-one li-th fl">项目地址：<label id="Address"></label></span></div>
+    </div>
+</div>
+<div class="cd-header">
+    <a href="#0" class="cd-3d-nav-trigger"><span class="zhan">展开</span><b class="de-down"></b></a>
+    <div class="container">
+        <div class="down-all btop">
+            <span class="down-con">开发商：<label id="Developers"></label></span>
+            <span class="down-con">开盘时间：<label id="StartTime"></label></span>
+            <span class="down-con">交房时间：<label id="GiveTime"></label></span>
+            <span class="down-con">产权年限：<label id="PropertyRight"></label></span>
+        </div>
+        <div class="down-all btop">
+            <span class="down-con">建筑物类型：<label id="HouseType"></label></span>
+            <span class="down-con">容积率：<label id="VolumeRate"></label></span>
+            <span class="down-con">绿化率：<label id="Green"></label></span>
+            <span class="down-con">工程进度：<label id="HouseNow"></label></span>
+            <span class="down-con">物业公司：<label id="Manager"></label></span>
+        </div>
+    </div>
+    <a href="#0" class="cd-3d-nav-trigger none"><span class="zhan">收起</span><b class="de-down"></b></a>
+</div>
+<div class="de-img mt20">
+    <div class="bd swiper-container" id="nav-swiper-container">
+    </div>
+</div>
+<div class="de-shuo mt20" id="Certificatestrimg">
+    @*<h3 class="de-tit">开发商授权书</h3>
+        <div class="de-all"><img src="/Content/UiImages/zheng.png" alt="" id="Certificatestr" /></div>*@
+</div>
+<div class="de-shuo mt20" id="housecontent">
+</div>
+<footer class="foot mt20">
+    <a href="#" onclick="SellerOk()" class="foot-btn">我要代售</a>
+</footer>
+<script type="text/javascript" charset="utf-8" src="~/Content/Scripts/uijs/zepto-8d18ef22b2.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="~/Content/Scripts/uijs/M-615bf5f31a.js"></script>
+<script src="~/Content/Scripts/uijs/idangerous-69cdef4e7c.swiper-3.0.6.min.js"></script>
+<script>
+    ({
+        init: function () {
+            M.opt.lazyload();
+            this.initSwiper();
+            this.initEvent();
+        },
+        initSwiper: function () {
+            var bannerSwiper = new Swiper('#banner-swiper-container', {
+                direction: 'horizontal',
+                pagination: '.swiper-pagination',
+                autoplay: 3000,
+                speed: 500,
+            });
+            var navSwiper = new Swiper('#nav-swiper-container', {
+                slidesPerView: "auto"
+            });
+        },
+        initEvent: function () {
+            var $container = $('.lay-4'),
+            offset = 10,
+            limit = 10,
+            is_loading = false,
+            has_more = true;
+            var $loading = $('<div class="loading">正在加载...</div>');
+            var filterDate = (function () {
+                var dateArr = [],
+                $date = $('.art-block time');
+                $date.each(function () { dateArr.push($(this).text()) });
+                return function (h) {
+                    var $h = $(h);
+                    $h.find('time').each(function () {
+                        var $this = $(this),
+                        text = $(this).text();
+                        if ($.inArray(text, dateArr) !== -1) {
+                            $this.parent().addClass('hidden');
+                        } else {
+                            dateArr.push(text);
+                        }
+                    });
+                    return $h;
+                }
+            })();
+            function isSlideToBottom() {
+                var docHeight = $(document).height(),
+                windowHeight = $(window).height(),
+                windowScrollTop = $(window).scrollTop();
+                return (windowScrollTop + windowHeight > docHeight - 20)
+            }
+            function loadMore() {
+                if (!isSlideToBottom() || is_loading || !has_more) {
+                    return false;
+                }
+                is_loading = true;
+                $container.append($loading);
+                $.get(M.url.setParam('t', +new Date(), url))
+                .done(function (o) {
+                    if (o.ret == 0) {
+                        var $pureData = filterDate(o.html);
+                        $container.find('.loading').remove('.loading');
+                        $container.append($pureData);
+                        offset += 10;
+                        has_more = o.has_more;
+                        M.opt.lazyload();
+                    }
+                    else {
+                        M.layer.msg({ content: o.msg, btn: ['确定'] });
+                    }
+                }).always(function () {
+                    is_loading = false;
+                    $container.find('.loading').remove('.loading');
+                })
+            };
+            $(window).on('scroll', loadMore);
+            $('body').on('click', '.btn-more', function () {
+                $(this).hide().parents('.ware-bd').find('.ware-item').removeClass('hidden');
+            });
+        }
+    }).init()
+</script>

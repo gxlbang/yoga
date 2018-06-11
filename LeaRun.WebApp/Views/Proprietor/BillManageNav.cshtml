@@ -1,0 +1,17 @@
+﻿@{
+    ViewBag.Title = "房屋账单管理";
+    Layout = "~/Views/Shared/_Partial.cshtml";
+}
+
+<div class="all">
+    <header class="header clear">
+        <a href="javascript:history.go(-1);" class="return fl"></a>
+        <h1 class="title">房屋账单管理</h1>
+    </header>
+    <div class="bill-all">
+        @*<a href="/Proprietor/TemplateList" class="repair bbot clear"><span class="bill-text m-man fl">收费项管理</span><i class="icon-next fr"></i></a>*@
+        <a href="/Proprietor/Billing" class="repair bbot clear"><span class="bill-text m-man fl">出账账单管理</span><i class="icon-next fr"></i></a>
+        <a href="/Proprietor/HistoricalBillNav" class="repair bbot clear"><span class="bill-text m-man fl">历史账单明细</span><i class="icon-next fr"></i></a>
+        <a href="billing-statistics.html" class="repair bbot clear"><span class="bill-text m-man fl">账单统计</span><i class="icon-next fr"></i></a>
+    </div>
+</div>

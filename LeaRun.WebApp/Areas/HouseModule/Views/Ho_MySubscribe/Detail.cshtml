@@ -1,0 +1,124 @@
+@{
+    ViewBag.Title = "我的预约》明细页面";
+    Layout = "~/Views/Shared/_LayoutForm.cshtml";
+}
+<script type="text/javascript">
+    $(function () {
+        InitControl();
+    })
+    //得到一个对象实体
+    function InitControl() {
+        if (!!GetQuery('KeyValue')) {
+            AjaxJson("/HouseModule/Ho_MySubscribe/SetForm", { KeyValue: GetQuery('KeyValue') }, function (data) {
+                SetWebHtmlValue(data);
+            });
+        }
+    }
+</script>
+<form id="form1" style="margin: 1px">
+    <div id="message" style="display: none"></div>
+    <table class="form">
+        <tr><td colspan="4" style="text-align:center;font-weight:bold; font-size:16px;">合伙人信息</td></tr>
+    </table>
+    <table class="form">
+        <tbody>
+            <tr>
+                <th class='formTitle'>合伙人：</th>
+                <td class='formValue'>
+                    <label id="UName" />
+                </td>
+                <th class='formTitle'>合伙人编号：</th>
+                <td class='formValue'>
+                    <label id="UCode" />
+                </td>
+            </tr>
+            <tr>
+                <th class='formTitle'>联系电话：</th>
+                <td class='formValue'>
+                    <label id="UMobile" />
+                </td>
+                <th class='formTitle'>身份证号：</th>
+                <td class='formValue'>
+                    <label id="UCardCode" />
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="form">
+        <tr><td colspan="4" style="text-align:center;font-weight:bold; font-size:16px;">预约信息</td></tr>
+    </table>
+    <table class="form">
+        <tr>
+            <th class='formTitle'>楼盘名称：</th>
+            <td class='formValue'>
+                <label id="HName" />
+            </td>
+            <th class='formTitle'>人数：</th>
+            <td class='formValue'>
+                <label id="PeopleNum" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>预约时间：</th>
+            <td class='formValue'>
+                <label id="MYTime" />
+            </td>
+            <th class='formTitle'>预约提交时间：</th>
+            <td class='formValue'>
+                <label id="CreateTime" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>行程安排：</th>
+            <td class='formValue'>
+                <label id="CarOrBus" />
+            </td>
+            <th class='formTitle'>状态字符：</th>
+            <td class='formValue'>
+                <label id="StatusStr" style="color:red; font-weight:bold;" />
+            </td>
+        </tr>
+    </table>
+    <table class="form">
+        <tr><td colspan="4" style="text-align:center;font-weight:bold; font-size:16px;">接待信息</td></tr>
+    </table>
+    <table class="form">
+        <tr>
+            <th class='formTitle'>接待地点：</th>
+            <td class='formValue'>
+                <label id="Address" />
+            </td>
+            <th class='formTitle'>接待人：</th>
+            <td class='formValue'>
+                <label id="Reception" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>接待人电话：</th>
+            <td class='formValue'>
+                <label id="ReMobile" />
+            </td>
+            <th class='formTitle'>车型：</th>
+            <td class='formValue'>
+                <label id="CarType" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>车牌号：</th>
+            <td class='formValue'>
+                <label id="CarNumer" />
+            </td>
+            <th class='formTitle'>车颜色：</th>
+            <td class='formValue'>
+                <label id="CarColor" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>备注：</th>
+            <td class='formValue' colspan="3">
+                <textarea id="Remark" name="Remark" maxlength="600" class="txtArea" rows="7"></textarea>
+            </td>
+        </tr>
+        <tr></tr>
+    </table>
+</form>

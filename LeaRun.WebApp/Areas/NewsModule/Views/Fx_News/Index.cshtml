@@ -1,0 +1,195 @@
+@{
+    ViewBag.Title = "Fx_News";
+    Layout = "~/Views/Shared/_LayoutIndex.cshtml";
+}
+<script type="text/javascript">
+    $(function () {
+        GetTree();
+        GetGrid();
+    })
+    var PNumber = "", PName = "";
+    //加载左边树
+    function GetTree() {
+        var itemtree = {
+            onnodeclick: function (item) {
+                PNumber = item.id;
+                PName = item.text;
+                btn_Search();
+                $("#CenterTitle").html(" - " + item.text);
+            },
+            url: "/NewsModule/Fx_NewsClass/TreeJson"
+        };
+        $("#ItemsTree").treeview(itemtree);
+    }
+    //加载表格
+    function GetGrid() {
+        $("#gridTable").jqGrid({
+            url: "@Url.Content("~/NewsModule/Fx_News/GridPageJson")",
+            datatype: "json",
+            height: $(window).height() - 149,
+            autowidth: true,
+            colModel: [
+                    { label: 'Number', name: 'Number', index: 'Number', width: 0, align: 'left', hidden: true },
+                    { label: 'NewsClassNumber', name: 'NewsClassNumber', index: 'NewsClassNumber', width: 0, align: 'left', hidden: true },
+                    {
+                        label: '主图', name: 'NewsPic', index: 'NewsPic', width: 60, align: 'left',
+                        formatter: function (cellvalue, options, rowObject) {
+                            if (cellvalue) {
+                                return "<div style='padding:1px;'><img src='" + cellvalue + "' width='48' height='48' /></div>";
+                            } else {
+                                return "<div style='padding:1px;'><img src='/Content/Images/noimg.gif' width='48' height='48'/></div>";
+                            }
+                        }
+                    },
+                    { label: '标题', name: 'NewsName', index: 'NewsName', width: 450, align: 'left' },
+                    { label: '栏目', name: 'NewsClassName', index: 'NewsClassName', width: 120, align: 'left' },
+                    {
+                        label: '是否首页', name: 'IsFirst', index: 'IsFirst', width: 60, align: 'left',
+                        formatter: function (cellvalue, options, rowObject) {
+                            if (cellvalue == '1') return "<img src='/Content/Images/checkokmark.gif'/>";
+                            if (cellvalue == '0') return "<img src='/Content/Images/checknomark.gif'/>";
+                        }
+                    },
+                    {
+                        label: '是否热点', name: 'IsHot', index: 'IsHot', width: 60, align: 'left',
+                        formatter: function (cellvalue, options, rowObject) {
+                            if (cellvalue == '1') return "<img src='/Content/Images/checkokmark.gif'/>";
+                            if (cellvalue == '0') return "<img src='/Content/Images/checknomark.gif'/>";
+                        }
+                    },
+                    {
+                        label: '是否推荐', name: 'IsRec', index: 'IsRec', width: 60, align: 'left',
+                        formatter: function (cellvalue, options, rowObject) {
+                            if (cellvalue == '1') return "<img src='/Content/Images/checkokmark.gif'/>";
+                            if (cellvalue == '0') return "<img src='/Content/Images/checknomark.gif'/>";
+                        }
+                    },
+                    { label: '排序', name: 'NewsOrder', index: 'NewsOrder', width: 60, align: 'left' },
+                    { label: '点击量', name: 'NewsHit', index: 'NewsHit', width: 60, align: 'left' },
+                    { label: '发布时间', name: 'CreateTime', index: 'CreateTime', width: 150, align: 'left' },
+                    { label: '状态', name: 'StatusStr', index: 'StatusStr', width: 100, align: 'left' }
+            ],
+            pager: "#gridPager",
+            sortname: 'CreateTime',
+            sortorder: 'desc',
+            rownumbers: true,
+            shrinkToFit: false,
+            gridview: true,
+        });
+    }
+    //新增
+    function btn_add() {
+        if (!!PNumber || !!PName || PNumber != "0") {
+            var url = "/NewsModule/Fx_News/Form?PNumber=" + PNumber;
+            openDialog(url, "Form", "新增", 1000, 550, function (iframe) {
+                top.frames[iframe].AcceptClick()
+            });
+        } else {
+            alertDialog("请选择左边的栏目", 0);
+        }
+    }
+    //编辑
+    function btn_edit() {
+        var KeyValue = GetJqGridRowValue("#gridTable", "Number");
+        if (IsChecked(KeyValue)) {
+            var url = "/NewsModule/Fx_News/Form?KeyValue=" + KeyValue;
+            openDialog(url, "Form", "编辑", 1000, 550, function (iframe) {
+                top.frames[iframe].AcceptClick();
+            });
+        }
+    }
+    //删除
+    function btn_delete() {
+        var KeyValue = GetJqGridRowValue("#gridTable", "Number");
+        if (IsDelData(KeyValue)) {
+            var delparm = 'KeyValue=' + KeyValue;
+            delConfig('/NewsModule/Fx_News/Delete', delparm, KeyValue.split(",").length);
+        }
+    }
+    //明细
+    function btn_detail() {
+        var KeyValue = GetJqGridRowValue("#gridTable", "Number");
+        if (IsChecked(KeyValue)) {
+            var url = "/NewsModule/Fx_News/Detail?KeyValue=" + KeyValue;
+            Dialog(url, "Detail", "明细", 1000, 550, function (iframe) {
+                top.frames[iframe].AcceptClick();
+            });
+        }
+    }
+    //热点设置
+    function btn_modify(p) {
+        var KeyValue = GetJqGridRowValue("#gridTable", "Number");
+        if (IsChecked(KeyValue)) {
+            confirmDialog("提示", "是否要设置此数据", function (r) {
+                if (r) {
+                    Loading(true, "正在设置数据...");
+                    var url = "/NewsModule/Fx_News/SetHot?Number=" + KeyValue;
+                    var postData = 'P=' + p;
+                    AjaxJson(url, postData, function (data) {
+                        tipDialog(data.Message, 3, data.Code);
+                        if (data.Code > 0) {
+                            windowload();
+                        }
+                    });
+                }
+            })
+        }
+    }
+    //刷新
+    function windowload() {
+        $("#gridTable").trigger("reloadGrid"); //重新载入
+
+    }
+    //搜索
+    function btn_Search() {
+        var keywords = $("#keywords").val();
+        $("#gridTable").jqGrid('setGridParam', {
+            url: "@Url.Content("~/NewsModule/Fx_News/GridPageListJson")?Keyword=" + keywords + "&Number=" + PNumber, page: 1
+        }).trigger('reloadGrid');
+    }
+</script>
+<div id="layout" class="layout">
+    <!--左边-->
+    <div class="layoutPanel layout-west">
+        <div class="btnbartitle">
+            <div>
+                栏目结构
+            </div>
+        </div>
+        <div class="ScrollBar" id="ItemsTree"></div>
+    </div>
+    <!--中间-->
+    <div class="layoutPanel layout-center">
+        <div class="btnbartitle">
+            <div>
+                资讯列表 <span id="CenterTitle"></span>
+            </div>
+        </div>
+        <!--工具栏-->
+        <div class="tools_bar" style="border-top: none; margin-bottom: 0px;">
+            <div class="PartialButton">
+                @Html.Partial("_PartialButton")
+            </div>
+        </div>
+        <!--列表-->
+        <div id="grid_List">
+            <div class="bottomline QueryArea" style="margin: 1px; margin-top: 0px; margin-bottom: 0px;">
+                <table border="0" class="form-find" style="height: 45px;">
+                    <tr>
+                        <th>
+                            关键字：
+                        </th>
+                        <td>
+                            <input id="keywords" type="text" class="txt" style="width: 200px" />
+                        </td>
+                        <td>
+                            <input id="btnSearch" type="button" class="btnSearch" value="搜 索" onclick="btn_Search()" />
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <table id="gridTable"></table>
+            <div id="gridPager"></div>
+        </div>
+    </div>
+</div>

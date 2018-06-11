@@ -1,0 +1,67 @@
+﻿@model LeaRun.Entity.Am_Bill
+@{
+    ViewBag.Title = "账单详情";
+    Layout = "~/Views/Shared/_Partial.cshtml";
+}
+
+<div class="all pro-all">
+    <header class="header clear">
+        <a href="javascript:history.go(-1);" class="return fl"></a>
+        <h1 class="title">我的账单详情</h1>
+    </header>
+    @if(Model != null && Model.Number != null)
+    {
+        <div class="list-index">
+            <div class="pro">
+                <span class="pro-li">账单号：@Model.BillCode</span>
+                <span class="pro-li">表号：@Model.AmmeterCode</span>
+                <span class="pro-li">姓名：@Model.T_U_Name</span>
+                <span class="pro-li">手机号：@Model.T_UserName</span>
+                <span class="pro-li">区域：@Model.Province @Model.City @Model.County</span>
+                <span class="pro-li">地址：@(Model.Address)单元</span>
+                <span class="pro-li">单元：@(Model.Cell)单元</span>
+                <span class="pro-li">楼层：@(Model.Floor)层</span>
+                <span class="pro-li">房号：@(Model.Room)号</span>
+                <span class="pro-li">账号状态：@Model.StatusStr</span>
+                <span class="pro-li">账单出账时间：@Model.SendTime.Value.ToString("yyyy-MM-dd HH:mm:ss")</span>
+            </div>
+            <div class="pro mt15">
+                <div class="pro-explain pro-tit bbot">账单明细</div>
+                <div class="op-litwo op-lione clear">
+                    @if(ViewBag.content != null)
+                    {
+                        var list = ViewBag.content as List<LeaRun.Entity.Am_BillContent>;
+                        foreach (var item in list)
+                        {
+                            <span class="op-sshow his-show fl">@item.ChargeItem_Title：@item.Money.Value.ToString("0.00") 元</span>
+                        }
+
+                    }
+                </div>
+                @*<div class="op-litwo op-lione clear">
+                    <span class="op-sshow his-show fl">租金：2000.00元</span>
+                    <span class="op-sshow his-show fl">押金：1000.00元</span>
+                    </div>
+                    <div class="op-litwo op-lione clear">
+                    <span class="op-sshow his-show fl">物业费：100.00元</span>
+                    <span class="op-sshow his-show fl">水费：50.00元</span>
+                    </div>*@
+
+
+                <div class="op-litwo op-lione his-b clear">
+                    <span class="op-sshow his-show fl">滞纳金：@Model.OtherFees.Value.ToString("0.00") 元</span>
+                </div>
+                <div class="op-litwo his-all btop"><span class="op-sshow">合计：@Model.Money.Value.ToString("0.00") 元</span></div>
+            </div>
+            <div class="pro mt15">
+                <div class="pro-explain pro-tit bbot">备注</div>
+                <div class="pro-explain">
+                    <p>@Model.Remark</p>
+                </div>
+            </div>
+            <a href="/Personal/BillConfirmation?number=@Model.Number" class="btn-all">支付</a>
+            @*<a href="" class="btn-all btn-li">历史账单查询</a>*@
+        </div>
+    }
+
+</div>

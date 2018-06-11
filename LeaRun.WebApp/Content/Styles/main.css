@@ -1,0 +1,22 @@
+
+
+#wrapper { background: white url(/Content/UiImages/testimages/sidebar_bg.jpg) repeat-y top right; }
+
+#content { }
+  #content h1 { font-size: 2.4em; font-weight: normal; line-height: 32px; margin: 5px 0 10px 0; }
+  #content p { font-size: 1.4em; line-height: 22px; margin-bottom: 10px; }
+  
+  /* relevant for the tutorial - start */
+  #gallery { position: relative; }
+    #pictures { position: relative; height: 208px; }
+    #pictures img { position: absolute; top: 0; left: 0; }
+    
+    #prev, #next { font-size: 2.0em; }
+  /* relevant for the tutorial - end */
+  
+#footer { text-align: center; margin: 50px 0 20px 0; }
+
+#sidebar { }
+  #sidebar ul { margin-top: 20px; }
+  #sidebar ul li { font-size: 1.2em; padding: 20px 0 20px 0; border-bottom: 1px solid #dddcdc; line-height: 18px; }
+  #sidebar ul li h2 { font-size: 1.2em; margin-bottom: 8px; }

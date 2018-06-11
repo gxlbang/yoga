@@ -1,0 +1,238 @@
+@{
+    ViewBag.Title = "Am_Repair》明细页面";
+    Layout = "~/Views/Shared/_LayoutForm.cshtml";
+}
+<link rel="stylesheet" type="text/css" media="screen" href="~/Content/Styles/960.css?j=1237" />
+<link rel="stylesheet" type="text/css" media="screen" href="~/Content/Styles/main.css?j=989" />
+@*<script type="text/javascript" src="~/Content/Scripts/image/demo.js"></script>*@
+
+<form id="form1" style="margin: 1px">
+    <table class="form">
+        <tr><td colspan="4" style="text-align:center;font-weight:bold; font-size:16px;">报修信息</td></tr>
+    </table>
+    <table class="form">
+        <tr>
+            <th class='formTitle'>报修编号：</th>
+            <td class='formValue'>
+                <label id="RepairCode" />
+            </td>
+            <th width="10"></th>
+            <td class='formValue' rowspan="11">
+                <div class="container_12" id="wrapper">
+                    <div class="grid_8" id="content">
+
+                        <!-- relevant for the tutorial - start -->
+                        <div class="grid_6" id="gallery">
+                            <div id="pictures">
+                            </div>
+
+                            <div class="grid_3 alpha" id="prev">
+                                <a href="#previous">&laquo; 上一张</a>
+                            </div>
+                            <div class="grid_3 omega" id="next">
+                                <a href="#next">下一张 &raquo;</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>租户：</th>
+            <td class='formValue'>
+                <label id="UserName" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>租户姓名：</th>
+            <td class='formValue'>
+                <label id="U_Name" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>业主：</th>
+            <td class='formValue'>
+                <label id="F_UserName" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>业主姓名：</th>
+            <td class='formValue'>
+                <label id="F_Name" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>省：</th>
+            <td class='formValue'>
+                <label id="Province" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>市：</th>
+            <td class='formValue'>
+                <label id="City" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>区：</th>
+            <td class='formValue'>
+                <label id="County" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>单元：</th>
+            <td class='formValue'>
+                <label id="Cell" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>楼层：</th>
+            <td class='formValue'>
+                <label id="Floor" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>房号：</th>
+            <td class='formValue'>
+                <label id="Room" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>地址：</th>
+            <td class='formValue' colspan="3">
+                <label id="Address" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>状态：</th>
+            <td class='formValue' colspan="3">
+                <label id="StatusStr" style="color:blue;font-weight:bold;" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>报修时间：</th>
+            <td class='formValue' colspan="3">
+                <label id="CreateTime" style="color:red;font-weight:bold;" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>报修内容：</th>
+            <td class='formValue' colspan="3">
+                <textarea id="RContent" name="RContent" maxlength="200" class="txtArea" rows="4"></textarea>
+            </td>
+        </tr>
+    </table>
+    <table class="form">
+        <tr><td colspan="4" style="text-align:center;font-weight:bold; font-size:16px;">报修处理</td></tr>
+    </table>
+    <table class="form">
+        <tr>
+            <th class='formTitle'>维修师傅：</th>
+            <td class='formValue'>
+                <label id="AUserName" />
+            </td>
+            <th class='formTitle'>维修师傅姓名：</th>
+            <td class='formValue'>
+                <label id="AU_Name" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>联系电话：</th>
+            <td class='formValue'>
+                <label id="AMobile" />
+            </td>
+            <th class='formTitle'>派单时间：</th>
+            <td class='formValue'>
+                <label id="ACreateTime" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>处理内容：</th>
+            <td class='formValue' colspan="3">
+                <textarea id="AContent" name="AContent" maxlength="200" class="txtArea" rows="4"></textarea>
+            </td>
+        </tr>
+    </table>
+</form>
+<script type="text/javascript">
+    $(function () {
+        InitControl();
+        var z = 0; //for setting the initial z-index's
+        var inAnimation = false; //flag for testing if we are in a animation
+
+        $('#pictures img').each(function () { //set the initial z-index's
+            z++; //at the end we have the highest z-index value stored in the z variable
+            $(this).css('z-index', z); //apply increased z-index to <img>
+        });
+
+        function swapFirstLast(isFirst) {
+            if (inAnimation) return false; //if already swapping pictures just return
+            else inAnimation = true; //set the flag that we process a image
+
+            var processZindex, direction, newZindex, inDeCrease; //change for previous or next image
+
+            if (isFirst) { processZindex = z; direction = '-'; newZindex = 1; inDeCrease = 1; } //set variables for "next" action
+            else { processZindex = 1; direction = ''; newZindex = z; inDeCrease = -1; } //set variables for "previous" action
+
+            $('#pictures img').each(function () { //process each image
+                if ($(this).css('z-index') == processZindex) { //if its the image we need to process
+                    $(this).animate({ 'top': direction + $(this).height() + 'px' }, 'slow', function () { //animate the img above/under the gallery (assuming all pictures are equal height)
+                        $(this).css('z-index', newZindex) //set new z-index
+                          .animate({ 'top': '0' }, 'slow', function () { //animate the image back to its original position
+                              inAnimation = false; //reset the flag
+                          });
+                    });
+                } else { //not the image we need to process, only in/de-crease z-index
+                    $(this).animate({ 'top': '0' }, 'slow', function () { //make sure to wait swapping the z-index when image is above/under the gallery
+                        $(this).css('z-index', parseInt($(this).css('z-index')) + inDeCrease); //in/de-crease the z-index by one
+                    });
+                }
+            });
+
+            return false; //don't follow the clicked link
+        }
+
+        $('#next a').click(function () {
+            return swapFirstLast(true); //swap first image to last position
+        });
+
+        $('#prev a').click(function () {
+            return swapFirstLast(false); //swap last image to first position
+        });
+    })
+    //得到一个对象实体
+    function InitControl() {
+        if (!!GetQuery('KeyValue')) {
+            AjaxJson("/AmmeterModule/Am_Repair/SetForm", { KeyValue: GetQuery('KeyValue') }, function (data) {
+                SetWebLable(data);
+                //获取反馈
+                AjaxJson("/AmmeterModule/Am_Repair/GetAm_RepairAnswer", { KeyValue: data.Number }, function (data1) {
+                    $("#AUserName").text(data1.UserName);
+                    $("#AU_Name").text(data1.U_Name);
+                    $("#AMobile").text(data1.Mobile);
+                    $("#ACreateTime").text(formatDate(data1.CreateTime, "yyyy-MM-dd"));
+                    $("#AContent").text(data1.AContent);
+                });
+                //获取报修图片
+                AjaxJson("/AmmeterModule/Am_Repair/GetAm_RepairImage", { KeyValue: data.Number }, function (data0) {
+                    var result;
+                    $.each(data0, function (i) {
+                        result = '<a href="javascritp:;" onclick="ViewImage(this)">' +
+                        '<img width="200" height="200" src="' + data0[i].ImagePath + '" alt="" /></a>';
+                        $("#pictures").append(result);
+                    });
+                });
+            });
+        }
+    }
+    //打开图片查看器
+    function ViewImage(a) {
+        var image = $(a).find("img").attr("src");
+        if (IsChecked(image)) {
+            var url = "/SystemModule/Images/Index?Title=报修图片&Image=" + image;
+            Dialog(url, "Image", "报修图片", 1000, 680, function (iframe) {
+                top.frames[iframe].AcceptClick();
+            });
+        }
+    }
+</script>

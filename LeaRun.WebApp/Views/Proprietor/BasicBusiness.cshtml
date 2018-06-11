@@ -1,0 +1,183 @@
+﻿@model LeaRun.Entity.Am_Ammeter
+@{
+    ViewBag.Title = "基本业务";
+    Layout = "~/Views/Shared/_Partial.cshtml";
+}
+
+<div class="all">
+    <header class="header clear">
+        <a href="javascript:history.go(-1);" class="return fl"></a>
+        <h1 class="title">基本业务</h1>
+    </header>
+    @if (Model != null)
+    {
+        <div id="Tab" class="tab-news">
+            <div class="tab-news-hd tab-hd-index op-li bbot">
+                <ul class="fix clear">
+                    <li id="one1" onclick="setTab('one',1,3)" class="on">基本信息</li>
+                    <li id="one2" onclick="setTab('one',2,3)">充值</li>
+                    <li id="one3" onclick="setTab('one',3,3)">操作记录</li>
+                </ul>
+            </div>
+            <div class="tab-news-con">
+                <!--基本信息-->
+                <div id="con_1" class="list-index op-none on">
+                    <div class="op-padd">
+                        <span class="op-ju clear">采集器： @Model.Collector_Code @*<span class="op-lian fr">已连接</span>*@</span>
+                        <span class="op-ju">表号：@Model.AM_Code</span>
+                        <span class="op-ju">电表类型：@Model.AmmeterType_Name</span>
+                        <span class="op-ju">电价：@(Model.AmmeterMoney == null ? "" : Model.AmmeterMoney.Value.ToString("0.00")) 元/度</span>
+                        <span class="op-ju">绑定用户：@Model.U_Name</span>
+                        @*<span class="op-ju">起充金额：0.00 元</span>*@
+                        <span class="op-ju">区域：@Model.Province @Model.City @Model.County </span>
+                        <span class="op-ju">单元：@Model.Cell 单元</span>
+                        <span class="op-ju">楼层：@Model.Floor 楼</span>
+                        <span class="op-ju">房号：@Model.Room 号</span>
+                        <span class="op-ju">安装地址：@Model.Address </span>
+                        <span class="op-ju">备注：</span>
+                        <div class="op-btnall clear">
+                            <a href="javascript:;" class="op-abtn fl" onclick="AmmeterClear('@Model.Number')" >电表清零</a>
+                            <a href="javascript:;" onclick="pullOff('@Model.Number',10)" class="op-abtn fl">跳闸</a>
+                            <a href="javascript:;" onclick="pullOff('@Model.Number',11)" class="op-abtn fl">合闸</a>
+                        </div>
+                    </div>
+                </div>
+                <!--充值-->
+                <div id="con_2" class="list-index op-none" style="display:none">
+                    <div class="op-padd">
+                        <span class="op-ju">表号：@Model.AM_Code</span>
+                        <span class="op-ju clear">当前剩余电量：@Model.CurrPower kWh<a href="javascript:;" onclick="checkAmmeter('@Model.Number',20)" class="op-cha fr">立即查询电量</a></span>
+                        <span class="op-ju">电量同步时间：@Model.CP_Time.Value.ToString("yyyy-MM-dd HH:mm:ss")</span>
+                        <span class="op-ju clear">当前剩余余额：@Model.CurrMoney.Value.ToString("0.00") 元<a href="javascript:;" onclick="checkAmmeter('@Model.Number',22)" class="op-cha fr">立即查询剩余余额</a></span>
+                        <span class="op-ju">剩余余额同步时间：@Model.CM_Time.Value.ToString("yyyy-MM-dd HH:mm:ss")</span>
+                        <span class="op-ju">总充值金额：@Model.AllMoney.Value.ToString("0.00") 元</span>
+                        <span class="op-ju clear">充值金额：<input type="number" class="money fr" placeholder="0" id="money" /></span>
+                        <div class="op-btnall op-cho clear">
+                            <a href="javascript:;" onclick="recharge('@Model.Number')" class="btn-all fl">充值</a>
+                            @*<a href="" class="op-abtn fl">返回</a>
+                                <a href="" class="op-abtn fr">刷新</a>*@
+                        </div>
+                    </div>
+                </div>
+                <!--操作记录-->
+                <div id="con_3" class="list-index op-none" style="display:none">
+                    <div id="containerList">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+</div>
+<script src="~/Content/Scripts/menu.js"></script>
+<script>
+    $(function() {
+        binList();
+    });
+
+    //<!--
+    /*第一种形式 第二种形式 更换显示样式*/
+    function setTab(name, cursel, n) {
+        for (i = 1; i <= n; i++) {
+            var menu = document.getElementById(name + i);
+            var con = document.getElementById("con_" + i);
+            menu.className = i == cursel ? "on" : "";
+            con.style.display = i == cursel ? "block" : "none";
+        }
+    }
+    //-->
+    function pullOff(number,type) {
+        $.post("/Proprietor/AmmeterPullOff", { number: number, type: type }, function (data) {
+            if (data.res == "Ok") {
+                layer.msg(data.msg, { time: 2000 });
+            } else {
+                layer.msg(data.msg, { time: 2000 });
+            }
+        });
+    }
+    function checkAmmeter(number, type) {
+        $.post("/Proprietor/AmmeterCheck", { number: number, type: type }, function (data) {
+            if (data.res == "Ok") {
+                layer.msg(data.msg, { time: 2000 });
+            } else {
+                layer.msg(data.msg, { time: 2000 });
+            }
+        });
+    }
+    function AmmeterClear(number) {
+        $.post("/Proprietor/AmmeterClear", { number: number}, function (data) {
+            if (data.res == "Ok") {
+                layer.msg(data.msg, { time: 2000 });
+            } else {
+                layer.msg(data.msg, { time: 2000 });
+            }
+        });
+    }
+    function binList() {
+        $("#name").val(GetQuery("name"));
+        layui.use('flow', function(){
+            var flow = layui.flow;
+            var count=0;
+            if (@ViewBag.recordCount!=null) {
+                count=@ViewBag.recordCount;
+            }
+            flow.load({
+                elem: '#containerList', //流加载容器
+                scrollElem: '',
+                done: function(page, next){ //执行下一页的回调
+                    //模拟数据插入
+                    setTimeout(function () {
+
+                        var par=window.location.search.replace("?","").split('&');
+                        var parList=[];
+                        for (var i in par) {
+                            var arr=par[i].split('=');
+                            if (arr.length>0) {
+                                parList[arr[0]]=arr[1];
+                            }
+                        }
+                        parList["pageIndex"]=page;
+                        var data='';
+                        for (var i in parList) {
+                            data+=i+"="+parList[i]+"&";
+                        }
+                        $.post("/Proprietor/AmmeterTaskList",data, function (data) {
+                            var lis = [];
+                            for (var i in data) {
+                                lis.push("<div class=\"list-index\">");
+                                lis.push("<a class=\"pro repair-m\" href=\"javascript:;\">");
+                                lis.push("<table style=\"width:100%\" >");
+                                lis.push("<tr><td style=\"width:40%\"  >操作者："+data[i].U_Name+"</td><td style=\"width:50%\" >状态："+data[i].StatusStr+"</td></tr>");
+                                lis.push("<tr><td style=\"width:40%\"  >操作类型："+data[i].OperateTypeStr+"</td> <td style=\"width:50%\"  >备注："+data[i].Remark+"</td> </tr>");
+                                lis.push("<tr><td colspan=\"2\">提交时间:"+formatDate(data[i].CreateTime,"yyyy-MM-dd hh:mm:ss")+"</td></tr>");
+                                lis.push("<tr><td colspan=\"2\">完成时间:"+formatDate(data[i].OverTime,"yyyy-MM-dd hh:mm:ss")+"</td></tr>");
+                                // lis.push("<tr><td colspan=\"2\">备注:"+data[i].Remark+"</td></tr>");
+
+                                lis.push("</table>");
+                                lis.push("</a>");
+                                lis.push("</div>");
+                            }
+                            next(lis.join(''), page < count);
+                        });
+
+                    }, 500);
+                }
+            });
+        });
+    }
+    function recharge(number) {
+        var money=$("#money").val();
+        $.post("/Proprietor/AmmeterRecharge", { number: number, money: money }, function (data) {
+            if (data.res == "Ok") {
+                layer.msg(data.msg, { time: 2000 });
+            } else {
+                layer.msg(data.msg, { time: 2000 });
+            }
+        });
+    }
+</script>
+
+
+<link href="~/Content/Scripts/layui/css/layui.css" rel="stylesheet" />
+<script src="~/Content/Scripts/layui/layui.js"></script>

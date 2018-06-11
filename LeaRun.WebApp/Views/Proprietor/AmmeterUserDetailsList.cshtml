@@ -1,0 +1,65 @@
+﻿@{
+    ViewBag.Title = "历史用户";
+    Layout = "~/Views/Shared/_Partial.cshtml";
+}
+
+<div class="all">
+    <header class="header clear">
+        <a href="javascript:history.go(-1);" class="return fl"></a>
+        <h1 class="title">历史用户</h1>
+    </header>
+    @if (ViewBag.ammeter != null)
+    {
+        var ammeter = ViewBag.ammeter as LeaRun.Entity.Am_Ammeter;
+        var clr = ammeter.Cell + "单元 " + ammeter.Floor + "层 " + ammeter.Room + "号";
+        <div class="acc-top deh-use bbot clear">
+            表号：@ammeter.AM_Code
+        </div>
+        <div class="acc-top deh-use bbot clear">
+            区域：@ammeter.Province @ammeter.City@ammeter.County
+        </div>
+        <div class="acc-top deh-use bbot clear">
+            地址：@ammeter.Address @clr
+        </div>
+    }
+    <div id="containerList">
+ 
+    </div>
+</div>
+<link href="~/Content/Scripts/layui/css/layui.css" rel="stylesheet" />
+<script src="~/Content/Scripts/layui/layui.js"></script>
+<script>
+    var ammeterNumber=GetQuery("ammeterNumber");
+    layui.use('flow', function(){
+        var flow = layui.flow;
+        var count=0;
+        if (@ViewBag.recordCount!=null) {
+            count=@ViewBag.recordCount;
+        }
+        flow.load({
+            elem: '#containerList', //流加载容器
+            scrollElem: '',
+            done: function(page, next){ //执行下一页的回调
+                //模拟数据插入
+                setTimeout(function () {
+                    $.post("/Proprietor/AmmeterUserDetailsList", { pageIndex: page,ammeterNumber:ammeterNumber}, function (data) {
+                        var lis = [];
+                        for (var i in data) {
+                            lis.push("<div class=\"list-index\" >");
+                            lis.push("<a class=\"pro repair-m\" href=\"javascript:;\"\">");
+                            lis.push("<table>")
+                            lis.push("<tr><td style=\"width:45%\">租户:"+data[i].U_Name+"</td><td>手机号:"+data[i].UserName+"</td></tr>")
+                            lis .push("<tr ><td colspan=\"2\">租赁时间:"+formatDate(data[i].CreateTime,"yyyy-MM-dd")+" 至 "+formatDate(data[i].LeaveTime,"yyyy-MM-dd")+"</td></tr>");
+                            lis.push("</table>");
+                            lis.push("</a>");
+                            lis.push("</div>");
+                        }
+                        next(lis.join(''), page < count);
+                    });
+                }, 500);
+            }
+        });
+    });
+
+</script>
+

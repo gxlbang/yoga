@@ -1,0 +1,76 @@
+﻿@model LeaRun.Entity.Ho_PartnerUser
+@{
+    ViewBag.Title = "个人信息";
+    Layout = "~/Views/Shared/_Partial.cshtml";
+}
+<div class="all pro-all">
+    <header class="header clear">
+        <a href="javascript:history.go(-1);" class="return fl"></a>
+        <h1 class="title">我的个人信息</h1>
+    </header>
+    <div class="list-index">
+        @if (Model.Status == 0)
+        {
+            <div class="pro my-per-in">
+                <div class="btn-all my-infor">您还未完善信息哦...</div>
+                <a href="/Personal/Perfect" class="btn-all">完善信息</a>
+            </div>
+        }
+
+        @if (Model.Status == 3 || Model.Status == 2 || Model.Status == 1)
+        {
+            <div class="pro my-per-in">
+                <div class="my-in clear">
+                    <span class="my-name fl">姓名：</span>
+                    <span class="my-per">@Model.Name</span>
+                </div>
+                <div class="my-in clear">
+                    <span class="my-name fl">性别：</span>
+                    <span class="my-per">@Model.Sex</span>
+                </div>
+                <div class="my-in clear">
+                    <span class="my-name fl">手机号：</span>
+                    <span class="my-per clear">@Model.Account
+
+                    </span>
+                </div>
+                <div class="my-in clear">
+                    <span class="my-name fl">我的地址：</span>
+                    <span class="my-per">@Model.Address</span>
+                </div>
+                <div class="my-in clear">
+                    <span class="my-name fl">身份证：</span>
+                    <span class="my-per">@Model.CardCode</span>
+                </div>
+                <div class="my-in clear mt10">
+                    <span class="my-name fl">正面：</span>
+                    <span class="my-per"><img src="@Model.CodeImg1" alt="正面" /></span>
+                </div>
+                <div class="my-in clear mt15">
+                    <span class="my-name fl">背面：</span>
+                    <span class="my-per"><img src="@Model.CodeImg2" alt="背面" /></span>
+                </div>
+                @if (Model.Status == 1)
+                {
+                    <div class="btn-all my-infor">您的信息已经提交，等待审核中...</div>
+                    <div class="btn-all my-infor">提交时间：@Model.ModifyTime.Value.ToString("yyyy-MM-dd HH:mm:ss")</div>
+                }
+                @if (Model.Status == 2)
+                {
+                    <a href="/Info/Perfect" class="btn-all my-infor">审核未通过，重新上传</a>
+                }
+
+            </div>
+        }
+
+
+    </div>
+</div>
+<script>
+    $(function () {
+        $('.my-per img').jqthumb({
+            width: 4,
+            height: 1.8,
+        });
+    });
+</script>

@@ -1,0 +1,28 @@
+﻿@{
+    ViewBag.Title = "动态";
+    Layout = "~/Views/Shared/UiIndex.cshtml";
+}
+<script type="text/javascript">
+    function NoThing() {
+        $.toast("建设中...");
+    }
+</script>
+<div class="banner">
+    <div id="slides" class="slider-focus">
+        <div class="bd">
+            <ul>
+                <li><a class="pic" href="/Ui/News?Number=@ViewBag.News.Number">
+                    <img src="@ViewBag.News.NewsPic" alt="" /></a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<ul class="nav-list clear">
+    <li class="nav-li fl"><a href="#" onclick="NoThing()" class="nav-a"><div class="dy-img"><img src="/Content/UiImages/office.png" alt="" /></div><span class="nav-text">共享办公</span></a></li>
+    <li class="nav-li fl"><a href="~/html/czlc/index.html" class="nav-a"><div class="dy-img"><img src="/Content/UiImages/Tech.png" alt="" /></div><span class="nav-text">业务流程</span></a></li>
+    <li class="nav-li fl"><a href="/Ui/MyPartner" class="nav-a"><div class="dy-img"><img src="/Content/UiImages/Partner.png" alt="" /></div><span class="nav-text">合伙人</span></a></li>
+    <li class="nav-li fl"><a href="/Ui/NewsList?Number=fa3b7527-b8d6-4bc2-bbac-6b88a420a85e" class="nav-a"><div class="dy-img"><img src="/Content/UiImages/hot.png" alt="" /></div><span class="nav-text">往期焦点</span></a></li>
+</ul>
+@{  ViewDataDictionary vdd = new ViewDataDictionary();
+    vdd.Add("ind", "2");
+    Html.RenderPartial("UIDown", vdd); }

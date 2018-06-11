@@ -1,0 +1,29 @@
+﻿@model LbangCMS.Areas.Admin.Models.ImageLisModel
+<input type="hidden" id="CurentPageIndex" value="@Model.CurrentPageIndex" />
+<input type="hidden" id="TotalPage" value="@Model.TotalPage" />
+
+<section class="cards">
+    @if (Model != null && Model.PictureList != null)
+    {
+        foreach (var item in Model.PictureList)
+        {
+            <div class="col-md-2">
+                <div class="card">
+                    @Html.Img(item.FilePath)
+                    <a href="#" class="card-heading"><strong>@item.FileName</strong></a>
+                    <div class="card-actions">
+                        @{ var imageUrl = System.Configuration.ConfigurationManager.AppSettings["ImageDomain"] + item.FilePath;}
+                        <button class="btn btn-primary btnCopy" data-clipboard-text="@imageUrl"><i class="icon-copy"></i> 复制地址</button>
+                        <button class="btn btn-warning" onclick="remove_item(@item.Id)"><i class="icon-times"></i> 删除</button>
+                    </div>
+                </div>
+            </div>
+                                }
+
+                            }
+
+</section>
+@if (Model.PictureList == null || !Model.PictureList.Any())
+{
+    <div class="alert alert-info">暂无图片信息</div>
+}

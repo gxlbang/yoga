@@ -1,0 +1,65 @@
+@{
+    ViewBag.Title = "Ho_HouseImage》明细页面";
+    Layout = "~/Views/Shared/_LayoutForm.cshtml";
+}
+<script type="text/javascript">
+    $(function () {
+        InitControl();
+    })
+    //得到一个对象实体
+    function InitControl() {
+        if (!!GetQuery('KeyValue')) {
+            AjaxJson("/HouseModule/Ho_HouseImage/SetForm", { KeyValue: GetQuery('KeyValue') }, function (data) {
+                SetWebControls(data);
+                $("#pimg").attr("src", data.ImageUrl);
+                $('input,select,textarea').each(function (r) {
+                    $(this).attr("disabled", "disabled");
+                })
+            });
+        }
+    }
+</script>
+<form id="form1" style="margin: 1px">
+    <table class="form">
+        <tr>
+            <th class='formTitle'>楼盘名称：</th>
+            <td class='formValue'>
+                <input id="HouseName" maxlength=50 type="text" class="txt" />
+            </td>
+            <th width="10"></th>
+            <td class='formValue' rowspan="5">
+                <img src="~/Content/Images/noimg.gif" id="pimg" width="150" height="150" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>图册名称：</th>
+            <td class='formValue'>
+                <input id="GroupName" maxlength=50 type="text" class="txt" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>图片上传：</th>
+            <td class='formValue'>
+                <input id="ImageUrl" type="hidden" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>图片标题：</th>
+            <td class='formValue'>
+                <input id="ImageTitle" maxlength=50 type="text" class="txt" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>图片排序：</th>
+            <td class='formValue'>
+                <input id="Orders" maxlength=10 type="text" class="txt" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>图片说明：</th>
+            <td class='formValue' colspan="3">
+                <textarea id="ImageDes" maxlength="512" class="txtArea" rows="20"></textarea>
+            </td>
+        </tr>
+    </table>
+</form>

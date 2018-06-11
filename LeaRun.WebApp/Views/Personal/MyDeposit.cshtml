@@ -1,0 +1,29 @@
+﻿@model List<LeaRun.Entity.Am_UserDeposit>
+@{
+    ViewBag.Title = "我的押金";
+    Layout = "~/Views/Shared/_Partial.cshtml";
+}
+
+<div class="all pro-all">
+    <header class="header clear">
+        <a href="javascript:history.go(-1);" class="return fl"></a>
+        <h1 class="title">我的押金</h1>
+    </header>
+    <div class="list-index">
+        @if (Model != null && Model.Count() > 0)
+        {
+            foreach (var item in Model)
+            {
+                <div class="pro repair-m">
+                    
+                    <span class="bill-span">区域： @item.Province@item.City@item.County  </span>
+                    <div class="my-bill my-de clear">
+                        <span class="bill-span fl">地址：@item.Address  @item.Cell 单元 @item.Floor 层 @item.Room 号</span>
+                        <span class="bill-span fl">押金：@item.Money.Value.ToString("0.00") 元</span>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>
+

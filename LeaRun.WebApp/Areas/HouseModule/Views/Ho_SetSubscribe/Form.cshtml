@@ -1,0 +1,210 @@
+@{
+    ViewBag.Title = "Ho_SetSubscribe》表单页面";
+    Layout = "~/Views/Shared/_LayoutForm.cshtml";
+}
+<script type="text/javascript">
+    var KeyValue = GetQuery('KeyValue');//主键
+    var Number = GetQuery('Number');//主键
+    $(function () {
+        InitControl();
+    })
+    //得到一个对象实体
+    function InitControl() {
+        if (!!Number) {
+            AjaxJson("/HouseModule/Ho_MySubscribe/SetForm", { KeyValue: Number }, function (data) {
+                SetLableValuex(data);
+               
+            });
+        }
+        if (!!GetQuery('KeyValue')) {
+            AjaxJson("/HouseModule/Ho_SetSubscribe/SetForm", { KeyValue: KeyValue }, function (data) {
+                SetinputValue(data);
+            });
+        }
+    }
+    function SetLableValuex(data) {
+        for (var key in data) {
+            var id = $('#' + key);
+            var tagName = id.prop("tagName");
+            if (tagName == "LABEL") {
+                var value = $.trim(data[key]).replace("&nbsp;", "");
+                id.text(value);
+            }
+        }
+    }
+    function SetinputValue(data) {
+        for (var key in data) {
+            var id = $('#' + key);
+            var tagName = id.prop("tagName");
+            //if (key == "PeopleNum") { alert(tagName); }
+            if (tagName == "INPUT" || tagName == "TEXTAREA" || tagName == "SELECT") {
+                var type = id.attr('type');
+                var value = $.trim(data[key]).replace("&nbsp;", "");
+                switch (type) {
+                    case "checkbox":
+                        if (value == 1) {
+                            id.attr("checked", 'checked');
+                        } else {
+                            id.removeAttr("checked");
+                        }
+                        $('input').customInput();
+                        break;
+                    default:
+                        id.val(value);
+                        break;
+                }
+            }
+        }
+    }
+    //保存事件
+    function AcceptClick() {
+        if (!CheckDataValid('#form1')) {
+            return false;
+        }
+        var postData = GetWebControls("#form1");
+        AjaxJson("/HouseModule/Ho_SetSubscribe/SubmitUserForm?KeyValue=" + KeyValue + "&Number=" + Number, postData, function (data) {
+            tipDialog(data.Message, 3, data.Code);
+            top.frames[tabiframeId()].windowload();
+            closeDialog();
+        });
+    }
+</script>
+<form id="form1" style="margin: 1px">
+    <div id="message" style="display: none"></div>
+    <table class="form">
+        <tr><td colspan="4" style="text-align:center;font-weight:bold; font-size:16px;">合伙人信息</td></tr>
+    </table>
+    <table class="form">
+        <tbody>
+            <tr>
+                <th class='formTitle'>合伙人：</th>
+                <td class='formValue'>
+                    <label id="UName" />
+                </td>
+                <th class='formTitle'>合伙人编号：</th>
+                <td class='formValue'>
+                    <label id="UCode" />
+                </td>
+            </tr>
+            <tr>
+                <th class='formTitle'>联系电话：</th>
+                <td class='formValue'>
+                    <label id="UMobile" />
+                </td>
+                <th class='formTitle'>身份证号：</th>
+                <td class='formValue'>
+                    <label id="UCardCode" />
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="form">
+        <tr><td colspan="4" style="text-align:center;font-weight:bold; font-size:16px;">预约信息</td></tr>
+    </table>
+    <table class="form">
+        <tr>
+            <th class='formTitle'>楼盘名称：</th>
+            <td class='formValue'>
+                <label id="HName" />
+            </td>
+            <th class='formTitle'>人数：</th>
+            <td class='formValue'>
+                <label id="PeopleNum" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>预约时间：</th>
+            <td class='formValue'>
+                <label id="MYTime" />
+            </td>
+            <th class='formTitle'>预约提交时间：</th>
+            <td class='formValue'>
+                <label id="CreateTime" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>行程安排：</th>
+            <td class='formValue'>
+                <label id="CarOrBus" />
+            </td>
+            <th class='formTitle'>状态字符：</th>
+            <td class='formValue'>
+                <label id="StatusStr" style="color:red; font-weight:bold;" />
+            </td>
+        </tr>
+    </table>
+    <table class="form">
+        <tr><td colspan="4" style="text-align:center;font-weight:bold; font-size:16px;">接待信息</td></tr>
+    </table>
+    <table class="form">
+        <tr>
+            <th class='formTitle'>接待人数：</th>
+            <td class='formValue'>
+                <input id="s_PeopleNum" maxlength=50 type="text" class="txt required" datacol="yes" err="接待人数" checkexpession="Num" />
+            </td>
+            <th class='formTitle'>接待时间：</th>
+            <td class='formValue'>
+                <input id="s_MYTime" maxlength=50 type="text" class="txt Wdate" value="@LeaRun.Utilities.DateTimeHelper.GetToday()" onfocus="WdatePicker({ dateFmt: 'yyyy-MM-dd', minDate: new Date() })" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>行程安排：</th>
+            <td class='formValue'>
+                <input id="s_CarOrBus" maxlength=50 type="text" class="txt required" value="无"  datacol="yes" err="行程安排" checkexpession="NotNull"  />
+            </td>
+            <th class='formTitle'>接待地点：</th>
+            <td class='formValue'>
+                <input id="s_Address" maxlength=50 type="text" class="txt required"  datacol="yes" err="接待地点" checkexpession="NotNull"  />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>接待人：</th>
+            <td class='formValue'>
+                <input id="s_Reception" maxlength=10 type="text" class="txt required"  datacol="yes" err="接待人" checkexpession="NotNull"  />
+            </td>
+            <th class='formTitle'>接待人电话：</th>
+            <td class='formValue'>
+                <input id="s_ReMobile" maxlength=11 type="text" class="txt required"  datacol="yes" err="接待人电话" checkexpession="NotNull"  />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>车型：</th>
+            <td class='formValue'>
+                <input id="s_CarType" maxlength=50 type="text" class="txt" />
+            </td>
+            <th class='formTitle'>车牌号：</th>
+            <td class='formValue'>
+                <input id="s_CarNumer" maxlength=50 type="text" class="txt" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>车颜色：</th>
+            <td class='formValue'>
+                @*<input id="s_CarColor" maxlength=50 type="text" class="txt"   />*@
+                <select id="s_CarColor" class="txtselect">
+                    <option value="黑色">黑色</option>
+                    <option value="白色">白色</option>
+                    <option value="灰色">灰色</option>
+                    <option value="红色">红色</option>
+                    <option value="蓝色">蓝色</option>
+                    <option value="棕色">棕色</option>
+                </select>
+            </td>
+            <th class='formTitle'>状态：</th>
+            <td class='formValue'>
+                <select id="s_Status" class="txtselect">
+                    <option value="0">正常</option>
+                    <option value="1">做废</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>备注：</th>
+            <td class='formValue' colspan="3">
+                <textarea id="s_Remark" name="s_Remark" maxlength="600" class="txtArea" rows="5"></textarea>
+            </td>
+        </tr>
+        <tr>
+        </tr>
+    </table>
+</form>

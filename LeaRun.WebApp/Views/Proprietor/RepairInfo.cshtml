@@ -1,0 +1,178 @@
+﻿@model LeaRun.Entity.Am_Repair
+@{
+    ViewBag.Title = "报修详情";
+    Layout = "~/Views/Shared/_Partial.cshtml";
+}
+
+<div class="all pro-all">
+    <header class="header clear">
+        <a href="javascript:history.go(-1);" class="return fl"></a>
+        <h1 class="title">报修处理</h1>
+    </header>
+    @if (Model != null && Model.Number != null)
+    {
+        <div class="list-index">
+            <div class="pro">
+                <span class="pro-li">编号：@Model.RepairCode</span>
+                <span class="pro-li">表号：@Model.AmmeterCode</span>
+                <span class="pro-li">姓名：@Model.U_Name &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 手机号：@Model.UserName</span>
+                <span class="pro-li">区域：@Model.Province@Model.City@Model.County@Model.Address</span>
+                <span class="pro-li">地址：@Model.Cell 单元 @Model.Floor 层 @Model.Room 号</span>
+                <span class="pro-li">状态：@Model.StatusStr</span>
+                <div class="pro-img clear" id="RepairImage" data-am-widget="gallery" data-am-gallery="{ pureview: true }">
+                    @if (ViewBag.repairImage != null)
+                    {
+                        var list = ViewBag.repairImage as List<LeaRun.Entity.Am_RepairImage>;
+                        foreach (var item in list)
+                        {
+                            <div class="example pro-i fl"><a href="javascript:;" onclick="OpenImages()"><img class="img-rounded" src="@item.ImagePath" alt="" /></a></div>
+                        }
+                    }
+                </div>
+                <div class="pro-explain btop mt10">说明：@Model.RContent</div>
+            </div>
+            @if (Model.Status == 0)
+            {
+                <div class="pro mt15">
+                    <div class="pro-explain pro-tit bbot">反馈信息</div>
+                    <div class="pro-explain"><textarea class="acc-text" id="remark" placeholder="填写反馈信息"></textarea></div>
+                    <div class="btop">
+                        <span class="pro-li" id="OpUser"></span>
+                        <span class="pro-li"><button id="add" onclick="AddOpUser()" class="acc-aj">+添加维修师傅</button></span>
+                    </div>
+                </div>
+                <input type="hidden" id="myusernumber" />
+                <a href="javascript:;" onclick="Submitform()" class="btn-all">处理</a>
+            }
+            else
+            {
+                <div class="pro mt15">
+                    <div class="pro-explain pro-tit bbot">反馈信息</div>
+                    <div class="pro-explain">
+                        @if (ViewBag.repairAnswer != null)
+                        {
+                            var repairAnswer = ViewBag.repairAnswer as LeaRun.Entity.Am_RepairAnswer;
+                            if (repairAnswer != null && repairAnswer.Number != null && repairAnswer.Number != "")
+                            {
+                                <p>已安排师傅过去维修</p>
+                                <p>联系方式：@repairAnswer.Mobile<span style="padding-left: 0.3rem;">@repairAnswer.U_Name</span></p>
+                                <p>备注：@repairAnswer.AContent</p>
+                            }
+                        }
+
+                    </div>
+                </div>
+            }
+        </div>
+    }
+
+</div>
+@*<div id="usershow"  style="display:none;">
+        <div class="all">
+            <div class="pen-li pen-re bbot clear">
+                <span class="pen-span fl">维修师傅</span>
+                <span class="pen-span pen-time fl">联系电话</span>
+            </div>
+            <a href="feedback-revision.html" class="re-re bbot clear">
+                <span class="pen-span fl">张师傅</span>
+                <span class="pen-span pen-time fl">15877132099</span>
+                <i class="icon-next"></i>
+            </a>
+
+        </div>
+    </div>*@
+<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script type="text/javascript">
+    var KeyValue = GetQuery('number');//主键
+    function Submitform() {
+        $.post("/Proprietor/SubmitRepairAnswer", { Number: KeyValue, U_Number: $("#myusernumber").val(), AContent: $("#remark").val() }, function (data) {
+            if (data.res = "Ok") {
+                layer.msg(data.msg);
+                location.href = "/Proprietor/RepairManagement";
+            } else {
+                layer.msg(data.msg);
+            }
+        });
+    }
+
+    function GetUser(elm) {
+        $("#OpUser").html($(elm).html());
+        $("#myusernumber").val($(elm).attr("ppuser"));
+        layer.closeAll();
+    }
+    function AddOpUser() {
+        $.post("/Proprietor/GetMyUserWXList", { type: 1 }, function (data) {
+            var htmlstr = '<div><div class="pen-li pen-re bbot clear">' +
+                    '<span class="pen-span fl">姓名</span>' +
+                    '<span class="pen-span pen-time fl">联系电话</span></div>';
+            for (var i in data) {
+                htmlstr += '<a href="javascript:;" ppuser="' + data[i].Number + '" onclick="GetUser(this)" class="re-re bbot clear">' +
+                    '<span class="pen-span fl">' + data[i].Name + '</span>' +
+                    '<span class="pen-span pen-time fl">' + data[i].Mobile + '</span>' +
+                    '</a>';
+            }
+            htmlstr += '</div>';
+            //layer.open({
+            //    type: 1,
+            //    shade: false,
+            //    title: false, //不显示标题
+            //    area: '85%',
+            //    content: htmlstr, //捕获的元素，注意：最好该指定的元素要存放在body最外层，否则可能被其它的相对元素所影响
+            //    cancel: function () {
+            //        bool = false;
+            //        //layer.msg('玩命提示中');
+            //    }
+            //});
+            layer.open({
+                type: 1,
+                title: false,
+                closeBtn: 1,
+                area: '85%',
+                shadeClose: true,
+                skin: 'yourclass',
+                content: htmlstr
+            });
+        });
+    }
+    //打开图片查看器
+    function OpenImages() {
+        var image = $("#RepairImage").find("img");
+        var src = [];
+        for (var i = 0; i < image.length; i++) {
+            src[i] = RootPath() + $(image[i]).attr("src");
+        }
+        var srclist = arrayToJson(src);
+        imagePreview($(image[0]).attr("src"), srclist);
+    }
+    function arrayToJson(o) {
+        var r = [];
+        if (typeof o == "string") return "\"" + o.replace(/([\'\"\\])/g, "\\$1").replace(/(\n)/g, "\\n").replace(/(\r)/g, "\\r").replace(/(\t)/g, "\\t") + "\"";
+        if (typeof o == "object") {
+            if (!o.sort) {
+                for (var i in o)
+                    r.push(i + ":" + arrayToJson(o[i]));
+                if (!!document.all && !/^\n?function\s*toString\(\)\s*\{\n?\s*\[native code\]\n?\s*\}\n?\s*$/.test(o.toString)) {
+                    r.push("toString:" + o.toString.toString());
+                }
+                r = "{" + r.join() + "}";
+            } else {
+                for (var i = 0; i < o.length; i++) {
+                    r.push(arrayToJson(o[i]));
+                }
+                r = "[" + r.join() + "]";
+            }
+            return r;
+        }
+        return o.toString();
+    }
+    //这个是调用微信图片浏览器的函数
+    function imagePreview(curSrc, srcList) {
+        if (!curSrc || !srcList || srcList.length == 0) {
+            return;
+        }
+        WeixinJSBridge.invoke('imagePreview', {
+            'current': curSrc,
+            'urls': srcList
+        });
+    };
+</script>

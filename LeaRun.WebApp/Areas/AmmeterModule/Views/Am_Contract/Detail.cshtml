@@ -1,0 +1,297 @@
+@{
+    ViewBag.Title = "Am_Contract》明细页面";
+    Layout = "~/Views/Shared/_LayoutForm.cshtml";
+}
+<script type="text/javascript">
+    $(function () {
+        InitControl();
+    })
+    //得到一个对象实体
+    function InitControl() {
+        if (!!GetQuery('KeyValue')) {
+            AjaxJson("/AmmeterModule/Am_Contract/SetForm", { KeyValue: GetQuery('KeyValue') }, function (data) {
+                SetWebControls(data);
+            });
+        }
+    }
+</script>
+<form id="form1" style="margin: 1px">
+    <table class="form">
+        <tr>
+            <th class='formTitle'>Number：</th>
+            <td class='formValue'>
+                <label id="Number" />
+            </td>
+            <th class='formTitle'>AmmeterNumber：</th>
+            <td class='formValue'>
+                <label id="AmmeterNumber" />
+            </td>
+            <th class='formTitle'>AmmeterCode：</th>
+            <td class='formValue'>
+                <label id="AmmeterCode" />
+            </td>
+            <th class='formTitle'>TemplateNumber：</th>
+            <td class='formValue'>
+                <label id="TemplateNumber" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>CreateTime：</th>
+            <td class='formValue'>
+                <label id="CreateTime" />
+            </td>
+            <th class='formTitle'>F_U_Number：</th>
+            <td class='formValue'>
+                <label id="F_U_Number" />
+            </td>
+            <th class='formTitle'>F_UserName：</th>
+            <td class='formValue'>
+                <label id="F_UserName" />
+            </td>
+            <th class='formTitle'>F_U_Name：</th>
+            <td class='formValue'>
+                <label id="F_U_Name" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>Province：</th>
+            <td class='formValue'>
+                <label id="Province" />
+            </td>
+            <th class='formTitle'>City：</th>
+            <td class='formValue'>
+                <label id="City" />
+            </td>
+            <th class='formTitle'>County：</th>
+            <td class='formValue'>
+                <label id="County" />
+            </td>
+            <th class='formTitle'>Address：</th>
+            <td class='formValue'>
+                <label id="Address" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>Cell：</th>
+            <td class='formValue'>
+                <label id="Cell" />
+            </td>
+            <th class='formTitle'>Floor：</th>
+            <td class='formValue'>
+                <label id="Floor" />
+            </td>
+            <th class='formTitle'>Room：</th>
+            <td class='formValue'>
+                <label id="Room" />
+            </td>
+            <th class='formTitle'>RoomNum：</th>
+            <td class='formValue'>
+                <label id="RoomNum" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>HallNum：</th>
+            <td class='formValue'>
+                <label id="HallNum" />
+            </td>
+            <th class='formTitle'>KitchenNum：</th>
+            <td class='formValue'>
+                <label id="KitchenNum" />
+            </td>
+            <th class='formTitle'>ToiletNum：</th>
+            <td class='formValue'>
+                <label id="ToiletNum" />
+            </td>
+            <th class='formTitle'>HouseSize：</th>
+            <td class='formValue'>
+                <label id="HouseSize" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>Useing：</th>
+            <td class='formValue'>
+                <label id="Useing" />
+            </td>
+            <th class='formTitle'>UseingSize：</th>
+            <td class='formValue'>
+                <label id="UseingSize" />
+            </td>
+            <th class='formTitle'>Money：</th>
+            <td class='formValue'>
+                <label id="Money" />
+            </td>
+            <th class='formTitle'>MoneyStr：</th>
+            <td class='formValue'>
+                <label id="MoneyStr" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>DepositMoney：</th>
+            <td class='formValue'>
+                <label id="DepositMoney" />
+            </td>
+            <th class='formTitle'>DepositMoneyStr：</th>
+            <td class='formValue'>
+                <label id="DepositMoneyStr" />
+            </td>
+            <th class='formTitle'>CycleTime：</th>
+            <td class='formValue'>
+                <label id="CycleTime" />
+            </td>
+            <th class='formTitle'>TotalMoney：</th>
+            <td class='formValue'>
+                <label id="TotalMoney" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>TotalMoneyStr：</th>
+            <td class='formValue'>
+                <label id="TotalMoneyStr" />
+            </td>
+            <th class='formTitle'>BankInfo：</th>
+            <td class='formValue'>
+                <label id="BankInfo" />
+            </td>
+            <th class='formTitle'>BankUserName：</th>
+            <td class='formValue'>
+                <label id="BankUserName" />
+            </td>
+            <th class='formTitle'>BankCode：</th>
+            <td class='formValue'>
+                <label id="BankCode" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>Am_Money：</th>
+            <td class='formValue'>
+                <label id="Am_Money" />
+            </td>
+            <th class='formTitle'>WaterMoney：</th>
+            <td class='formValue'>
+                <label id="WaterMoney" />
+            </td>
+            <th class='formTitle'>PropertyMoeny：</th>
+            <td class='formValue'>
+                <label id="PropertyMoeny" />
+            </td>
+            <th class='formTitle'>GarbageMoney：</th>
+            <td class='formValue'>
+                <label id="GarbageMoney" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>NetMoney：</th>
+            <td class='formValue'>
+                <label id="NetMoney" />
+            </td>
+            <th class='formTitle'>PenaltyTime：</th>
+            <td class='formValue'>
+                <label id="PenaltyTime" />
+            </td>
+            <th class='formTitle'>PenaltyMoney：</th>
+            <td class='formValue'>
+                <label id="PenaltyMoney" />
+            </td>
+            <th class='formTitle'>BackTime：</th>
+            <td class='formValue'>
+                <label id="BackTime" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>BackMoney：</th>
+            <td class='formValue'>
+                <label id="BackMoney" />
+            </td>
+            <th class='formTitle'>GoTime：</th>
+            <td class='formValue'>
+                <label id="GoTime" />
+            </td>
+            <th class='formTitle'>GoMoney：</th>
+            <td class='formValue'>
+                <label id="GoMoney" />
+            </td>
+            <th class='formTitle'>GoOnTime：</th>
+            <td class='formValue'>
+                <label id="GoOnTime" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>RentMoneyTime：</th>
+            <td class='formValue'>
+                <label id="RentMoneyTime" />
+            </td>
+            <th class='formTitle'>HoName：</th>
+            <td class='formValue'>
+                <label id="HoName" />
+            </td>
+            <th class='formTitle'>HoUserName：</th>
+            <td class='formValue'>
+                <label id="HoUserName" />
+            </td>
+            <th class='formTitle'>HoUserMobile：</th>
+            <td class='formValue'>
+                <label id="HoUserMobile" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>Remark：</th>
+            <td class='formValue'>
+                <label id="Remark" />
+            </td>
+            <th class='formTitle'>U_Number：</th>
+            <td class='formValue'>
+                <label id="U_Number" />
+            </td>
+            <th class='formTitle'>UserName：</th>
+            <td class='formValue'>
+                <label id="UserName" />
+            </td>
+            <th class='formTitle'>U_Name：</th>
+            <td class='formValue'>
+                <label id="U_Name" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>RentBeginTime：</th>
+            <td class='formValue'>
+                <label id="RentBeginTime" />
+            </td>
+            <th class='formTitle'>RentEndTime：</th>
+            <td class='formValue'>
+                <label id="RentEndTime" />
+            </td>
+            <th class='formTitle'>RentDate：</th>
+            <td class='formValue'>
+                <label id="RentDate" />
+            </td>
+            <th class='formTitle'>U_Code：</th>
+            <td class='formValue'>
+                <label id="U_Code" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>U_Mobile：</th>
+            <td class='formValue'>
+                <label id="U_Mobile" />
+            </td>
+            <th class='formTitle'>CreateAddress：</th>
+            <td class='formValue'>
+                <label id="CreateAddress" />
+            </td>
+            <th class='formTitle'>Status：</th>
+            <td class='formValue'>
+                <label id="Status" />
+            </td>
+            <th class='formTitle'>StatusStr：</th>
+            <td class='formValue'>
+                <label id="StatusStr" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>UpdateTime：</th>
+            <td class='formValue'>
+                <label id="UpdateTime" />
+            </td>
+        </tr>
+    </table>
+</form>

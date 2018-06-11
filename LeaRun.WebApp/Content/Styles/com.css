@@ -1,0 +1,515 @@
+*, html { margin: 0; padding: 0; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box; }
+html,body { max-width: 640px; margin: 0 auto; background: #f5f5f5; }
+body { -webkit-text-size-adjust: none; -webkit-tap-highlight-color: rgba(0,0,0,0); font-size: 0.28rem; font-family: "Microsoft Yahei","微软雅黑",Tahoma,Arial,Helvetica,STHeiti; color: #333; padding: 0; margin: 0; }
+a { text-decoration: none; color: #333; }
+img { display: block; border: none; width: 100%;}
+ul,li,ol { list-style-type: none; margin: 0; padding: 0; }
+em,i { font-style: normal; }
+h1,h2,h3,h4,h5,h6,strong,b { font-weight: normal; }
+img,input,button,a,select,textarea {margin:0; padding:0; resize:none; border:none; outline: 0; font: inherit; vertical-align: baseline; background: none; } 
+select,button { cursor: pointer; }
+.clear:before, .clear:after { display: table; content: '';}
+.clear:after { clear: both; }
+.mt20 { margin-top: 0.4rem; }
+.mt15 { /*margin-top: 0.3rem;*/ margin-bottom:0.3rem; }
+.mt10 { margin-top: 0.2rem; }
+.fl { float: left; }
+.fr { float: right; }
+.bbot{ border-bottom: 0.02rem solid #e0e0e0 !important; }
+.btop{ border-top: 0.02rem solid #e0e0e0; }
+.gary { display: block; width: 100%; height: 0.3rem; background: #f8f8f8; }
+
+
+/*login 登录*/
+.all { position: absolute; top: 0; left: 50%; transform: translateX(-50%); max-width: 640px; width: 100%; height: 100%; background: #fff; }
+.header { display: block; width: 100%; height: 0.88rem; padding: 0 0.88rem; background: #0080ff; }
+.return { display: block; width: 0.88rem; height: 0.88rem; margin-left: -0.88rem; background: url(../images/return.png) center center no-repeat; background-size:  80% 80%; }
+.title { display: block; width: 100%; height: 0.88rem; line-height: 0.88rem; text-align: center; color: #fff; font-size: 0.36rem; }
+.tab-login-list { width: 100%; margin: 0; background: #fff; }
+/*.list-index{ display: none; }*/
+.active{ display: block; }
+.tab-hd-index { height: 0.82rem; }
+.tab-hd-index ul{ width: 100%; height: 0.82rem; }
+.tab-hd-index li{ float: left; width: 50%; height: 0.82rem; text-align: center; font-size: 0.32rem; line-height: 0.8rem; }
+.tab-hd-index li.on { color:#0080ff; border-bottom: 0.04rem solid #0080ff; } 
+.tab-news { width: 100%; background: #fff; }
+.list-index { width: 100%; padding: 0.3rem; } 
+.l-p { display: block; width: 100%; border: 0.02rem solid #e0e0e0; border-radius: 0.1rem; padding-left: 0.88rem; height: 0.92rem; margin-bottom: 0.3rem; }
+.l-phone { display: block; width: 0.88rem; height: 0.88rem; background: url(../images/phone.png) center center no-repeat; background-size: 0.6rem 0.6rem; margin-left: -0.88rem; }
+.l-input { display: block; width: 90%; height: 0.88rem; line-height: 0.88rem; padding-left: 0.2rem; }
+.l-pass { background: url(../images/password.png) center center no-repeat; background-size: 0.6rem 0.6rem; }
+.btn-all { display: block; width: 100%; height: 0.8rem; margin: 1rem auto 0.2rem auto; border-radius: 0.1rem; line-height: 0.8rem; text-align: center; background: #0080ff; color: #fff; font-size: 0.32rem; }
+.l-pnone { border: none; padding: 0; }
+.l-w { display: block; line-height: 0.6rem; color: #999; margin-left: 0.4rem; padding: 0.1rem; }
+.l-we { margin: 0; padding: 0.1rem 0 0.1rem 0.4rem; color: #50b674; background: url(../images/WeChat.png) center left no-repeat; background-size: 0.4rem 0.4rem; }
+.l-yan { display: block; width: 100%; height: 0.92rem; margin-bottom: 0.3rem; }
+.l-yan .l-p { width: 66%; border: 0.02rem solid #e0e0e0; border-radius: 0.1rem; padding-left: 0.8rem; }
+.l-yz { display: block; width: 30%; height: 0.92rem; line-height: 0.92rem; text-align: center; background: #ccc; border-radius: 0.1rem; overflow: hidden; }
+.l-code { display: block; height: 0.92rem; line-height: 0.92rem; width: 100%; color: #999; background: #ccc; }
+.l-code { display: block; height: 0.92rem; line-height: 0.92rem; width: 100%; color: #999; }
+
+/*register 注册*/
+.l-deng { color: #f00; margin: 0; }
+.l-shuo { width: 100%; height: 0.6rem; line-height: 0.6rem; }
+.btn-xuan { display: block; width: 0.3rem; height: 0.3rem; position: relative; top: 0.18rem; margin-right: 0.1rem; }
+.l-lv { color: #0080ff; text-decoration: underline; }
+.l-ch input { width: 0.4rem; height: 0.4rem; position: absolute; top: 50%;  left: 0rem; opacity: 0; margin-top: -0.2rem; z-index: 100; cursor: pointer; }
+.l-ch label:before { content: ""; position: absolute; left: 0rem; top: 50%; margin-top: -0.2rem; width: 0.4rem; height: 0.4rem; background:url(../images/selected.png) center center no-repeat; background-size: 0.4rem 0.4rem; }
+.l-ch input:checked ~ label:before { width: 0.4rem; height: 0.4rem; background: url(../images/selected-no.png) center center no-repeat; background-size: 0.4rem 0.4rem; }
+.l-ch { display: block; width: 0.6rem; height: 0.6rem; position: relative; }
+
+/*binding-bank 绑定银行卡*/
+.bill-all { width: 100%; padding: 0; }
+.bill { display: block; width: 100%; padding-left: 1.7rem; }
+.bill-text { display: block; width: 1.6rem; height: 0.88rem; line-height: 0.88rem; margin-left: -1.6rem; text-align: right; }
+/*.bill .l-input { height: 0.8rem; line-height: 0.8rem; }*/
+.bill-in { width: 56%; }
+.bill .l-code { width: 36%; height: 0.88rem; line-height: 0.88rem; }
+
+/*repair 报修*/
+.repair { display: block; width: 100%; line-height: 0.88rem; padding-left: 0.3rem; color: #333; }
+.repair .bill-text { margin: 0; text-align: left; }
+.icon-next { display: block; width: 0.88rem; height: 0.88rem; text-align: center; background: url(../images/next.png) center center no-repeat; background-size: 0.5rem 0.5rem; }
+.icon-next1 { display: block; width: 0.88rem; height: 0.88rem; text-align: center; background: url(../images/telphone.png) center center no-repeat; background-size: 0.5rem 0.5rem; }
+.img-rounded { max-width:100px; max-height:100px; width:70px; height:70px;}
+/*repair-processing 报修反馈*/
+.pro { width: 100%; height: auto; border: 0.02rem solid #e0e0e0; border-radius: 0.1rem; box-shadow: 0.06rem 0.06rem 0.08rem #e0e0e0; background: #fff; }
+.pro-all { background: #f8f8f8; }
+.pro-li { display: block; width: 100%; line-height: 0.8rem; padding: 0 0.2rem; }
+.pro-explain { line-height: 2; padding: 0.2rem; min-height: 1.2rem; }
+.pro-img { width: 100%; padding: 0.3rem 0.2rem; }
+.pro-i { padding-left: 0.3rem; }
+.pro-i:nth-child(1) { padding: 0; }
+.pro-tit { padding: 0 0.2rem; height: 0.82rem; line-height: 0.8rem; min-height: inherit; }
+
+/*repair-management 报修管理*/
+.repair-m { display: block; padding: 0.2rem; color: #333; line-height: 0.6rem; position: relative; }
+.repair-span { padding-left: 0.3rem; }
+.repair-m .repair-span:nth-child(1) { padding: 0; }
+.repair-m .repair-span:nth-child(3) { padding: 0; display: block; width: 100%; height: 0.6rem; }
+.repair-m .repair-span:nth-child(4) { padding: 0; display: block; width: 100%; height: 0.6rem; color: #4b93db; }
+.repair-m .icon-next { position: absolute; top: 50%; right: 0rem; margin-top: -0.4rem; }
+.repair-m .re-gary { color: #999 !important;}
+#Tab .tab-hd-index { background: #fff; }
+#Tab .pen-span { width: auto; padding: 0; }
+#Tab .pen-a { padding: 0.2rem 0.7rem 0.2rem 0.3rem; }
+#Tab .pen-a .repair-span:nth-child(4) { width: 100%; padding: 0; } 
+
+/*pending-list 待处理列表*/
+.all-pa { padding: 0 0.3rem 0.3rem; }
+.pen-li { display: block; width: 100%; line-height: 0.88rem; background: #fff; }
+.pen-span { display: block; width: 32%; line-height: 0.88rem; padding-left: 0.2rem; text-align: left; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pen-spanex { display: block; padding-right:0.3rem; width: 58%; height: 0.8rem; line-height: 0.8rem; padding-left: 0.2rem; text-align: left; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pen-a .pen-span { height: 0.6rem; line-height: 0.6rem; }
+.pen-time { width: 43%; }
+/*.pen-a .pen-time { width: 43%; }*/
+.pen-z { width: 19%; color: #4b93db; }
+.pen-li .pen-z { color: #333; }
+.pen-a { padding: 0.2rem 0; }
+.pen-a .repair-span:nth-child(4) { padding: 0; display: block; width: 100%; height: 0.8rem; line-height: 0.8rem; color: #333; padding-left: 0.2rem; }
+.reti-list { display: block; width: auto; padding: 0.2rem 0.8rem 0.2rem 0.2rem; margin: 0.3rem 0.2rem; position: relative; }
+.reti-list .pen-span { width: auto; }
+.reti-list .icon-next { position: absolute; top: 50%; right: 0; margin-top: -0.4rem; }
+
+
+/*revision-record 报修记录*/
+.pen-re { padding: 0 0.2rem; }
+.re-re { border: 0; box-shadow: none; padding: 0 0.2rem; display: block; width: 100%; position: relative; background: #fff; }
+.re-re .pen-z { width: 23%; }
+.re-re .icon-next { position: absolute; top: 50%; right: 0rem; margin-top: -0.44rem; }
+/*repair-page 报修页面*/
+.upload-ul{ position: relative;  display: inline-block; padding: 0.2rem;}
+.upload-ul li{ position: relative; float: left; display: inline-block; width: 1.5rem; height: 1.5rem; margin: 0 0.1rem 0.1rem 0; overflow: hidden; }
+.upload-pick{ background: url(../images/upload-bj1.png) center center no-repeat; background-size: 1.5rem 1.5rem; }
+.upload-pick:hover{ background: url(../images/upload-bj2.png) center center no-repeat; background-size: 1.5rem 1.5rem; }
+.webuploader-pick{position: relative;display: inline-block;vertical-align: top; width: 100%; height: 100%;}
+.webuploader-container{ position: relative; width: 100%; height: 100%; }
+.webuploader-container label{position: absolute;left: 0;top: 0;width: 100%;}
+.webuploader-element-invisible{opacity: 0;width: 100%;height: 100%;clip: rect(1px 1px 1px 1px);clip: rect(1px,1px,1px,1px);}
+.viewThumb{ position:relative;width: 100%;height: 100%;overflow:hidden; }
+.viewThumb img{ width: 100%;height: 100%; }
+.diyBar{ position: absolute; display:none; top: 0;left: 0;width: 100%;height: 100%;background: url(../images/bgblack.png);z-index: 3;}
+.diyProgress{ position: absolute; left: 0;top: 33px;width: 100%;height:  0.4rem;line-height: 0.4rem; text-align: center;color: #FFF;background:rgba(10,168,241,.7); z-index: 3;}
+.diyControl{ position: absolute; display:none; left: 0;bottom: 0;width: 100%;height: 0.4rem; line-height: 0.4rem; background: url(../images/bgblack.png); z-index: 3; }
+.viewThumb:hover .diyControl{ display: block; }
+.diyControl span{ display: inline-block; width: 33.33%; height: 0.4rem; float: left; }
+.diyControl span i{ display: block; width: 100%; height: 100%; opacity: .7; margin: auto; }
+.diyControl span i:hover{ opacity: 1; cursor: pointer; }
+.diyLeft{ }
+.diyLeft i{ background: url(../images/left-jian.png) center center no-repeat; background-size: 0.4rem 0.4rem;  }
+.diyCancel i{ background: url(../images/cha.png) center center no-repeat; background-size: 0.36rem 0.36rem; }
+.diyRight i{ background: url(../images/left-jian.png) center center no-repeat; transform: rotate(180deg); background-size: 0.4rem 0.4rem; }
+.goods-edit .upload-tip{ font: 12px/23px "Microsoft YaHei"; color: #a3a3a3;vertical-align: top; }
+
+.text-t { display: block; width: 100%; height: 100%; }
+
+/*Collector management 采集器管理*/
+.pen-co { color: #00c847; }
+.co-et { display: inline-block; height: 0.8rem; line-height: 0.8rem; text-align: center; padding: 0 0.1rem; position: absolute; top: 50%; right: 0.44rem; margin-top: -0.4rem; color: #1a70c6; }
+.btn-col { position: fixed; bottom: 0; left: 0; border-radius: 0; margin: 0; padding:0; }
+
+/*account-bill-management 出账账单管理*/
+.acc-list { padding: 0; border: 0; border-radius: 0; box-shadow: none; }
+.acc-li { width: 30%; height: 0.8rem; line-height: 0.8rem; padding-left: 0.3rem; }
+.acc-l { display: block; padding: 0; color: #333; position: relative; }
+.acc-se { display: block; width: 100%; padding: 0.2rem 0.3rem; background: #f8f8f8; }
+.acc-in { display: block; width: 34%; height: 0.8rem; border: 0.02rem solid #e0e0e0; padding-left: 0.2rem; line-height: 0.76rem; margin-right: 3%; border-radius: 0.1rem; }
+.acc-btn { display: block; width: 25%; height: 0.8rem; text-align: center; line-height: 0.8rem; border-radius: 0.1rem; background: #0080ff; color: #fff; }
+.acc-l .icon-next { width: 0.8rem; height: 0.8rem; position: absolute; top: 50%; right:0; margin-top: -0.4rem; }
+
+/*recharge-page 充值页面*/
+.re-all { display: block; padding: 0.3rem; }
+.re-span { display: block; width: 100%; height: 0.8rem; line-height: 0.8rem;}
+.re-name { display: inline-block; width: 2rem; height: 0.8rem; text-align: right; }
+.re-fu { display: block; width: 40%; height: 0.8rem; line-height: 0.8rem; padding: 0 0.5rem; position: relative; }
+.re-fu .l-ch { width: 100%; height: 0.8rem; position: static; }
+.re-fu .l-ch input { display: block; height: 0.8rem; width: 100%; margin-top: -0.4rem; }
+.re-fu .l-ch label:before { content: ""; position: absolute; left: 0rem; top: 50%; margin-top: -0.2rem; width: 0.4rem; height: 0.4rem; background:url(../images/error.png) center center no-repeat; background-size: 0.6rem 0.6rem; }
+.re-fu .l-ch input:checked ~ label:before { width: 0.4rem; height: 0.4rem; background: url(../images/right.png) center center no-repeat; background-size: 0.6rem 0.6rem; }
+.re-oth { padding-top: 0; }
+.re-pt { display: block; width: 100%; border-radius: 0.1rem; line-height: 0.88rem; border: 0.02rem solid #e0e0e0; padding-left: 0.4rem; background: #fff; }
+.re-y { display: block; width: 0.5rem; height: 0.88rem; margin-left: -0.4rem; font-size: 0.32rem; text-align: right; }
+.re-pt .l-input { padding-left: 0.1rem; font-size: 0.32rem; }
+.re-whe { display: block; width: auto; padding-left: 0.5rem; background: url(../images/WeChat.png) center left no-repeat; background-size: 0.46rem 0.46rem; }
+
+/*recharge 充值*/
+/*details-account 待出账详情*/
+.acc-all { /*padding-bottom: 0.3rem;*/ }
+.acc-top { width: 100%; line-height: 0.88rem; padding: 0 0.3rem; background: #fff; }
+.acc-one { display: block; width: 30%; }
+.acc-two { width: 60%; padding: 0 0.2rem; }
+.acc-pa { padding: 0.2rem 0.3rem 0 0.3rem; }
+.acc-one .acc-in { width: 100%; }
+.icon-close { display: block; width: 8%; height: 0.8rem; font-size: 0.46rem; color: #999; text-align: center; cursor: pointer; background: none; }
+.acc-add { width: 100%; padding: 0.3rem; }
+.acc-aj { display: block; width: 100%; height: 0.8rem; line-height: 0.8rem; text-align: center; color: #0080ff; font-size: 0.32rem; background: none; }
+.acc-bei { display: block; width: 100%; padding: 0.2rem 0.3rem 0.2rem 1.2rem; line-height: 2; }
+.acc-b { display: block; width: 1.2rem; margin-left: -1.2rem; height: 0.6rem; text-align: right; }
+.acc-text { display: block; width: 100%; min-height: 1.2rem; }
+.acc-btnt { display: block; width: 100%; padding: 0.6rem 0.3rem; }
+.acc-btno { display: block; width: 47%; height: 0.8rem; line-height: 0.8rem; text-align: center; color: #fff; background: #0080ff; border-radius: 0.1rem; font-size: 0.32rem; }
+.acc-btntt { background: #ccc; color: #999; }
+#container { display: none; }
+/*operation-record 操作记录*/
+.op-padd { padding: 0.3rem; }
+.op-none { padding: 0; width: 100%; }
+.op-li li { width: 33.333%; }
+.op-span { display: block; width: 18%; height: 0.8rem; line-height: 0.8rem; text-align: center; }
+.op-long { width: 38%; }
+.op-top { width: 100%; }
+.op-list { padding: 0; position: relative; }
+.op-list .icon-next { width: 0.8rem; height: 0.8rem; position: absolute; top: 50%; right: 0; margin-top: -0.4rem; z-index: 9;
+	-webkit-transition: -webkit-transform 0.6s ease;
+	-moz-transition: -moz-transform 0.6s ease;
+	-o-transition: -o-transform 0.6s ease;
+	-ms-transition: -ms-transform 0.6s ease;
+ }
+
+.oen h2 {
+  position: relative;
+  width: 100%;
+  height: 0.8rem;
+  text-align: center;
+  font-size: 0.28rem;
+  padding: 0;
+  -webkit-transition: all 0.6s ease;
+  -moz-transition: all 0.6s ease;
+  -o-transition: all 0.6s ease;
+  -ms-transition: all 0.6s ease;
+  transition: all 0.6s ease;
+}
+.arrowRot {
+  -webkit-transform: rotate(90deg);
+  -moz-transform: rotate(90deg);
+  -o-transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+  transform: rotate(90deg);
+}
+.secondary {
+  overflow: hidden;
+  height: 0;
+  -webkit-transition: all 0.6s ease;
+  -moz-transition: all 0.6s ease;
+  -o-transition: all 0.6s ease;
+  -ms-transition: all 0.6s ease;
+  transition: all 0.6s ease;
+}
+.op-litwo { display: block; width: 100%; line-height: 0.6rem; padding: 0 0.3rem; }
+.op-sshow { padding-left: 0.4rem; }
+.op-litwo .op-sshow:nth-child(2n+1) { padding: 0; }
+.op-lione { padding-top: 0.2rem; }
+.op-lithe { height: 0.8rem; padding-bottom: 0.2rem; }
+/*operation-record 基本信息*/
+.op-ju { display: block; width: 100%; line-height: 0.7rem; }
+.op-lian { color: #06c13b; }
+.op-abtn { display: inline-block; height: 0.8rem; line-height: 0.76rem; border: 0.02rem solid #e0e0e0; padding: 0 0.54rem; color: #333; border-radius: 0.1rem; margin: 0 0.2rem; }
+.op-abtn:hover { background: #0080ff; color: #fff; border: 0.02rem solid #0080ff;
+	-webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  -ms-transition: all 0.3s ease;
+  transition: all 0.3s ease; }
+.op-btnall { padding: 0.5rem 0; }
+/*operation-record 充值*/
+.op-cho .op-abtn { width: 46%; padding: 0; text-align: center; margin: 0; }
+.op-cha { display: inline-block; height: 0.7rem; line-height: 0.66rem; border: 0.02rem solid #e0e0e0; padding: 0 0.2rem; text-align: center; color: #999; border-radius: 0.1rem;
+-webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  -ms-transition: all 0.3s ease;
+  transition: all 0.3s ease; }
+.op-cha:hover { background: #0080ff; color: #fff; border: 0.02rem solid #0080ff; }
+.money { display: inline-block; width: 78%; height: 0.7rem; line-height: 0.66rem; border: 0.02rem solid #e0e0e0; padding-left: 0.2rem; border-radius: 0.1rem; }
+
+/*meter-management 电表管理*/
+.m-man { width: auto; }
+/*meter-query 电表账单查询*/
+.mt-q { color: #333; }
+.mt-q .pen-span { width: 40%; text-align: center; padding: 0; }
+
+/*list-mbills 电表账单列表*/
+.list-mi { width: 66%; }
+.list-mbill .pen-span { width: 30%; text-align: center; padding: 0; }
+.list-mbill { color: #333; position: relative; }
+.list-mbill .icon-next { position: absolute; top: 50%; right: 0; margin-top: -0.44rem; }
+/*list-meters 电表列表*/
+.l-a { display: inline-block; padding:  0 0.2rem; color: #0080ff; }
+.l-a:nth-child(2) { color: #999; }
+.l-a:nth-child(3) { color: #008d1b; }
+/*historical-bills 历史账单明细*/
+.his-b { padding-bottom: 0.3rem; }
+.his-b .op-sshow { color: #ff6600; }
+.his-show { width: 50%; }
+.op-lione .his-show { padding: 0 !important;}
+.his-all { padding: 0 0.3rem; line-height: 0.8rem; }
+.his-all .op-sshow { display: block; width: 100%; text-align: right; }
+/*historical-bill(owner) 历史账单（业主）*/
+/*.histori .bill-text { width: 2rem; }*/
+/*historical-bill(individual) 历史账单（个人）*/
+.his-li .repair-span:nth-child(4) { color: #333; }
+.his-bill, .hiss-bill { padding-bottom: 0; }
+.hiss-bill .acc-in { width: 45%; margin: 0; }
+.his-line { display: block; width: 10%; line-height: 0.8rem; text-align: center; color: #999; font-size: 0.36rem; }
+/*details-historical-users 历史用户详情*/
+
+.de-use { padding-top: 0;}
+.deh-use { background: #f8f8f8; }
+.deh-use .acc-one { padding: 0; }
+/*historical-users 历史用户*/
+.pen-users { width: 56%; }
+.his-re { display: block; width: 100%; color: #333; padding-right: 0; }
+/*historical-user-query 历史电表用户查询*/
+.humq { display: block; width: 100%; color: #333; padding-right: 0; position: relative; }
+.humq .acc-one { padding: 0; }
+.humq .icon-next { position: absolute; top: 50%; right: 0; margin-top: -0.44rem; }
+
+/*payment-inquiry 缴费查询*/
+.pay-in { background: #f8f8f8; padding: 0 0.3rem; }
+.pay-in .pen-span { width: 25%; padding-left: 0rem; }
+.pay-in .pen-time { width: 48%; }
+.pay-a { display: block; color: #333; padding: 0 0.3rem; border-radius: 0; border: none; box-shadow: none; position: relative; background: #fff; }
+.pay-a .icon-next { position: absolute; top: 50%; right: 0; margin-top: -0.44rem; }
+/*electricity-price-setting 电价设置*/
+.ele-top { padding: 0.3rem; position: relative; }
+.ele-span { display: block; width: 100%; line-height: 0.8rem; }
+.ele-pa { display: inline-block; width: auto; position: absolute; top: 50%; right: 0rem; margin-top: -0.4rem; }
+.ele-a { display: inline-block; padding: 0 0.3rem; color: #0080ff; }
+.ele-a:nth-child(1) { color: #999; }
+.ele-form { width: 100%; padding: 0.3rem 0 0 1.3rem; }
+.ele-lab { display: block; width: 1rem; line-height: 0.8rem; margin-left: -1rem; }
+.ele-in { display: block; width: 100%; border: 0.02rem solid #e0e0e0; line-height: 0.76rem; border-radius: 0.1rem; padding-left: 0.2rem; }
+.ele-tob { padding: 0.4rem 0; }
+/*renting-management 退租管理*/
+
+/*checkout-review-list 退房审核列表*/
+.chre-list { padding: 0; color: #333; position: relative; }
+.chre-list .pen-span { width: 25%; padding: 0; text-align: center; }
+.chre-list .pen-span:nth-child(3) { width: 44%; }
+.chre-list .icon-next { position: absolute; top: 50%; right: 0; margin-top: -0.4rem; }
+/*search-users 搜索用户*/
+/*details-renting-records 退租记录详情*/
+/*details-rent-withdrawal 退租详情*/
+.dere-re { padding-bottom: 0.2rem; }
+/*check-out-details-review 退房详情审核*/
+/*withdrawals 提现*/
+.w-explain {  display: block; width: auto; line-height: 0.8rem; color: #999; text-align: right; }
+.w-recharge { width: 100%; padding-right: 0; height: auto; }
+.w-recharge .l-ch { position: absolute; top: 50%; left: 0; margin-top: -0.4rem;}
+.w-recharge .l-ch .btn-xuan { height: 2.84rem; margin-top: -1.42rem; }
+.w-recharge .pro { padding: 0.2rem; }
+/*charge-item-addition 收费项添加*/
+.charge-top { display: block; width: 100%; padding: 0.2rem 0.3rem; }
+.charge-span { display: block; width: 100%; line-height: 0.8rem; }
+.charge-bill { display: block; width: 100%; padding: 0 0.3rem 0 2.3rem; }
+.charge-bill .bill-text { height: auto; width: 2rem; margin-left: -2rem; text-align: right; }
+.charge-se { display: block; width: 100%; height: 0.88rem; line-height: 0.88rem; padding-left: 0.2rem; }
+.chre-list .icon-next { position: absolute; top: 50%; right: 0; margin-top: -0.44rem; }
+
+/*equipment-deposit 设备押金*/
+.ep-de { display: block; width: 100%; padding: 0 0.3rem; background: #fff; }
+.ep-de .pen-span { width: 28%; padding: 0; }
+.ep-de .pen-time { width: 44%; }
+/*retiring-record 退租记录*/
+.reti-re { display: block; width: 100%; padding: 0 2.3rem 0 0.3rem; position: relative; color: #333; background: #fff; }
+.reti-re .icon-next { position: absolute; top: 50%; right: 0; margin-top: -0.44rem; }
+.reti-re .pen-span { width: 100%; padding: 0; }
+.reti-re .reti-span { width: 1.6rem; color: #999; text-align: right; position: absolute; top: 0rem; right: 0.6rem; }
+
+/*add-repair 添加报修*/
+.add-repair { display: block; width: 100%; color: #333; padding: 0 0.3rem; position: relative; background: #fff; }
+.add-repair .pen-span { width: 18%; padding: 0; text-align: center; }
+.add-repair .pen-span:nth-child(1) { width: 25%; }
+.add-repair .icon-next { position: absolute; top: 50%; right: 0; margin-top: -0.44rem; }
+/*charge-item-management 收费项管理*/
+.charge-form .acc-in { width: 30%; margin-right: 3.33%; }
+.charge-form .acc-btn { margin-top: 0.2rem; margin-right: 3.33%; }
+.charge-form .charge-btn { background: #fff; border: 0.02rem solid #e0e0e0; color: #333; }
+.charge-man { display: block; color: #333; padding: 0 0.3rem; background: #fff; }
+.charge-man .pen-span { width: 25%; padding: 0; text-align: center; }
+
+/*add-collector 添加采集器*/
+.add-co { width: 100%; padding: 0 0.3rem 0 2rem; margin: 0; padding-top: 0.3rem; background: #fff; }
+.add-co .bill-text { width: 1.7rem; margin-left: -1.7rem; }
+.add-co .charge-se { width: 33.33%; }
+.add-cote { width: 100%; min-height: 1.2rem; line-height: 2; padding: 0.12rem 0.2rem; }
+
+/*add-electric-meter 添加电表*/
+.add-ele { padding-left: 2rem; }
+.add-ele .bill-text { width: 1.7rem; margin-left: -1.7rem; text-align: left; }
+/*card-uploading-audit 身份证上传审核*/
+.list-index .add-co { padding: 0 0 0 1.7rem; }
+.card-li .l-input , .card-li .charge-se { width: 100%; }{ width: 100%; }
+.card-file { display: block; width: 60%; line-height: 0.8rem; text-align: center; color: #666; background: #e0e0e0; border-radius: 0.1rem; position: relative; }
+.card-file .l-input { width: 100%; opacity: 0; position: absolute; top: 0; left: 0; }
+.card-one { width: 80%; border-radius: 0.1rem; position: relative; overflow: hidden; } 
+.card-s { display: block; width: 60%; height: 0.8rem; line-height: 0.8rem; color: #f00; text-align: center; position: absolute; top: 50%; left: 20%; margin-top: -0.4rem; }
+.card-one img { width: 100%; height: 1.6rem; }
+
+/*forget-password 忘记密码
+forget-password-one
+modify-password 修改密码*/
+
+/*my-balance 我的余额*/
+.top-right { display: block; width: auto; height: 0.88rem; line-height: 0.88rem; position: absolute; top: 0; right: 0.3rem; color: #fff; }
+.icon-money { display: block; width: 1.5rem; height: 1.5rem; background: url(../images/money.png) center center no-repeat; background-size: 1.8rem 1.8rem; margin: 0.2rem auto 0.1rem auto; }
+.my-yu{ display: block; width: 100%; line-height: 0.8rem; text-align: center; }
+.yellow { display: block; width: 100%; height: 1rem; line-height: 1rem; text-align: center; color: #f60; font-size: 0.48rem; }
+.btn-my { margin: 0.3rem auto; color: #333; background: #fff; border: 0.02rem solid #e0e0e0; line-height: 0.76rem; }
+
+/*my-bill 我的账单*/
+.my-bill { padding-right: 0.6rem; }
+.bill-span { display: block; width: auto; line-height: 0.7rem; }
+/*details-my-bill 我的账单详情*/
+.btn-li { margin: 0.2rem auto; color: #999; border: 0; background: none; }
+
+/*my-electric-meter 我的电表*/
+
+/*details-my-meter 我的电表详情*/
+.my-meter { display: inline-block; line-height: 0.7rem; padding: 0 0.2rem; color: #0080ff; }
+.my-m { margin-right: 0.2rem; }
+/*my-bank-card 我的银行卡*/
+.my-card { display: block; width: 100%; padding: 0.2rem 1.3rem 0.2rem 0.2rem; line-height: 0.7rem; position: relative; }
+.my-span { display: block; width: 100%; }
+.my-right { width: 1.3rem; position: absolute; top: 0.45rem; right: 0; text-align: center; }
+.my-left { display: block; width: 1.5rem; text-align: left; }
+.my-edti { display: block; width: 100%; color: #0080ff; }
+.my-gary { color: #999; } 
+/*my-personal-information 我的个人信息*/
+.my-per-in { padding: 0.2rem; }
+.my-in { display: block; width: 100%; line-height: 0.7rem; padding: 0 0  0 1.5rem; }
+.my-name { display: block; width: auto; margin-left: -1.5rem; }
+.my-per { display: block; width: 100%; }
+.my-xiu { display: inline-block; padding: 0 0.2rem; color: #999; }
+.my-infor { background: none; color: #f00; border: 0; margin-top: 0.4rem; }
+.my-per .jqthumb { border-radius: 0.1rem; overflow: hidden; }
+
+/*my-personal-center 我的个人中心*/
+.my-center { display: block; width: 100%; padding: 0 0.88rem; background: #0080ff; }
+.my-cleft { display: block; width: 0.88rem; height: 0.88rem; margin-left: -0.88rem; background: url(../images/cen-ge.png) center center no-repeat; background-size: 0.6rem 0.6rem; }
+.my-cright { margin: 0 -0.88rem 0 0; background: url(../images/design.png) center center no-repeat; background-size: 0.6rem 0.6rem; }
+.my-img { display: block; width: 4rem; height: 4rem; padding: 0.6rem; margin: auto; position: relative; }
+.my-border { display: block; width: 2.8rem; height: 2.8rem; border: 0.1rem solid #fff; opacity: 0.4; position: absolute; top: 0.6rem; left: 0.6rem; border-radius: 50%; }
+.my-img .jqthumb { width: 2.8rem; height: 2.8rem; border-radius: 50%; overflow: hidden; }
+.my-xing { display: block; width: 100%; line-height: 0.7rem; font-size: 0.36rem; position: relative; top: -0.3rem; text-align: center; color: #fff; }
+.my-list { display: block; width: 100%; line-height: 0.88rem; padding-left: 0.88rem; position: relative; font-size: 0.32rem; background: #fff; }
+.my-list .icon-next { height: 0.88rem; width: 0.88rem; position: absolute; top: 0; right: 0; }
+.my-list .icon-next1 { height: 0.88rem; width: 0.88rem; position: absolute; top: 0; right: 0; }
+.icon { display: block; width: 0.88rem; height: 0.88rem; margin-left: -0.88rem; background-size: 0.6rem 0.6rem !important; }
+.icon { display: block; width: 0.8rem; height: 0.8rem; margin-left: -0.8rem; background-size: 0.6rem 0.6rem !important; }
+.icon-one { background: url(../images/mine-meter.png) center center no-repeat; }
+.icon-two { background: url(../images/mine-money.png) center center no-repeat; }
+.icon-three { background: url(../images/mine-deposit.png) center center no-repeat; }
+.icon-four { background: url(../images/mine-hone.png) center center no-repeat; }
+.icon-five { background: url(../images/mine-ka.png) center center no-repeat; }
+.icon-six { background: url(../images/repair-manage.png) center center no-repeat; }
+.icon-seven { background: url(../images/contect.png) center center no-repeat; }
+.icon-eight { background: url(../images/center-z.png) center center no-repeat; }
+.icon-nine { background: url(../images/share.png) center center no-repeat; }
+.icon-ten { background: url(../images/check-out.png) center center no-repeat; }
+.icon-eleven { background: url(../images/mine-bill.png) center center no-repeat; }
+.icon-password { background: url(../images/password.png) center center no-repeat; }
+
+.icon-twelve { background: url(../images/report-query.png) center center no-repeat; }
+.my-list h2 { font-size: 0.32rem; text-align: left; padding-left: 0.8rem; position: relative;  }
+.my-none { padding: 0; }
+.my-none .op-list .icon-next { top: 0; margin: 0; }
+#dialogbg{ width:100%; height:100%; background-color:#000000; opacity: 0; position: fixed; top: 0; left: 0; z-index: 9999; display: none; }
+#dialog{ width: 1.5rem; height: auto; display: none; background: #51c8ff; position: fixed; top: 0.9rem; left: auto; right: -0.02rem; z-index: 10000; border-radius: 0.1rem;  /*box-shadow: -0.03rem 0.03rem 0.05rem #51c8ff;*/ margin: 0; }
+.my-paw { display: block; width: 100%; line-height: 0.8rem; text-align: center; border-top-left-radius: 0.1rem; border-top-right-radius: 0.1rem; color: #fff; }
+.btn-close { background: #f5f5f5; color: #999; border-radius: 0rem; border-bottom-left-radius: 0.1rem; border-bottom-right-radius: 0.1rem; }
+.icon-top { display: block; width: 0.6rem; height: 0.3rem; background: url(../images/tjian.png) center bottom no-repeat; background-size: 0.5rem 0.2rem; position: absolute; top: -0.20rem; right: 0.16rem; }
+.accordion { background: #fff; }
+.linked { padding-left: 0.8rem; }
+.submenu.secondary { width: 100%; display: none; overflow: hidden;  height: auto; }
+.op-show.linked .icon-next {-webkit-transition: all 0.4s ease; -o-transition: all 0.4s ease; transition: all 0.4s ease; }
+.open .linked .icon-next { transform: rotate(90deg); }
+.submenu .my-list { padding-left: 1.3rem; -webkit-transition: all 0.5s ease; -o-transition: all 0.5s ease; transition: all 0.5s ease; }
+.open .submenu .my-list { -webkit-transition: all 0.5s ease; -o-transition: all 0.5s ease; transition: all 0.5s ease; }
+.icon-phone { display: block; width: 0.88rem; height: 0.88rem; position: absolute; top: 0; right: 0.6rem; background: url(../images/icon-phone.png) center center no-repeat; background-size: 0.5rem 0.5rem; }
+/*fine-balance 余额明细*/
+
+/*my-deposit 我的押金*/
+.my-de { padding: 0; }
+/*I-want-retire 我要退租*/
+/*perfect-information 完善信息*/
+.perfect-mian { background: #fff; }
+.perfect-mian .bill-text { text-align: left; }
+/*share 我要分享*/
+.share { display: block; width: 100%; padding: 0.3rem; }
+.share-span { display: block; width: 100%; line-height: 0.8rem; text-align: center; font-size: 0.36rem; }
+.share-img { display: block; width: 100%; }
+.share-img .jqthumb { margin: 0.3rem auto; }
+
+/*owner-center 业主中心*/
+.icon-fourth { background: url(../images/manage-fa.png) center center no-repeat; }
+.icon-ty { background: url(../images/collector.png) center center no-repeat; }
+.icon-thy { background: url(../images/manage.png) center center no-repeat; }
+
+/*binding-users 绑定用户*/
+.gary.binding-text { height: auto; }
+.binding-text { padding-left: 1.8rem; }
+.binding-text .bill-text { width: 1.5rem; margin-left: -1.5rem; text-align: left; }
+
+
+
+
+
+
+
+
+
+
+@-webkit-keyframes bounceInDown {
+  0% { opacity: 0; -webkit-transform: translateY(-2000px); transform: translateY(-2000px);}
+  60% { opacity: 1; -webkit-transform: translateY(30px); transform: translateY(30px);}
+  80% { -webkit-transform: translateY(-10px);transform: translateY(-10px);}
+  100% { -webkit-transform: translateY(0); transform: translateY(0); }
+}
+@keyframes bounceInDown {
+  0% {  opacity: 0; -webkit-transform: translateY(-2000px); -ms-transform: translateY(-2000px); transform: translateY(-2000px);}
+  60% { opacity: 1; -webkit-transform: translateY(30px); -ms-transform: translateY(30px); transform: translateY(30px); }
+  80% { -webkit-transform: translateY(-10px); -ms-transform: translateY(-10px); transform: translateY(-10px); }
+
+  100% { -webkit-transform: translateY(0); -ms-transform: translateY(0); transform: translateY(0); }
+}
+.bounceInDown { -webkit-animation-name: bounceInDown; animation-name: bounceInDown;}

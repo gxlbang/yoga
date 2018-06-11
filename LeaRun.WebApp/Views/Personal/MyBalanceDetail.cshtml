@@ -1,0 +1,69 @@
+﻿@{
+    ViewBag.Title = "余额明细";
+    Layout = "~/Views/Shared/_Partial.cshtml";
+}
+<div class="all">
+    <header class="header clear">
+        <a href="javascript:history.go(-1);" class="return fl"></a>
+        <h1 class="title">余额明细</h1>
+    </header>
+    <div id="containerList">
+        <div class="pen-li pay-in bbot clear">
+            <span class="pen-span fl">金额</span>
+            <span class="pen-span fl">说明</span>
+            <span class="pen-span pen-time fr">时间</span>
+        </div>
+
+
+    </div>
+
+</div>
+
+<link href="~/Content/Scripts/layui/css/layui.css" rel="stylesheet" />
+<script src="~/Content/Scripts/layui/layui.js"></script>
+
+<script>
+    layui.use('flow', function(){
+        var flow = layui.flow;
+        var count=0;
+        if (@ViewBag.recordCount!=null) {
+            count=@ViewBag.recordCount;
+        }
+        flow.load({
+            elem: '#containerList', //流加载容器
+            scrollElem: '',
+            done: function(page, next){ //执行下一页的回调
+                //模拟数据插入
+                setTimeout(function () {
+                    $.post("/Personal/MyBalanceDetail", { pageIndex: page }, function (data) {
+                        var lis = [];
+                        for (var i in data) {
+                            lis.push("<div class=\"pro pay-in pay-a bbot clear\"  onclick=\"show('"+parseFloat(data[i].Money).toFixed(2)+"','"+data[i].OperateTypeStr+"','"+formatDate(data[i].CreateTime, "yyyy-MM-dd hh:mm:ss")+"')\"  >");
+                            lis.push("<span class=\"pen-span fl\">"+parseFloat(data[i].Money).toFixed(2)+"</span>");
+                            lis.push("<span class=\"pen-span fl\">"+data[i].OperateTypeStr+"</span>");
+                            lis.push("<span class=\"pen-span pen-time fr\">"+formatDate(data[i].CreateTime,"yyyy-MM-dd hh:mm:ss") +"</span>");
+                            lis.push("</div>");
+                        }
+                        next(lis.join(''), page < count);
+                    });
+                }, 500);
+            }
+        });
+    });
+
+    function show(data1,data2,data3) {
+        var content="<table class=\"layui-table\">"
+        content+="<tr><td>金额:</td><td>"+data1+"</td></tr>";
+        content+="<tr><td>说明:</td><td>"+data2+"</td></tr>";
+        content+="<tr><td>时间:</td><td>"+data3+"</td></tr>";
+        content+="</table>"
+        layer.open({
+            type: 1,
+            title: false,
+            closeBtn: 1,
+            shadeClose: true,
+            skin: 'yourclass',
+            content: content
+        });
+    }
+</script>

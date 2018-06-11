@@ -1,0 +1,299 @@
+﻿@{
+    ViewBag.Title = "用户管理";
+    Layout = "~/Views/Shared/_LayoutIndex.cshtml";
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        //GetTree();
+        GetGrid();
+        SwitchListAndView();
+        //绑定键盘按下事件
+        $(document).keypress(function (e) {
+            //回车键事件
+            if (e.which == 13) {
+                $("#keywords").focus();
+                $("#keywords").select();
+                $("#btnSearch").click();
+            }
+        });
+    });
+    var CompanyId = "", DepartmentId = "", DepartmentName = "";
+    //加载左边树
+    function GetTree() {
+        var itemtree = {
+            onnodeclick: function (item) {
+                if (item.Type == "Company") {
+                    DepartmentId = "";
+                    CompanyId = item.CompanyId;     //公司ID
+                } else if (item.Type == "Department") {
+                    CompanyId = item.parentnodes;
+                    DepartmentId = item.id;         //部门ID
+                    DepartmentName = item.text;     //部门名称
+                }
+                $("#CenterTitle").html(" - " + item.text + "(" + item.value + ")");
+                btn_Search();
+            },
+            url: "@Url.Content("~/CommonModule/Department/TreeJson")"
+        };
+        $("#ItemsTree").treeview(itemtree);
+    }
+    //搜索
+    function btn_Search() {
+        var keywords = $("#keywords").val();
+        $("#gridTable").jqGrid('setGridParam', {
+            url: "@Url.Content("~/CommonModule/User/GridPageListJson")?keywords=" + escape(keywords) + "&CompanyId=" + CompanyId + "&DepartmentId=" + DepartmentId, page: 1
+        }).trigger('reloadGrid');
+    }
+    //加载表格
+    function GetGrid() {
+        var SelectRowIndx;
+        $("#gridTable").jqGrid({
+            url: "@Url.Content("~/CommonModule/User/GridPageListJson")",
+            datatype: "json",
+            height: $(window).height() - 150,
+            autowidth: true,
+            colModel: [
+                { label: '主键', name: 'userid', index: 'userid', width: 80, align: 'left', hidden: true },
+                { label: '层级', name: 'InnerUser', index: 'InnerUser', width: 80, align: 'left', hidden: true },
+                //{ label: '工号', name: 'code', index: 'code', width: 80, align: 'left' },
+                { label: '登录账户', name: 'account', index: 'account', width: 120, align: 'left' },
+                { label: '姓名', name: 'realname', index: 'realname', width: 120, align: 'left' },
+                //{ label: '性别', name: 'gender', index: 'gender', width: 45, align: 'center' },
+                { label: '手机', name: 'mobile', index: 'mobile', width: 150, align: 'left' },
+                //{ label: '电话', name: 'telephone', index: 'telephone', width: 100, align: 'left' },
+                //{ label: '邮箱', name: 'email', index: 'email', width: 100, align: 'left' },
+                //{ label: '所在公司Id', name: 'companyid', hidden: true },
+                //{ label: '所在公司', name: 'companyname', index: 'companyname', width: 150, align: 'left' },
+                //{ label: '所在部门', name: 'departmentname', index: 'departmentname', width: 80, align: 'left' },
+                //{ label: '担任职务', name: 'duty', index: 'duty', width: 80, align: 'left' },
+                {
+                    label: '有效', name: 'enabled', index: 'enabled', width: 45, align: 'center',
+                    formatter: function (cellvalue, options, rowObject) {
+                        if (cellvalue == '1') return "<img src='../../Content/Images/checkokmark.gif'/>";
+                        if (cellvalue == '0') return "<img src='../../Content/Images/checknomark.gif'/>";
+                    }
+                },
+                { label: '登录次数', name: 'logoncount', index: 'logoncount', width: 70, align: 'center' },
+                {
+                    label: '最后登录时间', name: 'lastvisit', index: 'lastvisit', width: 200, align: 'left',
+                    formatter: function (cellvalue, options, rowObject) {
+                        return formatDate(cellvalue, 'yyyy-MM-dd hh:mm:ss');
+                    }
+                },
+                { label: '说明', name: 'remark', index: 'remark', width: 400, align: 'left' }
+            ],
+            viewrecords: true,
+            rowNum: 30,
+            rowList: [30, 50, 100, 500, 1000],
+            pager: "#gridPager",
+            sortname: 'SortCode',
+            sortorder: 'desc',
+            rownumbers: true,
+            shrinkToFit: false,
+            gridview: true,
+            multiselect: true,
+            onSelectRow: function () {
+                SelectRowIndx = GetJqGridRowIndx("#" + this.id);
+            },
+            gridComplete: function () {
+                LoadViewList();
+                $("#" + this.id).jqGrid('setSelection', SelectRowIndx);
+            }
+        });
+        columnModelData("#gridTable");
+        //自应高度
+        $(window).resize(function () {
+            $("#gridTable").setGridHeight($(window).height() - 178);
+        });
+    }
+    //高级查询
+    var QueryParamJson = "";
+    function btn_query() {
+        QueryDialog("/Utility/QueryPage", "QueryPage", "查询过滤", 770, 395, function (iframe) {
+            top.frames[iframe].QueryClick(function (JsonData) {
+                QueryParamJson = JsonData;
+                $("#gridTable").jqGrid('setGridParam', {
+                    url: "@Url.Content("~/CommonModule/User/GridPageListJson")?ParameterJson=" + escape(JsonData), page: 1
+                }).trigger('reloadGrid');
+            });
+        });
+    }
+    //新增
+    function btn_add() {
+        var url = "/CommonModule/User/Form?CompanyId=" + CompanyId + "&DepartmentId=" + DepartmentId
+        openDialog(url, "Form", "新增用户", 650, 350, function (iframe) {
+            top.frames[iframe].AcceptClick()
+        });
+    }
+    //编辑
+    function btn_edit() {
+        var KeyValue = GetJqGridRowValue("#gridTable", "userid");
+        if (IsChecked(KeyValue)) {
+            var url = "/CommonModule/User/Form?KeyValue=" + KeyValue;
+            openDialog(url, "Form", "编辑用户", 650, 350, function (iframe) {
+                top.frames[iframe].AcceptClick();
+            });
+        }
+    }
+    //明细
+    function btn_detail() {
+        var KeyValue = GetJqGridRowValue("#gridTable", "userid");
+        var gender = GetJqGridRowValue("#gridTable", "gender");
+        if (IsChecked(KeyValue)) {
+            var url = "/CommonModule/User/Detail?KeyValue=" + KeyValue + '&gender=' + escape(gender);
+            Dialog(url, "Detail", "用户明细", 750, 400);
+        }
+    }
+    //删除
+    function btn_delete() {
+        var KeyValue = GetJqGridRowValue("#gridTable", "userid");
+        if (IsDelData(KeyValue)) {
+            var delparm = 'KeyValue=' + KeyValue;
+            delConfig('/CommonModule/User/Delete', delparm, KeyValue.split(",").length);
+        }
+    }
+    //重置密码
+    function btn_resetpassword() {
+        var KeyValue = GetJqGridRowValue("#gridTable", "userid");
+        var Account = GetJqGridRowValue("#gridTable", "account");
+        var realname = GetJqGridRowValue("#gridTable", "realname");
+        if (IsChecked(KeyValue)) {
+            var url = "/CommonModule/User/ResetPassword?KeyValue=" + KeyValue + '&Account=' + Account + '&Type=1';
+            openDialog(url, "ResetPassword", "重置密码 - " + realname, 400, 130, function (iframe) {
+                top.frames[iframe].AcceptClick();
+            });
+        }
+    }
+    //用户角色
+    function btn_userrole() {
+        var UserId = GetJqGridRowValue("#gridTable", "userid");
+        var CompanyId = GetJqGridRowValue("#gridTable", "companyid");
+        var realname = GetJqGridRowValue("#gridTable", "realname");
+        if (IsChecked(UserId)) {
+            var url = "/CommonModule/User/UserRole?CompanyId=" + CompanyId + '&UserId=' + UserId;
+            openDialog(url, "UserRole", "用户角色 - " + realname, 625, 350, function (iframe) {
+                top.frames[iframe].AcceptClick();
+            });
+        }
+    }
+    //用户权限
+    function btn_AllotPermission() {
+        var UserId = GetJqGridRowValue("#gridTable", "userid");
+        var RealName = GetJqGridRowValue("#gridTable", "realname");
+        if (IsChecked(UserId)) {
+            var url = "/CommonModule/Permission/AllotPermission?ObjectId=" + UserId + '&Category=5';
+            openDialog(url, "AllotPermission", "用户权限 - " + RealName, 830, 480, function (iframe) {
+                top.frames[iframe].AcceptClick();
+            });
+        }
+    }
+    //数据范围
+    function btn_ScopePermission() {
+        var UserId = GetJqGridRowValue("#gridTable", "userid");
+        var RealName = GetJqGridRowValue("#gridTable", "realname");
+        if (IsChecked(UserId)) {
+            var url = "/CommonModule/Permission/ScopePermission?ObjectId=" + UserId + '&Category=5';
+            openDialog(url, "AllotPermission", "数据范围 - " + RealName, 830, 480, function (iframe) {
+                top.frames[iframe].AcceptClick();
+            });
+        }
+    }
+    //导入Excel
+    function btn_import() {
+        openDialog("/CommonModule/ExcelImport/ExcelImportDialog", "ExcelImportDialog", "用户信息导入", 750, 300, function (iframe) {
+            top.frames[iframe].AcceptClick();
+        });
+    }
+    //导出Excel
+    function btn_derive() {
+        SetDeriveExcel("#gridTable", "用户信息");
+        openDialog("/CommonModule/ExcelImport/DeriveDialog", "DeriveDialog", "用户信息导出", 600, 300, function (iframe) {
+            top.frames[iframe].AcceptClick();
+        });
+    }
+    //刷新
+    function windowload() {
+        $("#gridTable").trigger("reloadGrid"); //重新载入
+    }
+    /*视图begin=========================================================================*/
+    //切换到列表/视图
+    function SwitchListAndView() {
+        $('#grid_View').height($(window).height() - 78)
+        $('.switch-btns li').click(function () {
+            $('.switch-btns li').removeClass('selected');
+            $(this).addClass('selected');
+            if ($(this).attr('id') == 'li-switch-list') {
+                $(this).find('div').addClass('icon-btn-switch-list-select');
+                $("#li-switch-view").find('div').addClass('icon-btn-switch-view');
+                $("#li-switch-view").find('div').removeClass('icon-btn-switch-view-select');
+                $('#grid_List').show();
+                $('#grid_View').hide();
+            }
+            //显示视图
+            if ($(this).attr('id') == 'li-switch-view') {
+                $(this).find('div').addClass('icon-btn-switch-view-select');
+                $("#li-switch-list").find('div').addClass('icon-btn-switch-list');
+                $("#li-switch-list").find('div').removeClass('icon-btn-switch-list-select');
+                $('#grid_List').hide();
+                $('#grid_View').show();
+            }
+        })
+    }
+    //加载视图
+    function LoadViewList() {
+        var data = $("#gridTable").jqGrid("getRowData");
+        var html = "";
+        for (var i = 0; i < data.length; i++) {
+            var Genderimg = "CardphotoA";
+            if (data[i].gender == "女") {
+                Genderimg = "Cardphoto";
+            }
+            html += ' <div class="UserCard">';
+            html += '<div class="Cardhead">'
+            html += '     <div style="float: left">姓名：' + data[i].realname + '</div>'
+            html += '     <div style="float: right">NO：' + data[i].InnerUser + '</div>'
+            html += '</div>'
+            html += '<div>'
+            html += '    <div class="' + Genderimg + '"></div>'
+            html += '    <div class="CardInfo">'
+            html += '       电话：' + data[i].mobile + '<br />'
+            html += '       登录次数：' + data[i].logoncount + '<br />'
+            html += '       最后登录时间：' + data[i].lastvisit + '<br />'
+            html += '   </div>'
+            html += '</div>'
+            html += '</div>'
+        }
+        $("#grid_View").html(html);
+    }
+    /*视图end=========================================================================*/
+</script>
+
+<!--工具栏-->
+<div class="tools_bar leftline rightline" style="margin: 1px; margin-bottom: 0px;">
+    <div class="PartialButton">
+        @Html.Partial("_PartialButton")
+    </div>
+</div>
+<div class="leftline rightline QueryArea" style="margin: 1px; margin-top: 0px; margin-bottom: 0px;">
+    <table border="0" class="form-find" style="height: 45px;">
+        <tr>
+            <th>关键字：</th>
+            <td>
+                <input id="keywords" type="text" class="txt" style="width: 200px" />
+            </td>
+            @*<th>产品栏目：</th>
+            <td>
+                <select id="ProductClass" class="txtselect" style="width: 200px">
+                    <option value="">==请选择==</option>
+                </select>
+            </td>*@
+            <td>
+                <input id="btnSearch" type="button" class="btnSearch" value="搜 索" onclick="btn_Search()" />
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="topline rightline" style="margin: 1px; margin-top: -1px;">
+    <table id="gridTable"></table>
+    <div id="gridPager"></div>
+</div>

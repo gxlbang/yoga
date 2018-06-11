@@ -1,0 +1,207 @@
+﻿@{
+    ViewBag.Title = "成为合伙人";
+    Layout = "~/Views/Shared/UiIndex.cshtml";
+}
+<script>
+    var clock = '';
+    var nums = 60;
+    var btn;
+    function sendCode(thisBtn) {
+        var phone = $.trim($("#txtMobile").val());
+        var myreg = /^(((13[0-9]{1})|(14[0-9]{1})|(17[0]{1})|(15[0-3]{1})|(15[5-9]{1})|(18[0-9]{1}))+\d{8})$/;
+        if (!IsNullOrEmpty(phone)) {
+            $.toast("电话号码不能为空");
+            return false;
+        }
+        if (phone.length != 11) {
+            $.toast("电话号码不能少于11位");
+            return false;
+        }
+        if (!myreg.test(phone)) {
+            $.toast("电话号码不正确");
+            return false;
+        }
+        btn = thisBtn;
+        btn.disabled = true;
+        btn.value = nums + '秒重新获取';
+        clock = setInterval(doLoop, 1000);
+        var postData = "";
+        AjaxJson("/Ui/GetCode?Phone=" + phone, postData, function (data) {
+            $.toast(data.Message);
+        });
+    }
+    function doLoop() {
+        nums--;
+        if (nums > 0) {
+            btn.value = nums + '秒重新获取';
+        } else {
+            clearInterval(clock);
+            btn.disabled = false;
+            btn.value = '获取验证码';
+            nums = 60;
+        }
+    }
+    function SubmitForm() {
+        var name = $.trim($("#txtName").val());
+        if (!IsNullOrEmpty(name)) {
+            $.toast("姓名不能为空");
+            return false;
+        }
+        var cardcode = $.trim($("#txtCardCode").val());
+        if (!IsNullOrEmpty(cardcode) || cardcode.length < 15) {
+            $.toast("身份证号码不正确");
+            return false;
+        }
+        var phone = $.trim($("#txtMobile").val());
+        var myreg = /^(((13[0-9]{1})|(14[0-9]{1})|(17[0]{1})|(15[0-3]{1})|(15[5-9]{1})|(18[0-9]{1}))+\d{8})$/;
+        if (!IsNullOrEmpty(phone)) {
+            $.toast("电话号码不能为空");
+            return false;
+        }
+        if (phone.length != 11) {
+            $.toast("电话号码不能少于11位");
+            return false;
+        }
+        if (!myreg.test(phone)) {
+            $.toast("电话号码不正确");
+            return false;
+        }
+        var code = $.trim($("#txtCode").val());
+        if (!IsNullOrEmpty(code) || code.length != 4) {
+            $.toast("输入的验证码不正确");
+            return false;
+        }
+        
+        var cardpic1 = $("#cardpic1").val();
+        var cardpic2 = $("#cardpic2").val();
+        //if (!IsNullOrEmpty(cardpic1) || !IsNullOrEmpty(cardpic2)) {
+        //    $.toast("请正确上传身份证正反照片");
+        //    return false;
+        //}
+        //alert($("#checkbox-2-1").attr("checked"));
+        if ($("#checkbox-2-1").attr("checked")!="checked") {
+            $.toast("请先签订购房合同");
+            return false;
+        }
+        var postData = jQuery.parseJSON('{"Name":"' + name + '","Code":"' + code +
+            '","Mobile":"' + phone + '","CardCode":"' + cardcode +
+            '","CodeImg2":"' + cardpic2 + '","CodeImg1":"' + cardpic1 + '"}');
+        AjaxJson("/Ui/SubmitUser", postData, function (data) {
+            $.toast(data.Message);
+            if (data.Code == 1 || data.Code == "1") {
+                Urlhref("/Ui/Center");
+            }
+        });
+    }
+</script>
+<script src="~/Content/Scripts/uijs/checkFileTypeAndSize.js"></script>
+<script type="text/javascript">
+        $(function() {
+            $("#imguploadimg1").checkFileTypeAndSize({
+                allowedExtensions: ['jpg','jpeg','gif','png'],
+                maxSize: 2048, //最大允许2048KB，即2MB
+                success: function () {
+                    //上传文件数据准备
+                    var fd = new FormData();
+                    fd.append('image', $('#imguploadimg1')[0].files[0]);
+                    $.ajax({
+                        url: '@Url.Action("UploadFile","Ui")',
+                        type: "POST",
+                        data: fd,
+                        contentType: false,
+                        cache: false,
+                        processData: false,
+                        dataType: 'json',
+                        success: function (data) {
+                            $.toast(data.message);
+                            $("#cardpic1").val(data.filepath);
+                            $("#img1").attr("src", data.filepath);
+                        }
+                     });
+
+                },
+                extensionerror: function () {
+                    $.toast("允许的格式为：jpg,jpeg,gif,png");
+                    return;
+                },
+                sizeerror: function () {
+                    $.toast("最大尺寸2048KB,即2MB");
+                    return;
+                }
+            });
+            $("#imguploadimg2").checkFileTypeAndSize({
+                allowedExtensions: ['jpg', 'jpeg', 'gif', 'png'],
+                maxSize: 2048, //最大允许2048KB，即2MB
+                success: function () {
+                    //上传文件数据准备
+                    var fd = new FormData();
+                    fd.append('image', $('#imguploadimg2')[0].files[0]);
+                    $.ajax({
+                        url: '@Url.Action("UploadFile","Ui")',
+                        type: "POST",
+                        data: fd,
+                        contentType: false,
+                        cache: false,
+                        processData: false,
+                        dataType: 'json',
+                        success: function (data) {
+                            $.toast(data.message);
+                            $("#cardpic2").val(data.filepath);
+                            $("#img2").attr("src", data.filepath);
+                        }
+                    });
+
+                },
+                extensionerror: function () {
+                    $.toast("允许的格式为：jpg,jpeg,gif,png");
+                    return;
+                },
+                sizeerror: function () {
+                    $.toast("最大尺寸2048KB,即2MB");
+                    return;
+                }
+            });
+        });
+    function OpenHT() {
+        var name = $.trim($("#txtName").val());
+        if (!IsNullOrEmpty(name)) {
+            $.toast("姓名不能为空");
+            return false;
+        }
+        var cardcode = $.trim($("#txtCardCode").val());
+        if (!IsNullOrEmpty(cardcode) || cardcode.length < 15) {
+            $.toast("身份证号码不正确");
+            return false;
+        }
+        Urlhref("/Ui/ht?name=" + name + "&code=" + cardcode);
+    }
+</script>
+<div  class="infor-list bbot clear"><span class="in-name fl">真实姓名：</span>
+    <input class="in-input" type="text" placeholder="请输入真实姓名" id="txtName" /></div>
+<div class="infor-list bbot clear">
+    <span class="in-name fl">身份证号：</span>
+    <input class="in-input" type="text" maxlength="18" placeholder="请输入身份证号码" id="txtCardCode" />
+</div>
+<div class="infor-list bbot clear"><span class="in-name fl">电话号码：</span>
+    <input class="in-input" type="text" maxlength="11" id="txtMobile" placeholder="请输入电话号码" /></div>
+<div class="infor-list phone-listwo bbot clear"><span class="in-name fl">验证码：</span>
+    <input class="in-input in-yan fl" type="text"  maxlength="4" id="txtCode" placeholder="请输入验证码" />
+    <input type="button" class="tab-yanzhe fr" value="获取验证码" onclick="sendCode(this)" /></div>
+
+@*<div class="infor-list infor-listwo clear"><span class="in-name fl">上传身份证照片
+    </span></div>*@
+<div class="infor-list infor-listhree clear"><div class="tab-bao fl">
+    <div class="in-put fl"><input type="checkbox" id="checkbox-2-1" name="choose" />
+    <label for="checkbox-2-1"></label></div>本人已阅读,并且自愿签订 <a href="javascritp:;" onclick="OpenHT()" class="tab-s">《合伙人代理合同》</a></div></div>
+@*<div class="infor-list infor-listhre clear"><span class="in-name fl">正面图片：</span>
+    <label class="in-la" id="imgtxt1">
+    <img src="" style="max-height:168px;" id="img1" />
+    <input class="in-file" type="file"  accept="image/*" id="imguploadimg1" /></label></div>
+
+<div class="infor-list infor-listhre clear"><span class="in-name fl">反面图片：</span>
+    <label class="in-la" id="imgtxt2">
+        <img src="" style="max-height:168px;" id="img2" />
+    <input class="in-file" type="file"  accept="image/*" id="imguploadimg2"/></label></div>*@
+<input type="hidden" id="cardpic1" />
+<input type="hidden" id="cardpic2" />
+<a href="javascript:;" onclick="SubmitForm()" class="tab-btn">保存</a>

@@ -1,0 +1,187 @@
+@{
+    ViewBag.Title = "Fx_Orders";
+    Layout = "~/Views/Shared/_LayoutIndex.cshtml";
+}
+<script type="text/javascript">
+    $(function () {
+        GetGrid();
+    })
+    //加载表格
+    function GetGrid() {
+        $("#gridTable").jqGrid({
+            url: "@Url.Content("~/ProductModule/Fx_Orders/GridPageListJson")",
+            datatype: "json",
+            height: $(window).height() - 149,
+            autowidth: true,
+            colModel: [
+                    { label: '主键', name: 'Number', index: 'Number', width: 0, align: 'left', hidden: true },
+                    {
+                        label: '产品图片', name: 'Pro_Image', index: 'Pro_Image', width: 60, align: 'left',
+                        formatter: function (cellvalue, options, rowObject) {
+                            if (cellvalue) {
+                                return "<div style='padding:1px;'><img src='" + cellvalue + "' width='48' height='48' /></div>";
+                            } else {
+                                return "<div style='padding:1px;'><img src='/Content/Images/noimg.gif' width='48' height='48'/></div>";
+                            }
+                        }
+                    },
+                    { label: '产品名称', name: 'Pro_Name', index: 'Pro_Name', width: 100, align: 'left' },
+                    { label: '价格', name: 'Pro_Price', index: 'Pro_Price', width: 60, align: 'left' },
+                    { label: '规格', name: 'Pro_Size', index: 'Pro_Size', width: 60, align: 'left' },
+                    { label: '数量', name: 'Pro_Num', index: 'Pro_Num', width: 40, align: 'left' },
+                    { label: '买家姓名', name: 'Buyer', index: 'Buyer', width: 60, align: 'left' },
+                    { label: '联系电话', name: 'Mobile', index: 'Mobile', width: 80, align: 'left' },
+                    { label: '收货地址', name: 'Arddress', index: 'Arddress', width: 320, align: 'left' },
+                    { label: '快递单号', name: 'Ex_NO', index: 'Ex_NO', width: 120, align: 'left' },
+                    { label: '快递', name: 'Ex_Name', index: 'Ex_Name', width: 60, align: 'left' },
+                    {
+                        label: "订单时间", name: "CreateTime", index: "CreateTime", width: 120,
+                        formatter: function (value, options, rowObject) {
+                            return formatDate(value, 'yyyy-MM-dd hh:mm:ss');
+                        }
+                    },
+                    {
+                        label: '状态', name: 'Resutl', index: 'Resutl', width: 60, align: 'left',
+                        formatter: function (cellvalue, options, rowObject) {
+                            return "<div style='color:red;'>" + cellvalue + "</div>";
+                        }
+                    },
+                    {
+                        label: '用户名', name: 'UserName', index: 'UserName', width: 60, align: 'left',
+                        formatter: function (cellvalue, options, rowObject) {
+                            if (!IsNullOrEmpty(cellvalue)) { cellvalue = "管理员"; }
+                            return "<div style='color:blue;'>" + cellvalue + "</div>";
+                        }
+                    },
+                    { label: '备注', name: 'Buyer_Mark', index: 'Buyer_Mark', width: 120, align: 'left' },
+            ],
+            pager: "#gridPager",
+            sortname: 'CreateTime',
+            sortorder: 'desc',
+            rownumbers: true,
+            shrinkToFit: false,
+            multiselect: false,
+            gridview: true
+        });
+    }
+    //编辑
+    function btn_edit() {
+        var KeyValue = GetJqGridRowValue("#gridTable", "Number");
+        if (IsChecked(KeyValue)) {
+            var url = "/ProductModule/Fx_Orders/Form?KeyValue=" + KeyValue;
+            openDialog(url, "Form", "编辑", 770, 395, function (iframe) {
+                top.frames[iframe].AcceptClick();
+            });
+        }
+    }
+    //明细
+    function btn_detail() {
+        var KeyValue = GetJqGridRowValue("#gridTable", "Number");
+        if (IsChecked(KeyValue)) {
+            var url = "/ProductModule/Fx_Orders/Detail?KeyValue=" + KeyValue;
+            Dialog(url, "Detail", "明细", 770, 395, function (iframe) {
+                top.frames[iframe].AcceptClick();
+            });
+        }
+    }
+    //刷新
+    function windowload() {
+        $("#gridTable").trigger("reloadGrid"); //重新载入
+    }
+    //搜索
+    function btn_Search() {
+        var keywords = $("#keywords").val();
+        var Stuts = $("#Stuts").val();
+        var StartTime = $("#StartTime").val();
+        var EndTime = $("#EndTime").val();
+        var IsAll = $("#IsAll").val();
+        $("#gridTable").jqGrid('setGridParam', {
+            url: "@Url.Content("~/ProductModule/Fx_Orders/GridPageListJson")?StartTime=" + StartTime + '&EndTime=' + EndTime + '&Keyword=' + keywords + '&Stuts=' + Stuts + '&IsAll=' + IsAll, page: 1
+        }).trigger('reloadGrid');
+    }
+    //更改订单状态
+    function ModifyOrders(Status) {
+        var KeyValue = GetJqGridRowValue("#gridTable", "Number");
+        if (IsChecked(KeyValue)) {
+            confirmDialog("确认提示", "确定要更改订单状态?更改后无法恢复!", function (data) {
+                if (data) {
+                    AjaxJson("/ProductModule/Fx_Orders/SetOrders", { Status: Status, KeyValue: KeyValue }, function (data) {
+                        tipDialog(data.Message, 3, data.Code);
+                        windowload();
+                    });
+                }
+            });
+        }
+    }
+    //要打印数据源，子页面调用的函数
+    function PrintDataSource() {
+        var columnModel = $("#gridTable").jqGrid('getGridParam', 'colModel');
+        var dataModel = $("#gridTable").jqGrid("getRowData");
+        //var footerData = $("#gridTable").jqGrid("footerData");
+        var JsonData = {
+            columnModel: columnModel,
+            dataModel: dataModel,
+            //footerData: footerData,
+        }
+        return JsonData;
+    }
+    //点击打印
+    function btn_Print() {
+        PrintDialog("/Utility/PrintPage", "PrintPage", "打印当前页", 1200, 500, function (iframe) {
+            top.frames[iframe].SubmitPrint()
+        });
+    }
+</script>
+<!--工具栏-->
+<div class="tools_bar leftline rightline" style="margin: 1px; margin-bottom: 0px;">
+    <div class="PartialButton">
+        @Html.Partial("_PartialButton")
+    </div>
+</div>
+<div class="leftline rightline QueryArea" style="margin: 1px; margin-top: 0px; margin-bottom: 0px;">
+    <table border="0" class="form-find" style="height: 45px;">
+        <tr>
+            <th>关键字：</th>
+            <td>
+                <input id="keywords" type="text" class="txt" style="width: 150px" />
+            </td>
+            <th>订单状态：</th>
+            <td>
+                <select id="Stuts" class="txtselect" style="width: 100px">
+                    <option value="">请选择</option>
+                    <option value="1">未发货</option>
+                    <option value="2">有效订单</option>
+                    <option value="3">已发货</option>
+                    <option value="4">已完成</option>
+                    <option value="5">已退货</option>
+                    <option value="6">可疑</option>
+                    <option value="7">无效</option>
+                </select>
+            </td>
+            <th>下单时间：</th>
+            <td>
+                <input id="StartTime" type="text" class="txt Wdate" value="@LeaRun.Utilities.DateTimeHelper.GetToday()" style="width: 120px" onfocus="var endDate=$dp.$('EndTime');WdatePicker({onpicked:function(){EndTime.focus();},maxDate:'#F{$dp.$D(\'EndTime\')}'})" />
+            </td>
+            <td>-</td>
+            <td>
+                <input id="EndTime" type="text" class="txt Wdate" value="@LeaRun.Utilities.DateTimeHelper.GetToday()" style="width: 120px" onfocus="WdatePicker({minDate:'#F{$dp.$D(\'StartTime\')}'})" />
+            </td>
+            <td>
+                @*<input id="IsAll" type="checkbox" checked="checked" value="1" />
+                    <label for="IsShow" style="vertical-align: middle;">看子账户</label>*@
+                <select id="IsAll" class="txtselect" style="width: 80px; margin-top:2px ">
+                    <option value="1" selected="selected">包括</option>
+                    <option value="0">不包括</option>
+                </select>
+                <label for="IsShow" style="vertical-align: middle;">子账户</label>
+            </td>
+            <td>
+                <input id="btnSearch" type="button" class="btnSearch" value="搜 索" onclick="btn_Search()" />
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="topline rightline" style="margin: 1px; margin-top: -1px;">
+    <table id="gridTable"></table>
+    <div id="gridPager"></div>
+</div>

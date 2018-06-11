@@ -1,0 +1,92 @@
+@{
+    ViewBag.Title = "Am_Collector》明细页面";
+    Layout = "~/Views/Shared/_LayoutForm.cshtml";
+}
+<script type="text/javascript">
+    $(function () {
+        InitControl();
+    })
+    //得到一个对象实体
+    function InitControl() {
+        if (!!GetQuery('KeyValue')) {
+            AjaxJson("/AmmeterModule/Am_Collector/SetForm", { KeyValue: GetQuery('KeyValue') }, function (data) {
+                SetWebLable(data);
+            });
+        }
+    }
+    function AddCollect() {
+        AjaxJson("/AmmeterModule/Am_Collector/AddCollect", { KeyValue: GetQuery('KeyValue') }, function (data) {
+            alert(jQuery.parseJSON(data));
+        });
+    }
+</script>
+<form id="form1" style="margin: 1px">
+    <table class="form">
+        <tr>
+            <th class='formTitle'><a href="javascript:;" onclick="AddCollect()">业主帐号：</a></th>
+            <td class='formValue'>
+                <label id="UserName" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>业主姓名：</th>
+            <td class='formValue'>
+                <label id="URealName" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>采集器编号：</th>
+            <td class='formValue'>
+                <label id="CollectorCode" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>省：</th>
+            <td class='formValue'>
+                <label id="Province" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>市：</th>
+            <td class='formValue'>
+                <label id="City" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>区：</th>
+            <td class='formValue'>
+                <label id="County" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>地址：</th>
+            <td class='formValue'>
+                <label id="Address" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>电表数：</th>
+            <td class='formValue'>
+                <label id="AmCount" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>状态：</th>
+            <td class='formValue'>
+                <label id="StatusStr" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>创建时间：</th>
+            <td class='formValue'>
+                <label id="CreateTime" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>最后连接时间：</th>
+            <td class='formValue'>
+                <label id="LastConnectTime" />
+            </td>
+        </tr>
+    </table>
+</form>

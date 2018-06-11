@@ -1,0 +1,107 @@
+@{
+    ViewBag.Title = "Am_PayToUserMoneyDetails》明细页面";
+    Layout = "~/Views/Shared/_LayoutForm.cshtml";
+}
+<script type="text/javascript">
+    $(function () {
+        InitControl();
+    })
+    //得到一个对象实体
+    function InitControl() {
+        if (!!GetQuery('KeyValue')) {
+            AjaxJson("/AmmeterModule/Am_PayToUserMoneyDetails/SetForm", { KeyValue: GetQuery('KeyValue') }, function (data) {
+                SetWebControls(data);
+            });
+        }
+    }
+</script>
+<form id="form1" style="margin: 1px">
+    <table class="form">
+        <tr>
+            <th class='formTitle'>Number：</th>
+            <td class='formValue'>
+                <label id="Number" />
+            </td>
+            <th class='formTitle'>UserNumber：</th>
+            <td class='formValue'>
+                <label id="UserNumber" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>UserName：</th>
+            <td class='formValue'>
+                <label id="UserName" />
+            </td>
+            <th class='formTitle'>UName：</th>
+            <td class='formValue'>
+                <label id="UName" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>TaskNumber：</th>
+            <td class='formValue'>
+                <label id="TaskNumber" />
+            </td>
+            <th class='formTitle'>TotalMoney：</th>
+            <td class='formValue'>
+                <label id="TotalMoney" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>Money：</th>
+            <td class='formValue'>
+                <label id="Money" />
+            </td>
+            <th class='formTitle'>MoneyFree：</th>
+            <td class='formValue'>
+                <label id="MoneyFree" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>CreateTime：</th>
+            <td class='formValue'>
+                <label id="CreateTime" />
+            </td>
+            <th class='formTitle'>F_UserNumber：</th>
+            <td class='formValue'>
+                <label id="F_UserNumber" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>F_UserName：</th>
+            <td class='formValue'>
+                <label id="F_UserName" />
+            </td>
+            <th class='formTitle'>F_UName：</th>
+            <td class='formValue'>
+                <label id="F_UName" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>OpenId：</th>
+            <td class='formValue'>
+                <label id="OpenId" />
+            </td>
+            <th class='formTitle'>OperateType：</th>
+            <td class='formValue'>
+                <label id="OperateType" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>OperateTypeStr：</th>
+            <td class='formValue'>
+                <label id="OperateTypeStr" />
+            </td>
+            <th class='formTitle'>ObjectNumber：</th>
+            <td class='formValue'>
+                <label id="ObjectNumber" />
+            </td>
+        </tr>
+        <tr>
+            <th class='formTitle'>Remark：</th>
+            <td class='formValue'>
+                <label id="Remark" />
+            </td>
+        </tr>
+    </table>
+</form>
